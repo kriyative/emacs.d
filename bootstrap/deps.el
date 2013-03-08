@@ -27,7 +27,7 @@
 	     '("marmalade" . "http://marmalade-repo.org/packages/")
 	     t)
 (package-initialize)
-(unless (file-directory-p (expand-file-name "~/.emacs.d/elpa/archives"))
+(unless package-archive-contents
   (package-refresh-contents))
 
 (dolist (pkg packages-deps)
