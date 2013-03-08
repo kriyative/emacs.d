@@ -67,7 +67,6 @@
 	       (dir (expand-file-name (concat "~/.emacs.d/" key))))
 	  (unless (file-directory-p dir)
 	    (message "downloading and unpacking %s ..." key)
-	    (eshell-command (format "mkdir -p /tmp/%s" tmpdir))
 	    (download-and-install src tmpdir fname))
 	  (add-to-list 'load-path dir)))
     (eshell-command (format "rm -fr /tmp/%s" tmpdir))))
