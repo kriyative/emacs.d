@@ -21,6 +21,7 @@
 (require 'longlines)
 (require 'adaptive-wrap)
 (require 'font-lock)
+(require 'calendar)
 (require 'appt)
 (require 'shell)
 (require 'rcompile)
@@ -39,6 +40,9 @@
 (display-time)
 (appt-activate 1)
 (winner-mode 1)
+
+(setq server-use-tcp t)
+(server-start)
 
 (let ((f (expand-file-name "~/.personal.el")))
   (when (file-exists-p f)

@@ -1,8 +1,45 @@
 (require 'eshell)
 (require 'url)
 
+(defun emacs22-package-init ()
+  (let ((elpa-package-el (expand-file-name "~/.emacs.d/elpa/package.el")))
+    (if (file-exists-p elpa-package-el)
+        (load elpa-package-el)
+        (let ((buffer (url-retrieve-synchronously
+                       "http://tromey.com/elpa/package-install.el")))
+          (save-excursion
+            (set-buffer buffer)
+            (goto-char (point-min))
+            (re-search-forward "^$" nil 'move)
+            (eval-region (point) (point-max))
+            (kill-buffer (current-buffer)))
+          (load elpa-package-el)))))
+
+(defun emacs23-package-init ()
+  (let ((emacs23-package-code (concat "http://repo.or.cz"
+                                      "/w/emacs.git/blob_plain"
+                                      "/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp"
+                                      "/emacs-lisp/package.el"))
+        (e23-package (expand-file-name "~/.emacs.d/elpa23/package.el")))
+    (unless (file-exists-p e23-package)
+      (url-copy-file emacs23-package-code e23-package))
+    (load e23-package)))
+
+(cond
+  ((emacs24p) (require 'package))
+  ((emacs23p) (emacs23-package-init))
+  ((emacs22p) (emacs22-package-init)))
+
+(when (boundp 'package-archives)
+  (add-to-list 'package-archives
+	       '("marmalade" . "http://marmalade-repo.org/packages/")
+	       t))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (defvar packages-deps
-  '(adaptive-wrap
+  `(adaptive-wrap
     adoc-mode
     buffer-move
     clojure-mode
@@ -11,7 +48,7 @@
     csv-mode
     gh
     jabber
-    js2-mode
+    ,(if (emacs24-or-newer-p) 'js2-mode 'javascript-mode)
     logito
     magit
     magit-gh-pulls
@@ -21,14 +58,6 @@
     pcache
     slime
     slime-repl))
-
-(require 'package)
-(add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/")
-	     t)
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
 
 (dolist (pkg packages-deps)
   (unless (package-installed-p pkg)
