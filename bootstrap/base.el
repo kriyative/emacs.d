@@ -174,8 +174,9 @@ is invoked on the remote server."
   (cond
    ((string-match "^2[12]" emacs-version)
     (update-calendar-mode-line))
-   (t (calendar-update-mode-line))))
-
+   (t
+    (when (fboundp 'calendar-update-mode-line)
+      (calendar-update-mode-line)))))
 
 (defun partition (seq len)
   (do ((seq seq (nthcdr len seq))
@@ -197,6 +198,69 @@ is invoked on the remote server."
   (if (sequencep arg)
       arg
       (list arg)))
+
+(defun re-matches (re str)
+  (when (string-match re str)
+    (mapcar (lambda (match)
+              (apply 'substring str match))
+            (partition (match-data) 2))))
+
+(defmacro bind (clauses &rest body)
+  "This macro combines the behaviour of the forms `let*',
+`destructuring-bind', and `multiple-value-bind', permitting the
+following style of binding form:
+
+  (bind (((:values m n) (values 10 20))
+         ((a b _c &key (d 10)) '(1 2 3))
+         (x 5))
+    (+ x a b d m n))
+  => 48
+
+Note in the destructuring form (a b _c &key (d 10)), _c is a short form
+for declaring it as ignorable.
+
+This is a more limited and lightweight implementation of some ideas from
+metabang-bind (http://common-lisp.net/project/metabang-bind/)."
+  (labels
+      ((parse-arglist (args)
+         (loop
+            for arg in args
+            collect arg into args
+            when (and (symbolp arg) (eq (aref (symbol-name arg) 0) ?_))
+            collect arg into ignorables
+            finally (return (values args ignorables))))
+       (cons-form (form args clauses body)
+         (multiple-value-bind (arglist ignorables)
+             (parse-arglist args)
+           `(,form ,arglist
+                   ,@(cdar clauses)
+                   ,@(when ignorables `((declare ,(list* 'ignore ignorables))))
+                   (bind ,(cdr clauses) ,@body)))))
+    (cond
+      ((null clauses) `(progn ,@body))
+      ((sequencep (caar clauses))
+       (cond
+         ((eq (caaar clauses) :values)
+          (cons-form 'multiple-value-bind (cdaar clauses) clauses body))
+         ((eq (caaar clauses) :slots)
+          `(with-slots ,(cdaar clauses) ,@(cdar clauses)
+             (bind ,(cdr clauses) ,@body)))
+         (t
+          (cons-form 'destructuring-bind (caar clauses) clauses body))))
+      (t
+       `(let (,(car clauses))
+          (bind ,(cdr clauses) ,@body))))))
+
+(defun emacs-version-info ()
+  (bind (((_ &rest matches) (re-matches
+                             "\\([0-2][0-9]*\\)\.\\([0-9]*\\).\\([0-9]*\\)"
+                             emacs-version)))
+    (mapcar 'string-to-number matches)))
+
+(defun emacs24-or-newer-p () (<= 24 (first (emacs-version-info))))
+(defun emacs24p () (= 24 (first (emacs-version-info))))
+(defun emacs23p () (= 23 (first (emacs-version-info))))
+(defun emacs22p () (= 22 (first (emacs-version-info))))
 
 (defun html (spec)
   "Generate a string representation of the specified HTML spec."
