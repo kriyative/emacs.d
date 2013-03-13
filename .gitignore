@@ -2,3 +2,8 @@
 clojure-emacs-hacks/
 elpa/
 emacs-w3m/
+swank/
+url/
+server/
+elpa22/
+elpa23/
