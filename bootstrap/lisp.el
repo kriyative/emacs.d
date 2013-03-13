@@ -127,7 +127,7 @@ currently under the curser"
   (add-hook 'lisp-mode-hook 'my-common-lisp-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
 
-(eval-after-load 'emacs-lisp-mode
+(eval-after-load 'lisp-mode
   '(lisp-mode-init))
 
 ;;;;;;;;;;;;;;;; scheme ;;;;;;;;;;;;;;;;
@@ -153,6 +153,22 @@ currently under the curser"
   (let ((inferior-lisp-program
          (expand-file-name "~/Applications/PLT\\ Scheme\\ v4.2.1/bin/mzscheme")))
     (run-lisp inferior-lisp-program)))
+
+(eval-after-load 'chicken-slime
+  '(require 'cmuscheme))
+
+(add-to-list 'load-path "/usr/local/lib/chicken/6/")
+(autoload 'chicken-slime "chicken-slime" "SWANK backend for Chicken" t)
+
+(defun chicken-doc (&optional obtain-function)
+  (interactive)
+  (let ((func (funcall (or obtain-function 'current-word))))
+    (when func
+      (process-send-string (scheme-proc)
+                           (format "(require-library chicken-doc) ,doc %S\n" func))
+      (save-selected-window
+        (select-window (display-buffer (get-buffer scheme-buffer) t))
+        (goto-char (point-max))))))
 
 ;;;;;;;;;;;;;;;; clojure ;;;;;;;;;;;;;;;;
 
