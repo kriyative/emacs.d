@@ -176,6 +176,9 @@ currently under the curser"
 
 (eval-after-load 'clojure-mode
   '(progn
-     (require 'clojure-mode-ext)
-     (require 'clojure-mode-slime)
-     (require 'clojuredocs)))
+    (require 'clojure-mode-ext)
+    (require 'clojure-mode-slime)
+    (require 'clojuredocs)))
+
+(eval-after-load 'clojure-test-mode
+  '(require 'clojure-test-mode-slime))
