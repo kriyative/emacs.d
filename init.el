@@ -16,6 +16,10 @@
  "bootstrap/utils.el"
  "bootstrap/window.el")
 
+(add-exec-paths
+ (list "/usr/local/bin"
+       (expand-file-name "~/bin")))
+
 (require 'ibuffer)
 (require 'vc)
 (require 'longlines)

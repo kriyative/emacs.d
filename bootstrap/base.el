@@ -288,3 +288,8 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
   (interactive)
   (call-interactively (if current-prefix-arg 'remote-compile 'compile)))
 
+(defun add-exec-paths (paths)
+  (let ((paths (remove-if-not 'file-directory-p paths)))
+    (dolist (path paths)
+      (add-to-list 'exec-path path))
+    (setenv "PATH" (join ":" exec-path))))

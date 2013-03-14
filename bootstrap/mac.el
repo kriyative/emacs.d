@@ -174,15 +174,3 @@
         (if (eq system-type 'darwin)
             "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
           "/usr"))
-
-(defvar additional-exec-paths
-  (list "/usr/local/bin"
-	(expand-file-name "~/bin")))
-
-(dolist (path additional-exec-paths)
-  (add-to-list 'exec-path path))
-
-(setenv "PATH" (concat (join ":" additional-exec-paths)
-		       ":"
-		       (getenv "PATH")))
-
