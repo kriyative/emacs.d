@@ -48,3 +48,25 @@
     (pop-to-buffer (concat "*" buf-name "*"))
     (setq truncate-lines t)))
 
+(defun get-region-or-read-terms (prompt)
+  (replace-regexp-in-string "[ ]+" "+" (or (region) (read-string prompt))))
+
+(defun google (q)
+  (interactive (list (get-region-or-read-terms "Google: ")))
+  (browse-url
+   (concat "https://www.google.com/search?q=" q)))
+
+(defun ddg (q)
+  (interactive (list (get-region-or-read-terms "DuckDuckGo: ")))
+  (browse-url
+   (concat "https://duckduckgo.com/?q=" q)))
+
+(defun mdn (q)
+  (interactive (list (get-region-or-read-terms "MDN: ")))
+  (google (concat "site:developer.mozilla.org " q)))
+
+(defun wikipedia (q)
+  (interactive (list (get-region-or-read-terms "Wikipedia: ")))
+  (browse-url
+   (concat "http://en.wikipedia.org/w/index.php?search="
+           (capitalize q))))
