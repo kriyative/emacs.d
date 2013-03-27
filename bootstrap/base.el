@@ -17,9 +17,9 @@
   (concat (file-name-as-directory path) file))
 
 (defun locate-path (file path-list)
-  (when-let (path (find-if '(lambda (path)
-                              (let ((file-path (concat-path file path)))
-                                (and (file-exists-p file-path) file-path)))
+  (when-let (path (find-if (lambda (path)
+                             (let ((file-path (concat-path path file)))
+                               (and (file-exists-p file-path) file-path)))
                            path-list))
     (concat-path path file)))
 
