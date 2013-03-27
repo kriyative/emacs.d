@@ -31,7 +31,8 @@
   (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
   (define-key org-mode-map '[C-tab] nil)
   (when org-agenda-files
-    (add-hook 'display-time-hook 'show-daily-agenda)))
+    (add-hook 'display-time-hook 'show-daily-agenda))
+  (setq org-export-html-postamble nil))
 
 (eval-after-load 'org
   '(org-mode-init))
