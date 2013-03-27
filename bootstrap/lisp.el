@@ -9,7 +9,8 @@
                              (bind . 1)
                              (callback . lambda)
                              (c-fficall . with-slots)
-                             (with-cwd . 1))))
+                             (with-cwd . 1)
+                             (save-values . 1))))
     (dolist (x lisp-indent-alist)
       (put (car x)
            indent-function
@@ -74,50 +75,41 @@ currently under the curser"
   (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections))
 
 (defun slime-mode-init ()
-  (require 'slime-repl)
   (slime-setup '(slime-repl))
   (setq slime-protocol-version 'ignore)
-  ;; (setq slime-use-autodoc-mode nil)
-  (add-hook 'slime-mode-hook 'my-slime-mode-hook)
-  ;; (add-hook 'slime-connected-hook 'slime-connected-hook)
-  )
+  (add-hook 'slime-mode-hook 'my-slime-mode-hook))
 
-(eval-after-load "slime"
+(eval-after-load 'slime
   '(slime-mode-init))
 
 (defun sbcl ()
   (interactive)
-  (let* ((sbcl-path "/opt/sbcl/bin/sbcl")
-         (slime-lisp-implementations `((sbcl '(,sbcl-path)))))
-    (setenv "SBCL_HOME" sbcl-path)
-    (slime)))
+  (if-let (sbcl-path (locate-path "sbcl" exec-path))
+      (let ((slime-lisp-implementations `((sbcl (,sbcl-path)))))
+        (setenv "SBCL_HOME" (file-name-directory sbcl-path))
+        (slime))
+    (message "The sbcl application could not be found")))
 
 (defun ccl ()
   (interactive)
-  (let* ((ccl-path "/opt/src/ccl")
-         (slime-lisp-implementations `((ccl  (concat ccl-path "/scripts/ccl64")))))
-    (setenv "CCL_DEFAULT_DIRECTORY" ccl-path)
-    (slime)))
+  (if-let (ccl-path (locate-path "ccl64" exec-path))
+      (let ((slime-lisp-implementations `((ccl (,ccl-path)))))
+        (slime))
+    (message "The ccl application could not be found")))
 
 (defun clisp ()
   (interactive)
-  (let ((slime-lisp-implementations
-	 `((clisp ,(list (locate-path "clisp" exec-path) " -K full")))))
-    (slime)))
+  (if-let (clisp-path (locate-path "clisp" exec-path))
+      (let ((slime-lisp-implementations `((clisp (,clisp-path " -K full")))))
+        (slime))
+    (message "The clisp application could not be found")))
 
 (defun ecl ()
   (interactive)
-  (let ((slime-lisp-implementations
-         `((ecl ,(list (expand-file-name "~/bin/ecl.sh")))))
-	(slime-net-coding-system 'utf-8-unix))
-    (slime)))
-
-(defun ecl-iphone ()
-  (interactive)
-  (let ((slime-lisp-implementations
-	 `((ecl ,(list "/opt/iphone/simulator/bin/ecl")))))
-    (setenv "DYLD_LIBRARY_PATH" "/opt/iphone/simulator/lib")
-    (slime)))
+  (if-let (ecl-path (locate-path "ecl.sh" exec-path))
+      (let ((slime-lisp-implementations `((ecl (,ecl-path)))))
+        (slime))
+    (message "The ecl application could not be found")))
 
 ;;;;;;;;;;;;;;;; emacs lisp ;;;;;;;;;;;;;;;;
 
@@ -181,8 +173,6 @@ currently under the curser"
         (goto-char (point-max))))))
 
 ;;;;;;;;;;;;;;;; clojure ;;;;;;;;;;;;;;;;
-
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/clojure-emacs-hacks/"))
 
 (eval-after-load 'clojure-mode
   '(progn
