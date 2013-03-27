@@ -84,10 +84,8 @@
   '(cvs-mode-init))
 
 (defun setup-message-mode ()
-  (text-editing-setup-hook)
-  (font-lock-mode)
-  (auto-fill-mode 1)
-  (setq fill-column 72))
+  (setup-text-mode)
+  (font-lock-mode))
 
 (defvar *smtp-auth-info* nil)
 (defun setup-smtpmail ()
@@ -131,7 +129,6 @@
 	smtpmail-smtp-service 587
 	smtpmail-debug-info t)
   (global-set-key "\C-xm" 'my-compose-mail)
-  (add-hook 'message-setup-hook 'smtpmail-setup-hook)
   (add-hook 'message-mode-hook 'setup-message-mode))
 
 (eval-after-load 'message
@@ -164,3 +161,9 @@
   '(progn
      (set-face-attribute 'info-header-node nil :foreground "black")
      (set-face-attribute 'info-node nil :foreground "black")))
+
+(eval-after-load 'jabber
+  '(setq jabber-roster-line-format "%c %n %r %s %S"
+         jabber-roster-show-title nil
+         jabber-show-resources nil
+         jabber-chat-buffer-show-avatar nil))
