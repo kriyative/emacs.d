@@ -74,3 +74,25 @@
 
 (eval-after-load 'cc-mode
   '(java-mode-init))
+
+;;;;;;;;;;;;;;;; c-sharp mode ;;;;;;;;;;;;;;;;
+
+;; override a buggy defadvice in csharp-mode.el
+;;
+(eval-after-load 'csharp-mode
+  '(defadvice revert-buffer (around
+                             csharp-advise-revert-buffer
+                             activate compile)
+     (let ((is-flymake-enabled
+            (and (boundp 'flymake-is-running)
+                 flymake-is-running)))
+       ;; disable
+       (if is-flymake-enabled
+           (flymake-mode-off))
+
+       ;; revert
+       ad-do-it
+
+       ;; enable
+       (if is-flymake-enabled
+           (flymake-mode-on)))))
