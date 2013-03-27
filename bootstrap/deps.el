@@ -30,21 +30,25 @@
   ((emacs23p) (emacs23-package-init))
   ((emacs22p) (emacs22-package-init)))
 
+(defconst additional-package-archives
+  '((("kriyative" . "http://kriyative.github.com/elpa/packages/"))
+    (("marmalade" . "http://marmalade-repo.org/packages/") t)))
+
 (when (boundp 'package-archives)
-  (add-to-list 'package-archives
-	       '("marmalade" . "http://marmalade-repo.org/packages/")
-	       t))
+  (dolist (spec additional-package-archives)
+    (apply 'add-to-list 'package-archives spec)))
 (package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+(package-refresh-contents)
 
 (defvar packages-deps
   `(adaptive-wrap
     adoc-mode
     buffer-move
+    chicken-scheme
     clojure-mode
     clojure-test-mode
     clojurescript-mode
+    clojure-emacs-hacks
     csv-mode
     gh
     jabber
@@ -54,95 +58,13 @@
     magit-gh-pulls
     magithub
     markup-faces
+    miagi
     nrepl
     pcache
-    slime
-    slime-repl))
+    slime-snapshot
+    emacs-w3m))
 
-(dolist (pkg packages-deps)
-  (unless (package-installed-p pkg)
-    (package-install pkg)))
-
-(defvar non-packages-deps
-  '(("emacs-w3m" :src "http://dl.dropbox.com/u/64576/share/sw/emacs-w3m.tar.gz")
-    ("clojure-emacs-hacks" :src "https://github.com/kriyative/clojure-emacs-hacks.git")))
-
-(defmacro with-cwd (dir &rest body)
-  (let ((cwd% (gensym)))
-    `(let ((,cwd% default-directory))
-       (unwind-protect
-           (progn
-             (cd-absolute ,dir)
-             ,@body)
-         (cd-absolute ,cwd%)))))
-
-(defvar init-dir "~/.emacs.d")
-
-(defun test-string-match (item x) (string-match x item))
-
-(defvar unpackers-alist
-  `(("\\(tgz\\|tar\.gz\\)$"
-     ,(lambda (filename)
-        (call-process "tar" nil nil nil "xzf" filename)))
-    ("\\(tbz\\|tar\.bz\\|tar\.bz2\\)$"
-     ,(lambda (filename)
-        (call-process "tar" nil nil nil "xjf" filename)))
-    ("tar$"
-     ,(lambda (filename)
-        (call-process "tar" nil nil nil "xf" filename)))
-    ("zip$"
-     ,(lambda (filename)
-        (call-process "unzip" nil nil nil filename)))))
-
-(defun find-unpacker (filename)
-  (when-let (unpacker (assoc* filename unpackers-alist :test 'test-string-match))
-    (cadr unpacker)))
-
-;; (find-unpacker "emacs-w3m.tar.gz")
-;; (find-unpacker "master.zip")
-
-(defun unpack (filename)
-  (when-let (unpacker (find-unpacker filename))
-    (funcall unpacker filename)))
-
-(defun download-and-install-http (src tmpdir fname)
-  (with-cwd tmpdir
-    (call-process "curl" nil nil nil "-L" "-O" src))
-  (with-cwd init-dir
-    (unpack (concat (file-name-as-directory tmpdir) fname))))
-
-(defun download-and-install-git (src tmpdir fname)
-  (with-cwd init-dir
-    (call-process "git" nil nil nil "clone" src)))
-
-(defvar downloaders-alist
-  '(("github\.com" download-and-install-git)
-    ("^http" download-and-install-http)))
-
-(defun find-downloader (src)
-  (when-let (downloader (assoc* src downloaders-alist :test 'test-string-match))
-    (cadr downloader)))
-
-(defun download-and-install (src &rest args)
-  (if-let (downloader (find-downloader src))
-      (apply downloader src args)
-    (message "Don't know how to download/install %s" src)))
-
-(let* ((tmpname (make-temp-name "emacs-bootstrap-"))
-       (tmpdir (format "/tmp/%s" tmpname)))
-  (unwind-protect
-      (progn
-        (make-directory tmpdir t)
-        (add-to-list 'exec-path "/usr/local/bin")
-        (dolist (dep non-packages-deps)
-          (let* ((key (car dep))
-                 (plist (cdr dep))
-                 (src (getf plist :src))
-                 (url (url-generic-parse-url src))
-                 (fname (file-name-nondirectory (url-filename url)))
-                 (dir (expand-file-name (concat "~/.emacs.d/" key))))
-            (unless (file-directory-p dir)
-              (message "downloading and unpacking %s ..." key)
-              (download-and-install src tmpdir fname))
-            (add-to-list 'load-path dir))))
-    (delete-directory tmpdir t)))
+(save-values (features)
+  (dolist (pkg packages-deps)
+    (unless (package-installed-p pkg)
+      (package-install pkg))))
