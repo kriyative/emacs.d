@@ -14,12 +14,7 @@
        ,@body)))
 
 (defun concat-path (path file)
-  (let ((sep (if (boundp 'directory-sep-char) directory-sep-char ?/)))
-    (concat path
-            (if (eq (aref path (max 0 (1- (length path)))) sep)
-                ""
-              (char-to-string sep))
-            file)))
+  (concat (file-name-as-directory path) file))
 
 (defun locate-path (file path-list)
   (when-let (path (find-if '(lambda (path)
@@ -293,3 +288,39 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
     (dolist (path paths)
       (add-to-list 'exec-path path))
     (setenv "PATH" (join ":" exec-path))))
+
+(defun set-all-line-truncation (v)
+  (make-local-variable 'truncate-lines)
+  (setq truncate-lines v)
+  (make-local-variable 'truncate-partial-width-windows)
+  (setq truncate-partial-width-windows v))
+
+(defun turn-on-line-truncation ()
+  (interactive)
+  (set-all-line-truncation t))
+
+(defmacro with-cwd (dir &rest body)
+  (let ((cwd% (gensym)))
+    `(let ((,cwd% default-directory))
+       (unwind-protect
+           (progn
+             (cd-absolute ,dir)
+             ,@body)
+         (cd-absolute ,cwd%)))))
+
+(defmacro save-values (vars &rest body)
+  (let ((tmpargs (mapcar (lambda (x) (gensym x)) vars)))
+    `(let ,(map 'list
+                (lambda (tmparg var)
+                  (list tmparg var))
+                tmpargs
+                vars)
+       (unwind-protect
+           (progn ,@body)
+         ,@(map 'list
+                (lambda (var tmparg)
+                  (list 'setq var tmparg))
+                vars
+                tmpargs)))))
+
+(defun test-string-match (item x) (string-match x item))
