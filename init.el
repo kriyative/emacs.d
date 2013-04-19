@@ -41,6 +41,8 @@
 (require 'clojurescript-mode)
 (require 'adoc-mode)
 
+(require 'bbdb)
+(require 'bbdb-mua)
 (require 'miagi)
 
 (display-time)
