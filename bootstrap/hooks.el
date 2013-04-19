@@ -12,7 +12,8 @@
   '(add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
 
 (defun setup-text-mode ()
-  (auto-fill-mode 1))
+  (auto-fill-mode -1)
+  (visual-line-mode))
 (add-hook 'text-mode-hook 'setup-text-mode)
 
 (defun setup-indented-text-mode ()
@@ -25,7 +26,7 @@
 (add-hook 'nroff-mode-hook 'setup-nroff-mode)
 
 (defun setup-tex-mode ()
-  (auto-fill-mode 1)
+  (visual-line-mode)
   (font-lock-mode -1)
   (setq tab-width 2)
   (setq indent-tabs-mode nil)
@@ -111,7 +112,7 @@
 			     user-email-address)))
     (compose-mail)))
 
-(defun message-init ()
+(defun setup-message ()
   (require 'starttls)
   (setq mail-user-agent 'message-user-agent
 	query-user-mail-address t
@@ -132,7 +133,7 @@
   (add-hook 'message-mode-hook 'setup-message-mode))
 
 (eval-after-load 'message
-  '(message-init))
+  '(setup-message))
 
 (defun compilation-mode-colorize-buffer ()
   (toggle-read-only)
@@ -162,8 +163,18 @@
      (set-face-attribute 'info-header-node nil :foreground "black")
      (set-face-attribute 'info-node nil :foreground "black")))
 
+(defun setup-jabber ()
+  (setq jabber-roster-line-format "%c %n %r %s %S"
+        jabber-roster-show-title nil
+        jabber-show-resources nil
+        jabber-chat-buffer-show-avatar nil)
+  (add-hook 'jabber-chat-mode-hook 'visual-line-mode))
+
 (eval-after-load 'jabber
-  '(setq jabber-roster-line-format "%c %n %r %s %S"
-         jabber-roster-show-title nil
-         jabber-show-resources nil
-         jabber-chat-buffer-show-avatar nil))
+  '(setup-jabber))
+
+(defun setup-python ()
+  (setq python-remove-cwd-from-path nil))
+
+(eval-after-load 'python
+  '(setup-python))
