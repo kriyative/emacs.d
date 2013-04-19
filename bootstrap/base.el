@@ -23,6 +23,15 @@
                            path-list))
     (concat-path path file)))
 
+(defvar base-exec-path exec-path)
+
+(defun add-exec-paths (exec-paths &optional append)
+  (dolist (path exec-paths)
+    (let ((path (expand-file-name path)))
+      (when (file-directory-p path)
+        (add-to-list 'exec-path path append)))
+    (setenv "PATH" (join ":" exec-path))))
+
 (defun toggle-frame-width ()
   "Toggle between narrow and wide frame layouts"
   (interactive)
