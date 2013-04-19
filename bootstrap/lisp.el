@@ -182,3 +182,10 @@ currently under the curser"
 
 (eval-after-load 'clojure-test-mode
   '(require 'clojure-test-mode-slime))
+
+(defun setup-clojurescript-mode ()
+  (define-clojure-indent
+    (this-as 1)))
+
+(eval-after-load 'clojurescript-mode
+  '(setup-clojurescript-mode))
