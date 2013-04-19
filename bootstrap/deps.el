@@ -32,7 +32,8 @@
 
 (defconst additional-package-archives
   '((("kriyative" . "http://kriyative.github.com/elpa/packages/"))
-    (("marmalade" . "http://marmalade-repo.org/packages/") t)))
+    (("marmalade" . "http://marmalade-repo.org/packages/") t)
+    (("melpa" . "http://melpa.milkbox.net/packages/") t)))
 
 (when (boundp 'package-archives)
   (dolist (spec additional-package-archives)
@@ -45,12 +46,15 @@
     adoc-mode
     buffer-move
     chicken-scheme
+    clojure-emacs-hacks
     clojure-mode
     clojure-test-mode
     clojurescript-mode
-    clojure-emacs-hacks
     csv-mode
+    emacs-w3m
+    erlang
     gh
+    google-contacts
     jabber
     ,(if (emacs24-or-newer-p) 'js2-mode 'javascript-mode)
     logito
@@ -60,9 +64,9 @@
     markup-faces
     miagi
     nrepl
+    oauth2
     pcache
-    slime-snapshot
-    emacs-w3m))
+    slime-snapshot))
 
 (save-values (features)
   (dolist (pkg packages-deps)
