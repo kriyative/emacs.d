@@ -89,3 +89,24 @@
 
 (eval-after-load 'adoc-mode
   '(add-to-list 'auto-mode-alist '("\\.doc$" . adoc-mode)))
+
+;; HipChat via jabber.el
+;;
+;; from: https://gist.github.com/pufuwozu/4002033
+(defun hipchat-join (room)
+  (interactive "sRoom name: ")
+  (jabber-groupchat-join (jabber-read-account)
+                         (concat hipchat-number "_" room "@conf.hipchat.com")
+                         hipchat-nickname
+                         t))
+
+;; Mention nicknames in a way that HipChat clients will pickup
+(defun hipchat-mention (nickname)
+  (interactive
+   (list (jabber-muc-read-nickname jabber-group "Nickname: ")))
+  (insert (concat "@\"" nickname "\" ")))
+
+(eval-after-load 'bbdb
+  '(progn
+     (bbdb-insinuate-message)
+     (bbdb-initialize 'message 'sc)))
