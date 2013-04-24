@@ -56,6 +56,10 @@
   (when (file-exists-p f)
     (load f)))
 
+(let ((f (expand-file-name "~/.bash_profile")))
+  (when (file-exists-p f)
+    (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i"))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
