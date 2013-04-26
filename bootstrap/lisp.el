@@ -188,4 +188,6 @@ currently under the curser"
     (this-as 1)))
 
 (eval-after-load 'clojurescript-mode
-  '(setup-clojurescript-mode))
+  '(progn
+     (require 'clojurescript-mode-ext)
+     (setup-clojurescript-mode)))
