@@ -178,3 +178,9 @@
 
 (eval-after-load 'python
   '(setup-python))
+
+(defun setup-javascript-mode ()
+  (setq indent-tabs-mode nil))
+
+(eval-after-load 'js2-mode
+  '(add-hook 'javascript-mode-hook 'setup-javascript-mode))
