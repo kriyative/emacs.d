@@ -167,8 +167,12 @@
   (setq jabber-roster-line-format "%c %n %r %s %S"
         jabber-roster-show-title nil
         jabber-show-resources nil
-        jabber-chat-buffer-show-avatar nil)
-  (add-hook 'jabber-chat-mode-hook 'visual-line-mode))
+        jabber-chat-buffer-show-avatar nil
+        jabber-muc-autojoin t)
+  (require 'password-cache)
+  (require 'jabber-util)
+  (add-hook 'jabber-chat-mode-hook 'visual-line-mode)
+  (add-hook 'jabber-post-connect-hooks 'jabber-keepalive-start))
 
 (eval-after-load 'jabber
   '(setup-jabber))
