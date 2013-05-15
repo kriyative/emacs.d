@@ -25,3 +25,4 @@
 (define-key ctl-z-map "w" 'window-configuration-to-register)
 (define-key ctl-z-map [left] 'buf-move-left)
 (define-key ctl-z-map [right] 'buf-move-right)
+(define-key ctl-z-map "O" 'browse-url-default-macosx-browser)
