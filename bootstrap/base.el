@@ -334,9 +334,21 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
 
 (defun test-string-match (item x) (string-match x item))
 
+(defun find-file-if-exists (path &optional find-file-function find-file-args)
+  (let ((path (expand-file-name path)))
+    (when (file-exists-p path)
+      (apply (or find-file-function 'find-file-noselect)
+             path
+             find-file-args))))
+
 (defun find-file-no-desktop (path)
-  (when (file-exists-p f)
-    (let ((buf (find-file-noselect f)))
-      (when (featurep 'desktop)
-        (push (buffer-name buf)
-              desktop-clear-preserve-buffers)))))
+  (require 'desktop)
+  (when-let (buf (find-file-if-exists f))
+    (when (featurep 'desktop)
+      (push (buffer-name buf)
+            desktop-clear-preserve-buffers))))
+
+(defun load-file-if-exists (path &rest load-args)
+  (let ((path (expand-file-name path)))
+    (when (file-exists-p path)
+      (apply 'load path load-args))))
