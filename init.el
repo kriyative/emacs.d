@@ -52,13 +52,10 @@
 (setq server-use-tcp t)
 (server-start)
 
-(let ((f (expand-file-name "~/.personal.el")))
-  (when (file-exists-p f)
-    (load f)))
+(load-file-if-exists "~/.personal.el")
 
-(let ((f (expand-file-name "~/.bash_profile")))
-  (when (file-exists-p f)
-    (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i"))))
+(when (file-exists-p (expand-file-name "~/.bash_profile"))
+  (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
