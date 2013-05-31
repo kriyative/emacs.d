@@ -333,3 +333,10 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
                 tmpargs)))))
 
 (defun test-string-match (item x) (string-match x item))
+
+(defun find-file-no-desktop (path)
+  (when (file-exists-p f)
+    (let ((buf (find-file-noselect f)))
+      (when (featurep 'desktop)
+        (push (buffer-name buf)
+              desktop-clear-preserve-buffers)))))
