@@ -168,7 +168,10 @@
         jabber-roster-show-title nil
         jabber-show-resources nil
         jabber-chat-buffer-show-avatar nil
-        jabber-muc-autojoin t)
+        jabber-muc-autojoin nil
+        jabber-chat-local-prompt-format "[%t] %n\n"
+        jabber-chat-foreign-prompt-format "[%t] %n\n"
+        jabber-keepalive-interval 30)
   (require 'password-cache)
   (require 'jabber-util)
   (add-hook 'jabber-chat-mode-hook 'visual-line-mode)
