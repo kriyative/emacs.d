@@ -169,13 +169,16 @@
         jabber-show-resources nil
         jabber-chat-buffer-show-avatar nil
         jabber-muc-autojoin nil
-        jabber-chat-local-prompt-format "[%t] %n\n"
-        jabber-chat-foreign-prompt-format "[%t] %n\n"
-        jabber-keepalive-interval 30)
+        jabber-chat-local-prompt-format "\n[%t] %n\n"
+        jabber-chat-foreign-prompt-format "\n[%t] %n\n"
+        jabber-groupchat-prompt-format "\n[%t] %n\n"
+        jabber-keepalive-interval 30
+        jabber-muc-disable-disco-check t)
   (require 'password-cache)
   (require 'jabber-util)
   (add-hook 'jabber-chat-mode-hook 'visual-line-mode)
-  (add-hook 'jabber-post-connect-hooks 'jabber-keepalive-start))
+  ;; (add-hook 'jabber-post-connect-hooks 'jabber-keepalive-start)
+  (jabber-keepalive-start))
 
 (eval-after-load 'jabber
   '(setup-jabber))
