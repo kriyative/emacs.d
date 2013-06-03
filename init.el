@@ -71,6 +71,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(fringe ((t nil)))
- '(jabber-chat-prompt-foreign ((t (:background "LightBlue"))))
- '(jabber-chat-prompt-local ((t (:background "grey90"))))
+ '(jabber-chat-prompt-foreign ((t (:weight bold))))
+ '(jabber-chat-prompt-local ((t (:foreground "blue"))))
+ '(jabber-chat-prompt-system ((t (:foreground "red"))))
  '(jabber-title-medium ((t (:height 1.5)))))
