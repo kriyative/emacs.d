@@ -22,6 +22,7 @@
 (define-key ctl-z-map "o" 'browse-url-default-macosx-browser)
 (define-key ctl-z-map "t" 'toggle-truncate-lines)
 (define-key ctl-z-map "u" 'browse-url)
+(define-key ctl-z-map "v" 'magit-status)
 (define-key ctl-z-map "w" 'window-configuration-to-register)
 (define-key ctl-z-map "|" 'toggle-window-split)
 (define-key ctl-z-map [left] 'buf-move-left)
