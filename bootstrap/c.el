@@ -96,3 +96,15 @@
        ;; enable
        (if is-flymake-enabled
            (flymake-mode-on)))))
+
+;;;;;;;;;;;;;;;; js2-mode ;;;;;;;;;;;;;;;;
+
+(defun my-js2-mode-hook ()
+  (setq indent-tabs-mode nil))
+
+(defun setup-js2-mode ()
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-hook 'js2-mode-hook 'my-js2-mode-hook))
+
+(eval-after-load 'js2-mode
+  '(setup-js2-mode))
