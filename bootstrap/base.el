@@ -352,3 +352,13 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
   (let ((path (expand-file-name path)))
     (when (file-exists-p path)
       (apply 'load path load-args))))
+
+(defun other-window-send-keys (keys)
+  (interactive (list (read-key-sequence "Keysequence: ")))
+  (let ((window (selected-window)))
+    (unwind-protect
+        (save-excursion
+          (other-window (or current-prefix-arg 1))
+          (let ((last-kbd-macro (read-kbd-macro keys)))
+            (call-last-kbd-macro)))
+      (select-window window))))

@@ -18,3 +18,5 @@
 
 (global-set-key [?\C-.] 'tags-search)
 (global-set-key [?\C-,] 'tags-loop-continue)
+
+(define-key ctl-x-4-map "k" 'other-window-send-keys)
