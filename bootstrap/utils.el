@@ -70,3 +70,8 @@
   (browse-url
    (concat "http://en.wikipedia.org/w/index.php?search="
            (capitalize q))))
+
+(defun emacswiki (q)
+  (interactive (list (get-region-or-read-terms "emacswiki: ")))
+  (browse-url
+   (concat "http://www.emacswiki.org/emacs/Search?action=index&match=" q)))
