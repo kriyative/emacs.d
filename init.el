@@ -45,6 +45,8 @@
 (require 'bbdb-mua)
 (require 'miagi)
 
+(require 'js2-mode)
+
 (display-time)
 (appt-activate 1)
 (winner-mode 1)
