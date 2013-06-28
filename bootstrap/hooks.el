@@ -184,7 +184,10 @@
   '(setup-jabber))
 
 (defun setup-python ()
-  (setq python-remove-cwd-from-path nil))
+  (setq python-remove-cwd-from-path nil)
+  (setq jedi:setup-keys t)
+  (require 'jedi)
+  (add-hook 'python-mode-hook 'jedi:setup))
 
 (eval-after-load 'python
   '(setup-python))
