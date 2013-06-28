@@ -37,8 +37,8 @@
     (and result t)))
 
 (defun java-mode-hook ()
-  (setq c-basic-offset 2
-	tab-width 2
+  (setq c-basic-offset 4
+	tab-width 4
 	c-set-style "linux"
 	indent-tabs-mode nil)
   (when (boundp 'outline-regexp)
