@@ -21,6 +21,7 @@
                                       "/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp"
                                       "/emacs-lisp/package.el"))
         (e23-package (expand-file-name "~/.emacs.d/elpa23/package.el")))
+    (mkdir (file-name-directory e23-package) t)
     (unless (file-exists-p e23-package)
       (url-copy-file emacs23-package-code e23-package))
     (load e23-package)))
@@ -71,4 +72,6 @@
 (save-values (features)
   (dolist (pkg packages-deps)
     (unless (package-installed-p pkg)
-      (package-install pkg))))
+      (condition-case nil
+	  (package-install pkg)
+	(error (message "Error installing %s" pkg))))))
