@@ -31,7 +31,7 @@
   ((emacs22p) (emacs22-package-init)))
 
 (defconst additional-package-archives
-  '((("kriyative" . "http://kriyative.github.com/elpa/packages/"))
+  '((("kriyative" . "http://kriyative.github.io/elpa/packages/"))
     (("marmalade" . "http://marmalade-repo.org/packages/") t)
     (("melpa" . "http://melpa.milkbox.net/packages/") t)))
 
