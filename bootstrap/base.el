@@ -362,3 +362,8 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
           (let ((last-kbd-macro (read-kbd-macro keys)))
             (call-last-kbd-macro)))
       (select-window window))))
+
+(defun try-require (feature)
+  (condition-case nil
+      (require feature)
+    (error (message "Error loading feature %s" feature))))
