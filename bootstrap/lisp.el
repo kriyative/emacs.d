@@ -72,7 +72,9 @@ currently under the curser"
 	browse-url-browser-function 'w3m-browse-url-other-window)
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
-  (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections))
+  (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections)
+  (unless (boundp 'last-command-char)
+    (defvar last-command-char nil)))
 
 (defun slime-mode-init ()
   (slime-setup '(slime-repl))
