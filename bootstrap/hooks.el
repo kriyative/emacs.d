@@ -197,3 +197,11 @@
 
 (eval-after-load 'js2-mode
   '(add-hook 'javascript-mode-hook 'setup-javascript-mode))
+
+(defun setup-guide-key ()
+  (guide-key-mode 1)
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-z")
+        guide-key/popup-window-position 'bottom))
+
+(eval-after-load 'guide-key
+  '(setup-guide-key))

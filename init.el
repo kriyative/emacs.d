@@ -46,6 +46,7 @@
 (try-require 'miagi)
 
 (try-require 'js2-mode)
+(try-require 'guide-key)
 
 (display-time)
 (appt-activate 1)

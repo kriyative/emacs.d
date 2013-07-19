@@ -56,6 +56,7 @@
     erlang
     gh
     google-contacts
+    guide-key
     jabber
     ,(if (emacs24-or-newer-p) 'js2-mode 'javascript-mode)
     logito
