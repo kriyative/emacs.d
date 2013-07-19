@@ -47,6 +47,7 @@
 
 (try-require 'js2-mode)
 (try-require 'guide-key)
+(try-require 'dictionary)
 
 (display-time)
 (appt-activate 1)

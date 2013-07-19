@@ -52,6 +52,7 @@
     clojure-test-mode
     clojurescript-mode
     csv-mode
+    dictionary
     emacs-w3m
     erlang
     gh
