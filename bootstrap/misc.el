@@ -48,7 +48,8 @@
 (eval-after-load 'diary
   '(diary-init))
 
-(setq remote-shell-program "ssh"
+(setq backup-inhibited t
+      remote-shell-program "ssh"
       truncate-partial-width-windows nil
       ;; appt-message-warning-time 10
       display-time-day-and-date t
