@@ -52,6 +52,9 @@
 (display-time)
 (appt-activate 1)
 (winner-mode 1)
+(set-default 'truncate-lines t)
+(set-default 'truncate-partial-width-windows t)
+(set-default 'line-move-visual nil)
 
 (setq server-use-tcp t)
 (server-start)
@@ -79,3 +82,5 @@
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))
  '(jabber-chat-prompt-system ((t (:foreground "red"))))
  '(jabber-title-medium ((t (:height 1.5)))))
+(put 'narrow-to-region 'disabled nil)
+(put 'scroll-left 'disabled nil)

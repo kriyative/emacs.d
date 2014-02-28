@@ -50,7 +50,7 @@
 
 (setq backup-inhibited t
       remote-shell-program "ssh"
-      truncate-partial-width-windows nil
+      truncate-partial-width-windows t
       ;; appt-message-warning-time 10
       display-time-day-and-date t
       display-time-world-list '(("America/Los_Angeles" "Cupertino")

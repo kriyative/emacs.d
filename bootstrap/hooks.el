@@ -206,3 +206,11 @@
 
 (eval-after-load 'guide-key
   '(setup-guide-key))
+
+(defun setup-html-mode ()
+  (visual-line-mode -1)
+  (setq truncate-lines t
+        truncate-partial-width-windows t))
+
+(eval-after-load 'sgml-mode
+  '(add-hook 'html-mode-hook 'setup-html-mode))

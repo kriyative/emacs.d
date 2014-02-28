@@ -178,9 +178,11 @@ currently under the curser"
 
 (eval-after-load 'clojure-mode
   '(progn
-    (require 'clojure-mode-ext)
-    (require 'clojure-mode-slime)
-    (require 'clojuredocs)))
+     (require 'clojure-mode-ext)
+     (require 'clojure-mode-slime)
+     (require 'clojuredocs)
+     (add-hook 'clojure-mode-hook
+               (lambda () (auto-revert-mode 1)))))
 
 (eval-after-load 'clojure-test-mode
   '(require 'clojure-test-mode-slime))
@@ -193,3 +195,4 @@ currently under the curser"
   '(progn
      (require 'clojurescript-mode-ext)
      (setup-clojurescript-mode)))
+
