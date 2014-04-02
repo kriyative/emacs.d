@@ -16,3 +16,5 @@
 (set-face-foreground 'region nil)
 (normal-erase-is-backspace-mode 0)
 (menu-bar-mode -1)
+
+(set-default 'fringes-outside-margins t)
