@@ -63,7 +63,7 @@
     logito
     magit
     magit-gh-pulls
-    magithub
+    ;; magithub
     markup-faces
     miagi
     nrepl
