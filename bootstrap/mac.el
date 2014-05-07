@@ -105,38 +105,6 @@
 
 (push 'mac-growl-compilation-finish-function compilation-finish-functions)
 
-(let ((fgcolor "black")
-      (bgcolor "white"))
-  (when window-system
-    (set-foreground-color fgcolor)
-    (set-background-color bgcolor)
-    (set-face-foreground 'mode-line bgcolor)
-    (set-face-background 'mode-line fgcolor)
-    (set-cursor-color "red")
-    (set-face-foreground 'default fgcolor))
-  (set-face-foreground 'region fgcolor)
-  (set-face-background 'region "lightgrey")
-  (set-face-foreground 'minibuffer-prompt fgcolor)
-  (set-face-background 'minibuffer-prompt nil)
-  (unless window-system
-    (set-face-foreground 'mode-line "black")
-    (set-face-background 'mode-line "white")
-    (set-face-foreground 'menu "white"))
-  (set-face-background 'isearch "indian red")
-  (set-face-foreground 'isearch "white")
-  (set-face-background 'fringe "white")
-  (when (boundp 'font-lock-comment-face)
-    (set-face-foreground 'font-lock-comment-face "DimGrey")
-    (set-face-foreground 'font-lock-builtin-face "gray20")
-    (set-face-foreground 'font-lock-constant-face "DimGrey")
-    (set-face-foreground 'font-lock-function-name-face "blue")
-    (set-face-foreground 'font-lock-keyword-face "gray20")
-    (set-face-foreground 'font-lock-string-face "DimGrey")
-    (set-face-foreground 'font-lock-type-face fgcolor)
-    (set-face-foreground 'font-lock-variable-name-face fgcolor)
-    (set-face-foreground 'font-lock-warning-face "red"))
-  (set-face-attribute 'vertical-border nil :background "black" :foreground "black"))
-
 (setq initial-frame-alist
       `((vertical-scroll-bars)
         (scroll-bar-width)
@@ -146,7 +114,7 @@
         (height . 50))
       default-frame-alist initial-frame-alist)
 ;; (add-hook 'term-setup-hook 'mac-toggle-max-window)
-(set-face-background 'fringe "gray")
+
 ;;........1.........2.........3.........4.........5.........6.........7.........8
 ;;2345678901234567890123456789012345678901234567890123456789012345678901234567890
 ;; (set-default-font "Consolas 11")

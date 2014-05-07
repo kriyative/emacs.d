@@ -28,7 +28,7 @@
       (set-face-foreground 'menu bgcolor))
     (set-face-background 'isearch "indian red")
     (set-face-foreground 'isearch "white")
-    (set-face-background 'fringe bgcolor)
+    (set-face-background 'fringe "grey99")
     (when (boundp 'font-lock-comment-face)
       (set-face-foreground 'font-lock-comment-face "DimGrey")
       (set-face-foreground 'font-lock-builtin-face "gray20")
