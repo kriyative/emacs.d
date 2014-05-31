@@ -156,3 +156,5 @@
         (if (eq system-type 'darwin)
             "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
           "/usr"))
+
+(add-exec-paths '("/usr/local/MacGPG2/bin"))
