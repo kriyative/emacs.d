@@ -103,6 +103,15 @@
     (let ((fullscreenp (eq (frame-parameter nil 'fullscreen) 'fullboth)))
       (set-frame-parameter nil 'fullscreen (unless fullscreenp 'fullboth)))))
 
+(defun mac-move-mouse (x y)
+  (call-process "cliclick" nil nil nil (format "m:%d,%d" x y)))
+
+(defun mac-mouse-top-center ()
+  (interactive)
+  (let ((sx (/ (display-pixel-width) 2))
+        (sy 0))
+    (mac-move-mouse sx sy)))
+
 (push 'mac-growl-compilation-finish-function compilation-finish-functions)
 
 (setq initial-frame-alist
@@ -133,6 +142,7 @@
 (define-key ctl-z-map "p" 'mac-itunes-play)
 (define-key ctl-z-map "x" 'mac-toggle-max-window)
 (define-key ctl-z-map "l" 'mac-lock-screen)
+(define-key ctl-z-map "m" 'mac-mouse-top-center)
 (setq mac-pass-command-to-system nil)
 (set-fringe-mode '(5 . 5))
 (set-default 'fringe-indicator-alist
