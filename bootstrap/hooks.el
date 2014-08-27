@@ -214,3 +214,10 @@
 
 (eval-after-load 'sgml-mode
   '(add-hook 'html-mode-hook 'setup-html-mode))
+
+(defun setup-edit-server ()
+  (setq edit-server-default-major-mode 'normal-mode
+        edit-server-new-frame nil))
+
+(eval-after-load 'edit-server
+  '(setup-edit-server))
