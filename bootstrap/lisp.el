@@ -177,22 +177,11 @@ currently under the curser"
 ;;;;;;;;;;;;;;;; clojure ;;;;;;;;;;;;;;;;
 
 (eval-after-load 'clojure-mode
-  '(progn
-     (require 'clojure-mode-ext)
-     (require 'clojure-mode-slime)
-     (require 'clojuredocs)
-     (add-hook 'clojure-mode-hook
-               (lambda () (auto-revert-mode 1)))))
+  '(add-hook 'clojure-mode-hook
+             (lambda () (auto-revert-mode 1))))
 
-(eval-after-load 'clojure-test-mode
-  '(require 'clojure-test-mode-slime))
+(eval-after-load 'cider-repl
+  '(cider-repl-add-shortcut "sayoonara" 'cider-quit))
 
-(defun setup-clojurescript-mode ()
-  (define-clojure-indent
-    (this-as 1)))
-
-(eval-after-load 'clojurescript-mode
-  '(progn
-     (require 'clojurescript-mode-ext)
-     (setup-clojurescript-mode)))
-
+(eval-after-load 'cider
+  `(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode))
