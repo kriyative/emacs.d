@@ -33,8 +33,10 @@
 
 (defconst additional-package-archives
   '((("kriyative" . "http://kriyative.github.io/elpa/packages/"))
+    (("gnu" . "http://elpa.gnu.org/packages/"))
     (("marmalade" . "http://marmalade-repo.org/packages/") t)
-    (("melpa" . "http://melpa.milkbox.net/packages/") t)))
+    (("melpa" . "http://melpa.milkbox.net/packages/") t)
+    ))
 
 (when (boundp 'package-archives)
   (dolist (spec additional-package-archives)
