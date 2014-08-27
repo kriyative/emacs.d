@@ -59,6 +59,8 @@
 (setq server-use-tcp t)
 (server-start)
 
+(edit-server-start)
+
 (load-file-if-exists "~/.personal.el")
 
 (when (file-exists-p (expand-file-name "~/.bash_profile"))
