@@ -168,3 +168,7 @@
           "/usr"))
 
 (add-exec-paths '("/usr/local/MacGPG2/bin"))
+
+;; uncomment if mouse should move to top center automatically when
+;; emacs frame takes focus
+;; (remove-hook 'focus-in-hook 'mac-mouse-top-center)
