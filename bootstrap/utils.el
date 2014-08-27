@@ -10,6 +10,16 @@
    (apply 'make-comint "mysql5" "mysql5" nil
 	  (when (> prompt 1) (split-string (read-string "Args: "))))))
 
+(defun h2sql (&optional prompt)
+  (interactive "p")
+  (let ((args (append (list
+                       "-cp"
+                       (expand-file-name
+                        "~/.m2/repository/com/h2database/h2/1.3.175/h2-1.3.175.jar")
+                       "org.h2.tools.Shell")
+                      (when (> prompt 1) (split-string (read-string "Args: "))))))
+    (message "h2sq %S" args)
+    (switch-to-buffer (apply 'make-comint "h2sql" "java" nil args))))
 
 (defun sysinfo ()
   (interactive)
