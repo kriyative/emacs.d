@@ -1,9 +1,7 @@
 *~
 ac-comphist.dat
 clojure-emacs-hacks/
-elpa/
-elpa22/
-elpa23/
+elpa*
 emacs-w3m/
 eshell/
 javadoc-cache
