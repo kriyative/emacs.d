@@ -76,7 +76,6 @@
 
 (save-values (features)
   (let ((package-load-list (append (remove-if-not 'listp packages-deps) '(all))))
-    (message "package-load-list: %S" package-load-list)
     (dolist (pkg packages-deps)
       (destructuring-bind (name version)
           (if (listp pkg)
