@@ -124,14 +124,14 @@
       default-frame-alist initial-frame-alist)
 ;; (add-hook 'term-setup-hook 'mac-toggle-max-window)
 
-;;........1.........2.........3.........4.........5.........6.........7.........8
-;;2345678901234567890123456789012345678901234567890123456789012345678901234567890
-;; (set-default-font "Consolas 11")
-;; (set-default-font "Monaco 11")
-(set-default-font "Menlo 12")
+;;........1.........2.........3.........4.........5.........6.........7.........8.........9
+;;23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+;; (set-default-font "Consolas 18")
+(set-default-font "Monaco 12")
+;; (set-default-font "Menlo 12")
 ;; (set-default-font "Andale Mono 10")
-;; (set-default-font "Inconsolata 11")
 ;; (set-default-font "Inconsolata 13")
+;; (set-default-font "Inconsolata 18")
 (global-set-key "\M-h" 'mac-hide-emacs)
 (global-set-key "\M- " 'just-one-space)
 (global-set-key '[C-tab] 'other-window)
@@ -164,7 +164,7 @@
       mac-autohide-menubar-on-maximize nil)
 (setenv "JAVA_HOME"
         (if (eq system-type 'darwin)
-            "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
+            "/Library/Java/JavaVirtualMachines/jdk/Contents/Home"
           "/usr"))
 
 (add-exec-paths '("/usr/local/MacGPG2/bin"))
