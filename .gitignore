@@ -9,3 +9,4 @@ server/
 swank/
 tramp
 url/
+/el-get/

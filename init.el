@@ -3,9 +3,11 @@
     (let ((init-path (file-name-directory load-file-name)))
       (load (concat init-path path)))))
 
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
+
 (load-relative
  "bootstrap/base.el"
- "bootstrap/deps.el"
+ "bootstrap/deps-el-get.el"
  "bootstrap/c.el"
  "bootstrap/lisp.el"
  "bootstrap/org.el"
