@@ -47,11 +47,11 @@
 (defvar packages-deps
   `(adaptive-wrap
     ;; ac-cider-compliment
-    ac-nrepl
+    ;; ac-nrepl
     adoc-mode
     buffer-move
     chicken-scheme
-    (cider "0.6.0")
+    cider
     clojure-emacs-hacks
     clojure-mode
     clojure-test-mode
@@ -67,22 +67,24 @@
     ,(if (emacs24-or-newer-p) 'js2-mode 'javascript-mode)
     jabber
     logito
-    (magit "1.2.1")
+    magit
     markup-faces
     miagi
     oauth2
     pcache
     slime-snapshot))
 
-(save-values (features)
-  (let ((package-load-list (append (remove-if-not 'listp packages-deps) '(all))))
-    (dolist (pkg packages-deps)
-      (destructuring-bind (name version)
-          (if (listp pkg)
-              pkg
-            (list pkg "any"))
-        (unless (package-installed-p name)
-          (message "installing %S %S" name version)
-          (condition-case nil
-              (package-install name)
-            (error (message "Error installing %s" name))))))))
+(defun bootstrap-emacs ()
+  (interactive)
+  (save-values (features)
+    (let ((package-load-list (append (remove-if-not 'listp packages-deps) '(all))))
+      (dolist (pkg packages-deps)
+        (destructuring-bind (name version)
+            (if (listp pkg)
+                pkg
+              (list pkg "any"))
+          (unless (package-installed-p name)
+            (message "installing %S" name)
+            (condition-case c
+                (package-install name)
+              (error (message "Error installing %s %s" name c)))))))))
