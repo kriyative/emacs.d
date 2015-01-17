@@ -150,9 +150,6 @@
 (eval-after-load 'ansi-color
   '(setup-ansi-color))
 
-(eval-after-load 'w3m
-  '(require 'browse-w3m))
-
 (eval-after-load 'magit
   '(set-face-attribute 'magit-item-highlight nil
 		       :background "lightgrey"
