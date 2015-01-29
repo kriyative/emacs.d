@@ -38,15 +38,6 @@
 
 (try-require 'w3m)
 
-(try-require 'clojure-mode)
-(try-require 'clojure-test-mode)
-(try-require 'clojurescript-mode)
-(try-require 'adoc-mode)
-
-(try-require 'bbdb)
-(try-require 'bbdb-mua)
-(try-require 'miagi)
-
 (try-require 'js2-mode)
 (try-require 'guide-key)
 (try-require 'dictionary)
