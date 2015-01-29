@@ -13,11 +13,14 @@
 
 (defvar pkgs
   '(adaptive-wrap
-    adoc-mode
+    alert
+    buffer-move
     csv-mode
     dictionary
     edit-server
+    emacs-jabber
     emacs-w3m
+    guide-key
     js2-mode
     magit))
 
