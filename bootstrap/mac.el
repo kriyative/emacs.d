@@ -1,3 +1,5 @@
+(require 'alert)
+
 (defun mac-play-sound (media)
   (let ((visible-bell nil))
     (beep)))
@@ -37,14 +39,14 @@
                 "-t" "Emacs compilation"
                 "-m" status))
 
-(defun nc-notify (message &optional title)
-  (call-process
-   "/opt/terminal-notifier_1.3.0/terminal-notifier.app/Contents/MacOS/terminal-notifier"
-   nil nil nil
-   "-title" (or title "Notification from Emacs")
-   "-message" message))
+(setq alert-default-style 'notifier)
+;; this fixes weird precedence bug in el-get
+(fmakunbound 'notifications-notify)
 
-;; (nc-notify "hello")
+(defun nc-notify (message &optional title)
+  (alert message :title title))
+
+;; (nc-notify "hello world")
 
 (defun mac-growl-compilation-finish-function (buffer status)
   (when (string-match "^\*compilation\*" (buffer-name buffer))
@@ -162,10 +164,6 @@
       x-select-enable-clipboard t
       one-buffer-one-frame-mode nil
       mac-autohide-menubar-on-maximize nil)
-(setenv "JAVA_HOME"
-        (if (eq system-type 'darwin)
-            "/Library/Java/JavaVirtualMachines/jdk/Contents/Home"
-          "/usr"))
 
 (add-exec-paths '("/usr/local/MacGPG2/bin"))
 
