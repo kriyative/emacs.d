@@ -1,4 +1,5 @@
 (require 'w3m)
+(require 'browse-url)
 
 (defun w3m-browse-url-other-window (url &optional new-session)
   (save-excursion
@@ -11,7 +12,6 @@
 (defun w3m-mode-hook ()
   (define-key w3m-mode-map "\M-t" 'w3m-copy-buffer))
 
-(require 'w3m)
 (add-hook 'w3m-mode-hook 'w3m-mode-hook)
 
 (setq browse-url-browser-function 'w3m-browse-url-other-window)
