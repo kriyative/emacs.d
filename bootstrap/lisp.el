@@ -183,5 +183,10 @@ currently under the curser"
 (eval-after-load 'cider-repl
   '(cider-repl-add-shortcut "sayoonara" 'cider-quit))
 
+(defun cider-mode-hook ()
+  (cider-turn-on-eldoc-mode)
+  (outline-minor-mode))
+
 (eval-after-load 'cider
-  `(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode))
+  `(add-hook 'cider-mode-hook 'cider-mode-hook))
+;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
