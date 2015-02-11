@@ -20,3 +20,8 @@
 (global-set-key [?\C-,] 'tags-loop-continue)
 
 (define-key ctl-x-4-map "k" 'other-window-send-keys)
+
+(define-key outline-minor-mode-map "\C-c[" 'show-entry)
+(define-key outline-minor-mode-map "\C-c]" 'hide-entry)
+(define-key outline-minor-mode-map "\C-c{" 'show-all)
+(define-key outline-minor-mode-map "\C-c}" 'hide-body)
