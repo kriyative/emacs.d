@@ -187,6 +187,11 @@ currently under the curser"
   (cider-turn-on-eldoc-mode)
   (outline-minor-mode))
 
-(eval-after-load 'cider
-  `(add-hook 'cider-mode-hook 'cider-mode-hook))
 ;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
+
+(defun cider-setup ()
+  (add-hook 'cider-mode-hook 'cider-mode-hook)
+  (setq cider-lein-parameters "trampoline repl :headless"))
+
+(eval-after-load 'cider
+  `(cider-setup))
