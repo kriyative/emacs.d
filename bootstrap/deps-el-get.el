@@ -22,6 +22,7 @@
     emacs-w3m
     guide-key
     js2-mode
+    lua-mode
     magit))
 
 (el-get 'sync pkgs)
