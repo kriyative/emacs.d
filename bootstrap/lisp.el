@@ -195,3 +195,19 @@ currently under the curser"
 
 (eval-after-load 'cider
   `(cider-setup))
+
+(defun cider-remove-current-ns (&optional buffer)
+  (interactive)
+  (with-current-buffer (or buffer (current-buffer))
+    (cider-tooling-eval
+     (format "(remove-ns '%s)" (cider-current-ns))
+     (cider-interactive-eval-handler (current-buffer)))))
+
+(defun cider-load-buffer-ext (&optional arg)
+  (interactive "p")
+  (if arg
+      (progn
+        (message "Removing namespace: %s" (cider-current-ns))
+        (cider-remove-current-ns)
+        (cider-load-buffer))
+    (cider-load-buffer)))
