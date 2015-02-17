@@ -185,7 +185,8 @@ currently under the curser"
 
 (defun cider-mode-hook ()
   (cider-turn-on-eldoc-mode)
-  (outline-minor-mode))
+  (outline-minor-mode)
+  (define-key cider-mode-map "\C-c\C-k" 'cider-load-buffer-ext))
 
 ;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
 
