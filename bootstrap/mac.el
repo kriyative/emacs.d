@@ -138,13 +138,6 @@
 (global-set-key "\M- " 'just-one-space)
 (global-set-key '[C-tab] 'other-window)
 
-(define-key ctl-z-map " " 'mac-itunes-pause)
-(define-key ctl-z-map "d" 'mac-dictionary-search)
-(define-key ctl-z-map "i" 'mac-control-itunes)
-(define-key ctl-z-map "p" 'mac-itunes-play)
-(define-key ctl-z-map "x" 'mac-toggle-max-window)
-(define-key ctl-z-map "l" 'mac-lock-screen)
-(define-key ctl-z-map "m" 'mac-mouse-top-center)
 (setq mac-pass-command-to-system nil)
 (set-fringe-mode '(5 . 5))
 (set-default 'fringe-indicator-alist
