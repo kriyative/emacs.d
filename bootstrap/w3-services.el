@@ -47,7 +47,7 @@
   "Print body for received message in XML-DATA."
   (let* ((message-format (caddar
                           (jabber-xml-get-children
-                           (car (jabber-xml-get-children x 'x))
+                           (car (jabber-xml-get-children xml-data 'x))
                            'message_format)))
          (htmlp (equal "html" message-format))
          (body (car
