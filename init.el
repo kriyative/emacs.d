@@ -65,13 +65,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
- '(smtpmail-smtp-server "smtp.gmail.com")
- '(smtpmail-smtp-service 25))
+ '(smtpmail-smtp-server "smtp.gmail.com" t)
+ '(smtpmail-smtp-service 25 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
+ '(erc-timestamp-face ((t (:foreground "" :weight bold))))
  '(fringe ((t nil)))
  '(jabber-chat-prompt-foreign ((t (:weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))

@@ -222,3 +222,15 @@
 
 (eval-after-load 'edit-server
   '(setup-edit-server))
+
+(defun erc-mode-hook ()
+  (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
+  (setq erc-max-buffer-size 30000
+        erc-user-full-name "kriyative"
+        erc-hide-list '("JOIN" "NICK" "PART" "QUIT")
+        erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
+        erc-fill-function 'erc-fill-static
+        erc-fill-static-center 20))
+
+(eval-after-load 'erc
+  '(add-hook 'erc-mode-hook 'erc-mode-hook))
