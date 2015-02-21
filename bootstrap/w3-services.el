@@ -9,12 +9,18 @@
     (let ((w3m-use-tab nil))
       (w3m-browse-url url new-session))))
 
+(defun w3m-new-buffer ()
+  (interactive)
+  (w3m-copy-buffer nil nil nil 'empty nil))
+
 (defun w3m-mode-hook ()
-  (define-key w3m-mode-map "\M-t" 'w3m-copy-buffer))
+  (define-key w3m-mode-map "\M-t" 'w3m-new-buffer))
 
-(add-hook 'w3m-mode-hook 'w3m-mode-hook)
+(eval-after-load 'w3m
+  '(add-hook 'w3m-mode-hook 'w3m-mode-hook))
 
-(setq browse-url-browser-function 'w3m-browse-url-other-window)
+(eval-after-load 'browse-url
+  '(setq browse-url-browser-function 'w3m-browse-url-other-window))
 
 (defun query-string-encode (s)
   (replace-regexp-in-string "[ ]+" "+" s))

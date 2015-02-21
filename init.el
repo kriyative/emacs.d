@@ -16,7 +16,8 @@
  "bootstrap/keybindings.el"
  "bootstrap/misc.el"
  "bootstrap/utils.el"
- "bootstrap/window.el")
+ "bootstrap/window.el"
+ "bootstrap/w3-services.el")
 
 (add-exec-paths
  (list "/usr/local/bin"
@@ -35,8 +36,6 @@
 (try-require 'buffer-move)
 (try-require 'vc-git)
 (try-require 'magit)
-
-(try-require 'w3m)
 
 (try-require 'js2-mode)
 (try-require 'guide-key)
