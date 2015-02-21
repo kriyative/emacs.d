@@ -150,10 +150,14 @@
 (eval-after-load 'ansi-color
   '(setup-ansi-color))
 
+(defun setup-magit ()
+  (set-face-attribute 'magit-item-highlight nil
+                      :background "lightgrey"
+                      :foreground "black")
+  (set-face-attribute 'magit-tag nil :foreground "black"))
+
 (eval-after-load 'magit
-  '(set-face-attribute 'magit-item-highlight nil
-		       :background "lightgrey"
-		       :foreground "black"))
+  '(setup-magit))
 
 (eval-after-load 'info
   '(progn
