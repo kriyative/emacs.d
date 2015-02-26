@@ -164,6 +164,58 @@
      (set-face-attribute 'info-header-node nil :foreground "black")
      (set-face-attribute 'info-node nil :foreground "black")))
 
+(defun jabber-chat-html-body (xml-data who mode)
+  "Print body for received message in XML-DATA."
+  (let* ((message-format (caddar
+                          (jabber-xml-get-children
+                           (car (jabber-xml-get-children xml-data 'x))
+                           'message_format)))
+         (htmlp (equal "html" message-format))
+         (body (car
+                (jabber-xml-node-children
+                 (car
+                  (jabber-xml-get-children xml-data 'body))))))
+    (when body
+      (when (eql mode :insert)
+	(if (and (> (length body) 4)
+		 (string= (substring body 0 4) "/me "))
+	    (let ((action (substring body 4))
+		  (nick (cond
+			 ((eq who :local)
+			  (plist-get (fsm-get-state-data jabber-buffer-connection) :username))
+			 ((or (jabber-muc-message-p xml-data)
+			      (jabber-muc-private-message-p xml-data))
+			  (jabber-jid-resource (jabber-xml-get-attribute xml-data 'from)))
+			 (t
+			  (jabber-jid-displayname (jabber-xml-get-attribute xml-data 'from))))))
+	      (insert (jabber-propertize
+		       (concat nick
+			       " "
+			       action)
+		       'face 'jabber-chat-prompt-system)))
+          (if htmlp
+              (let ((beg (point)))
+                (insert body)
+                (shr-render-region beg (point)))
+            (insert
+             (jabber-propertize
+              body
+              'face (case who
+                      ((:foreign :muc-foreign) 'jabber-chat-text-foreign)
+                      ((:local :muc-local) 'jabber-chat-text-local)))))
+          ;; (let ((beg (point))
+          ;;       (text (jabber-propertize
+          ;;              body
+          ;;              'face (case who
+          ;;                      ((:foreign :muc-foreign) 'jabber-chat-text-foreign)
+          ;;                      ((:local :muc-local) 'jabber-chat-text-local)))))
+          ;;   (insert text)
+          ;;   (when htmlp
+          ;;     (forward-line)
+          ;;     (shr-render-region beg (point))))
+          ))
+      t)))
+
 (defun setup-jabber ()
   (setq jabber-roster-line-format "%c %n %r %s %S"
         jabber-roster-show-title nil
@@ -179,6 +231,8 @@
   (require 'jabber-util)
   (add-hook 'jabber-chat-mode-hook 'visual-line-mode)
   ;; (add-hook 'jabber-post-connect-hooks 'jabber-keepalive-start)
+  (add-to-list 'jabber-body-printers 'jabber-chat-html-body)
+  (add-to-list 'jabber-alert-message-hooks 'jabber-message-display)
   (jabber-keepalive-start))
 
 (eval-after-load 'jabber

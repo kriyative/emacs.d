@@ -72,7 +72,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
- '(erc-timestamp-face ((t (:foreground "" :weight bold))))
+ '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
  '(fringe ((t nil)))
  '(jabber-chat-prompt-foreign ((t (:weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))
