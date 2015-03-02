@@ -51,8 +51,8 @@
 (set-default 'line-move-visual nil)
 
 (setq server-use-tcp t)
-(server-start)
-
+(ignore-errors
+  (server-start))
 (edit-server-start)
 
 (load-file-if-exists "~/.personal.el")
