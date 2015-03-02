@@ -23,7 +23,9 @@
     guide-key
     js2-mode
     lua-mode
-    magit))
+    magit
+    mode-line-stats
+    symon))
 
 (el-get 'sync pkgs)
 

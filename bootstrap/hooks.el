@@ -288,3 +288,56 @@
 
 (eval-after-load 'erc
   '(add-hook 'erc-mode-hook 'erc-mode-hook))
+
+(defun setup-mls-battery ()
+  (setq mls-battery-formatters (list
+                                (cons "c" (lambda (stats)
+                                            (car (nth 0 stats))))
+                                (cons "r" (lambda (stats)
+                                            (car (nth 1 stats))))
+                                (cons "B" (lambda (stats)
+                                            (car (nth 2 stats))))
+                                (cons "d" (lambda (stats)
+                                            (car (nth 3 stats))))
+                                (cons "L" (lambda (stats)
+                                            (car (nth 4 stats))))
+                                (cons "p" (lambda (stats)
+                                            (car (nth 5 stats))))
+                                (cons "m" (lambda (stats)
+                                            (car (nth 6 stats))))
+                                (cons "h" (lambda (stats)
+                                            (car (nth 7 stats))))
+                                (cons "t" (lambda (stats)
+                                            (car (nth 8 stats)))))
+        mls-battery-settings '((:formats
+                                ((:primary "&p{b}")
+                                 (:secondary " BAT[%p{%%},%t]")
+                                 (:monitor "&p")))
+                               (:levels
+                                (("%p" ((75.0 "norm")
+                                        (35.0 "warn")
+                                        (0.0  "crit"))))))))
+
+(eval-after-load 'mls-battery
+  '(setup-mls-battery))
+
+(defun setup-mls ()
+  (require 'mls-battery)
+  (mls-battery-start)
+  (define-key ctl-z-map "%" 'mls-mode-line-toggle)
+  (setq mls-modules '(battery cpu memory disk misc)
+        mls-format-primary '((:eval (mls-display "battery" :primary))
+                             (:eval (mls-display "cpu" :primary))
+                             (:eval (mls-display "memory" :primary))
+                             (:eval (mls-display "disk" :primary))
+                             (:eval (mls-display "misc" :primary)))
+        mls-format-secondary '((:eval (mls-display "battery" :secondary))
+                               (:eval (mls-display "cpu" :secondary))
+                               (:eval (mls-display "memory" :secondary))
+                               (:eval (mls-display "disk" :secondary))
+                               (:eval (mls-display "misc" :secondary))))
+  (mode-line-stats-mode 1)
+  (mls-mode-line-toggle))
+
+;; (eval-after-load 'mode-line-stats
+;;   `(setup-mls))
