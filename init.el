@@ -5,6 +5,8 @@
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
 
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/packages/"))
+
 (load-relative
  "bootstrap/base.el"
  "bootstrap/deps-el-get.el"
