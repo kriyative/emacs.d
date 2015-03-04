@@ -57,9 +57,10 @@
     (mls-format-expand mls-misc-formatters fmt stats)))
 
 (defun dbm-to-signal (dbm)
-  (let* ((dbm-floor 20.0)
-         (dbm-range (- 90.0 dbm-floor)))
-    (min 1 (- 1 (/ (- (abs dbm) dbm-floor) dbm-range)))))
+  (when dbm
+    (let* ((dbm-floor 20.0)
+           (dbm-range (- 90.0 dbm-floor)))
+      (min 1 (- 1 (/ (- (abs dbm) dbm-floor) dbm-range))))))
 
 (defun ss/format-wifi-stats ()
   (with-temp-buffer
@@ -69,7 +70,9 @@
                        (match-string 1)))
            (dbm (and (re-search-forward "Signal level=\\([-0-9]*\\) dBm" nil t)
                      (string-to-number (match-string 1)))))
-      (format "NET[%s %ddBm %d%%]" essid dbm (* 100 (dbm-to-signal dbm))))))
+      (if dbm
+          (format "NET[%s %ddBm %d%%]" essid dbm (* 100 (dbm-to-signal dbm)))
+        "NET[N/A]"))))
 
 ;; (ss/format-wifi-stats)
 
