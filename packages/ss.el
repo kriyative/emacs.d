@@ -80,12 +80,16 @@
   (mapconcat 'identity
              (list
               (concat (user-login-name) "@" (system-name))
-              (ss/format-wifi-stats)
-              (ss/format-battery-stats "BAT[%p% %t %B]")
+              (ss/format-battery-stats
+               (lambda (stats)
+                 (if (equal "AC" (car (nth 4 stats)))
+                     "BAT[%p% AC]"
+                   "BAT[%p% %t %B]")))
               (ss/format-cpu-stats "CPU[%C0% %C1% %C2% %C3%]")
               (ss/format-memory-stats "MEM[%R% %fMB]")
               (ss/format-disk-stats "DISK[%p%]")
               (ss/format-misc-stats "LOAD[%L1]")
+              (ss/format-wifi-stats)
               (current-time-string))
              " "))
 
