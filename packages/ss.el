@@ -15,7 +15,11 @@
 
 (defun ss/format-battery-stats (fmt)
   (let ((stats (mls-battery-fetch)))
-    (mls-format-expand mls-battery-formatters fmt stats)))
+    (mls-format-expand mls-battery-formatters
+                       (if (stringp fmt)
+                           fmt
+                         (funcall fmt stats))
+                       stats)))
 
 ;; (ss/format-battery-stats "BAT[%p% %t %B]")
 
