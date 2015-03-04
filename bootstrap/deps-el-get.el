@@ -11,23 +11,25 @@
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
-(defvar pkgs
-  '(adaptive-wrap
-    alert
-    buffer-move
-    csv-mode
-    dictionary
-    edit-server
-    emacs-jabber
-    emacs-w3m
-    guide-key
-    js2-mode
-    lua-mode
-    magit
-    mode-line-stats
-    symon))
+(defvar el-get-pkgs nil)
+(setq el-get-pkgs
+      '(adaptive-wrap
+        alert
+        buffer-move
+        csv-mode
+        dictionary
+        edit-server
+        emacs-jabber
+        emacs-w3m
+        emms
+        guide-key
+        js2-mode
+        lua-mode
+        magit
+        mode-line-stats
+        symon))
 
-(el-get 'sync pkgs)
+(el-get 'sync el-get-pkgs)
 
 (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
 (el-get-bundle cider :checkout "v0.8.2")
