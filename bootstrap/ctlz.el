@@ -29,3 +29,4 @@
 (define-key ctl-z-map "|" 'toggle-window-split)
 (define-key ctl-z-map [left] 'buf-move-left)
 (define-key ctl-z-map [right] 'buf-move-right)
+(define-key ctl-z-map "p" 'emms-pause)
