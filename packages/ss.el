@@ -95,4 +95,8 @@
 
 ;; (ss/current)
 
+(defun ss/info ()
+  (interactive)
+  (message "%s" (ss/current)))
+
 (provide 'ss)
