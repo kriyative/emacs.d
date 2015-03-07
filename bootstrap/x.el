@@ -13,6 +13,12 @@
 (set-frame-font x-font t t)
 (setq default-frame-alist `((font . ,x-font)))
 
+(defun setup-ss ()
+  (define-key ctl-z-map "%" 'ss/info))
+
+(eval-after-load 'ss
+  '(setup-ss))
+
 (try-require 'ss)
 
 (global-set-key '[C-z space] 'emms-pause)
