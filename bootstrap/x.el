@@ -31,12 +31,12 @@
   (eq t (cdr (assoc 'visibility (frame-parameters)))))
 
 (defun x-notify (message &optional title)
-  (let ((alert-default-style (if (frame-visible?) 'message 'notifications)))
+  (let ((alert-default-style 'notifications))
     (alert message :title (or title (concat "emacs@" system-name)))))
 
 ;; (x-notify "hello")
 
 (defun compilation-end-notifier (buffer status)
-  (x-notify status))
+  (x-notify status (concat "emacs - " (buffer-name buffer))))
 
 (push 'compilation-end-notifier compilation-finish-functions)
