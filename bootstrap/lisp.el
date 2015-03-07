@@ -186,7 +186,8 @@ currently under the curser"
 (defun cider-mode-hook ()
   (cider-turn-on-eldoc-mode)
   (outline-minor-mode)
-  (define-key cider-mode-map "\C-c\C-k" 'cider-load-buffer-ext))
+  (define-key cider-mode-map "\C-c\C-k" 'cider-load-buffer-ext)
+  (setq cider-completion-use-context nil))
 
 ;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
 
@@ -206,7 +207,7 @@ currently under the curser"
 
 (defun cider-load-buffer-ext (&optional arg)
   (interactive "p")
-  (if arg
+  (if (< 1 arg)
       (progn
         (message "Removing namespace: %s" (cider-current-ns))
         (cider-remove-current-ns)
