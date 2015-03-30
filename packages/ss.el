@@ -39,13 +39,18 @@
   (let ((stats (mls-disk-fetch)))
     (mls-format-expand mls-disk-formatters fmt stats)))
 
+(defun mls-proc-boot-time ()
+  (with-temp-buffer
+    (ignore-errors (insert-file-literally "/proc/stat"))
+    (when (re-search-forward "^btime ")
+      (goto-char (match-end 0))
+      (read (current-buffer)))))
+
 (defun mls-misc-fetch ()
   (let* ((load (map 'list
                     (lambda (x) (/ x 100.0))
                     (load-average)))
-         (boot-time (string-to-number
-                     (shell-command-to-string
-                      "cat /proc/stat | awk '{if(NR == 6) print $2}'")))
+         (boot-time (mls-proc-boot-time))
          (emacs-uptime (emacs-uptime mls-misc-emacs-uptime-format))
          (system-uptime (format-seconds mls-misc-system-uptime-format
                                         (- (float-time (current-time))
