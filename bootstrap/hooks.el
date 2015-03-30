@@ -58,10 +58,11 @@
 (add-hook 'dired-mode-hook 'setup-dired-mode)
 
 (defun setup-comint-mode ()
-  (setq comint-output-filter-functions
-        (cons 'shell-strip-ctrl-m
-              comint-output-filter-functions)))
-(add-hook 'comint-mode-hook 'setup-comint-mode)
+  (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
+  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer))
+
+(eval-after-load 'comint
+  `(setup-comint-mode))
 
 (add-hook 'diary-hook 'appt-make-list)
 
