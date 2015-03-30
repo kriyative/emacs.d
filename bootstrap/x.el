@@ -31,7 +31,7 @@
   (eq t (cdr (assoc 'visibility (frame-parameters)))))
 
 (defun x-notify (message &optional title)
-  (let ((alert-default-style 'notifications))
+  (let ((alert-default-style (if (frame-visible?) 'message 'notifications)))
     (alert message :title (or title (concat "emacs@" system-name)))))
 
 ;; (x-notify "hello")
