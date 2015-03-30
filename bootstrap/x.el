@@ -44,3 +44,5 @@
 (require 'password-mode)
 (require 'org)
 (require 'org-passwords)
+
+(mouse-avoidance-mode 'banish)
