@@ -48,3 +48,10 @@
 
 (eval-after-load 'remember
   '(remember-init))
+
+(defun setup-org-passwords ()
+  (setq org-passwords-file "~/.pwcrypt.gpg"
+        org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
+
+(eval-after-load 'org-passwords
+  '(setup-org-passwords))

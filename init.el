@@ -43,6 +43,9 @@
 (try-require 'guide-key)
 (try-require 'dictionary)
 
+(try-require 'pwcrypt)
+
+
 (display-time)
 (appt-activate 1)
 (winner-mode 1)

@@ -40,3 +40,7 @@
   (x-notify status (concat "emacs - " (buffer-name buffer))))
 
 (push 'compilation-end-notifier compilation-finish-functions)
+
+(require 'password-mode)
+(require 'org)
+(require 'org-passwords)
