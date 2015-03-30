@@ -176,9 +176,12 @@ currently under the curser"
 
 ;;;;;;;;;;;;;;;; clojure ;;;;;;;;;;;;;;;;
 
+(defun clojure-mode-hook ()
+  (auto-revert-mode 1)
+  (outline-minor-mode 1))
+
 (eval-after-load 'clojure-mode
-  '(add-hook 'clojure-mode-hook
-             (lambda () (auto-revert-mode 1))))
+  '(add-hook 'clojure-mode-hook 'clojure-mode-hook))
 
 (eval-after-load 'cider-repl
   '(cider-repl-add-shortcut "sayoonara" 'cider-quit))
