@@ -30,6 +30,7 @@
         magit
         mode-line-stats
         org-passwords
+        rudel
         symon))
 
 (el-get 'sync el-get-pkgs)
