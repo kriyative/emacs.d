@@ -155,7 +155,8 @@
   (set-face-attribute 'magit-item-highlight nil
                       :background "lightgrey"
                       :foreground "black")
-  (set-face-attribute 'magit-tag nil :foreground "black"))
+  (set-face-attribute 'magit-tag nil :foreground "black")
+  (setq magit-last-seen-setup-instructions "1.4.0"))
 
 (eval-after-load 'magit
   '(setup-magit))
