@@ -39,3 +39,4 @@
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle nicferrier/elwikicreole)
+(el-get-bundle kriyative/emacs-fun)

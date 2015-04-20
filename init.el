@@ -7,9 +7,13 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/packages/"))
 
+(load-relative "bootstrap/deps-el-get.el")
+
+(require 'efun-base)
+(require 'efun-cmds)
+
 (load-relative
  "bootstrap/base.el"
- "bootstrap/deps-el-get.el"
  "bootstrap/c.el"
  "bootstrap/lisp.el"
  "bootstrap/org.el"
@@ -21,10 +25,6 @@
  "bootstrap/window.el"
  "bootstrap/w3-services.el")
 
-(add-exec-paths
- (list "/usr/local/bin"
-       (expand-file-name "~/bin")))
-
 (try-require 'ibuffer)
 (try-require 'vc)
 (try-require 'longlines)
@@ -33,7 +33,6 @@
 (try-require 'calendar)
 (try-require 'appt)
 (try-require 'shell)
-(try-require 'rcompile)
 (try-require 'info)
 (try-require 'buffer-move)
 (try-require 'vc-git)
@@ -44,7 +43,6 @@
 (try-require 'dictionary)
 
 (try-require 'pwcrypt)
-
 
 (display-time)
 (appt-activate 1)

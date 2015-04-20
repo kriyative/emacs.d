@@ -63,14 +63,6 @@
       (if (and file-name (string-match pattern file-name))
 	  (kill-buffer buffer)))))
 
-(defun kill-buffers-matching (pattern)
-  "Kill all buffers matching specified regexp"
-  (interactive "sRegexp: ")
-  (dolist (buffer (remove-if-not
-                   (lambda (x) (string-match pattern (buffer-name x)))
-                   (buffer-list)))
-    (kill-buffer buffer)))
-
 (defun narrow-forward-page (arg)
   (interactive "p")
   (widen)
@@ -83,29 +75,6 @@
   (backward-page (1+ (or arg 1)))
   (narrow-to-page))
 
-(defun tail-f (file)
-  "Create a COMINT mode buffer running the `tail -f` command on
-specified FILE. If FILE is a ssh/scp style remote file spec,
-e.g.,
-
-  user@remote.host.com:/path/to/file.txt
-
-then a ssh connection is opened to remote.host.com, and `tail -f`
-is invoked on the remote server."
-  (interactive "fFile: ")
-  (let ((buf-name (concat "tail-f " file))
-	(re "\\(\\w+\\)@\\([^:]+\\):\\(.*\\)"))
-    (if (string-match re file)
-	(let ((user (match-string 1 file))
-	      (host (match-string 2 file))
-	      (file1 (match-string 3 file)))
-	  (make-comint buf-name "ssh" nil
-		       "-l" user
-		       host
-		       "tail" "-f" file1))
-        (make-comint buf-name "tail" nil "-f" (expand-file-name file)))
-    (pop-to-buffer (concat "*" buf-name "*"))))
-
 (defun region ()
   (when mark-active
     (buffer-substring (region-beginning) (region-end))))
@@ -116,8 +85,6 @@ is invoked on the remote server."
 	 (default (or word-at-point
 		      (and symbol-at-point (symbol-name symbol-at-point)))))
     (read-from-minibuffer (or label "Term: ") default)))
-
-(defun mklist (x) (if (listp x) x (list x)))
 
 (defun toggle-debug-on-error ()
   (interactive)
@@ -182,78 +149,13 @@ is invoked on the remote server."
     (when (fboundp 'calendar-update-mode-line)
       (calendar-update-mode-line)))))
 
-(defun partition (seq len)
-  (do ((seq seq (nthcdr len seq))
-       (result nil (cons (subseq seq 0 len) result)))
-      ((null seq) (reverse result))))
-
-(defun join (sep seq)
-  (mapconcat 'identity seq sep))
-
-(defun str (x)
-  (etypecase x
-    (symbol (subseq (symbol-name x) (if (keywordp x) 1 0)))
-    (string x)
-    (t (prin1-to-string x))))
-
 (defun spaced (seq) (join " " seq))
-
-(defun seq (arg)
-  (if (sequencep arg)
-      arg
-      (list arg)))
 
 (defun re-matches (re str)
   (when (string-match re str)
     (mapcar (lambda (match)
               (apply 'substring str match))
             (partition (match-data) 2))))
-
-(defmacro bind (clauses &rest body)
-  "This macro combines the behaviour of the forms `let*',
-`destructuring-bind', and `multiple-value-bind', permitting the
-following style of binding form:
-
-  (bind (((:values m n) (values 10 20))
-         ((a b _c &key (d 10)) '(1 2 3))
-         (x 5))
-    (+ x a b d m n))
-  => 48
-
-Note in the destructuring form (a b _c &key (d 10)), _c is a short form
-for declaring it as ignorable.
-
-This is a more limited and lightweight implementation of some ideas from
-metabang-bind (http://common-lisp.net/project/metabang-bind/)."
-  (labels
-      ((parse-arglist (args)
-         (loop
-            for arg in args
-            collect arg into args
-            when (and (symbolp arg) (eq (aref (symbol-name arg) 0) ?_))
-            collect arg into ignorables
-            finally (return (values args ignorables))))
-       (cons-form (form args clauses body)
-         (multiple-value-bind (arglist ignorables)
-             (parse-arglist args)
-           `(,form ,arglist
-                   ,@(cdar clauses)
-                   ,@(when ignorables `((declare ,(list* 'ignore ignorables))))
-                   (bind ,(cdr clauses) ,@body)))))
-    (cond
-      ((null clauses) `(progn ,@body))
-      ((sequencep (caar clauses))
-       (cond
-         ((eq (caaar clauses) :values)
-          (cons-form 'multiple-value-bind (cdaar clauses) clauses body))
-         ((eq (caaar clauses) :slots)
-          `(with-slots ,(cdaar clauses) ,@(cdar clauses)
-             (bind ,(cdr clauses) ,@body)))
-         (t
-          (cons-form 'destructuring-bind (caar clauses) clauses body))))
-      (t
-       `(let (,(car clauses))
-          (bind ,(cdr clauses) ,@body))))))
 
 (defun emacs-version-info ()
   (bind (((_ &rest matches) (re-matches
@@ -288,10 +190,6 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
                    (list (concat "</" (str tag) ">"))))))
         spec)))
 
-(defun ext-compile ()
-  (interactive)
-  (call-interactively (if current-prefix-arg 'remote-compile 'compile)))
-
 (defun add-exec-paths (paths)
   (let ((paths (remove-if-not 'file-directory-p paths)))
     (dolist (path paths)
@@ -307,30 +205,6 @@ metabang-bind (http://common-lisp.net/project/metabang-bind/)."
 (defun turn-on-line-truncation ()
   (interactive)
   (set-all-line-truncation t))
-
-(defmacro with-cwd (dir &rest body)
-  (let ((cwd% (gensym)))
-    `(let ((,cwd% default-directory))
-       (unwind-protect
-           (progn
-             (cd-absolute ,dir)
-             ,@body)
-         (cd-absolute ,cwd%)))))
-
-(defmacro save-values (vars &rest body)
-  (let ((tmpargs (mapcar (lambda (x) (gensym x)) vars)))
-    `(let ,(map 'list
-                (lambda (tmparg var)
-                  (list tmparg var))
-                tmpargs
-                vars)
-       (unwind-protect
-           (progn ,@body)
-         ,@(map 'list
-                (lambda (var tmparg)
-                  (list 'setq var tmparg))
-                vars
-                tmpargs)))))
 
 (defun test-string-match (item x) (string-match x item))
 

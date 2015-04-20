@@ -343,3 +343,9 @@
 
 ;; (eval-after-load 'mode-line-stats
 ;;   `(setup-mls))
+
+(defun setup-efun-cmds ()
+  (global-set-key "\C-x\C-f" 'x-find-file))
+
+(eval-after-load 'efun-cmds
+  '(setup-efun-cmds))

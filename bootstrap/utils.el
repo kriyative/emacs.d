@@ -30,21 +30,6 @@
 				     ""
 				     (shell-command-to-string "uptime"))))
 
-(defun run (command)
-  (interactive "sRun program: ")
-  (destructuring-bind (program &rest args)
-      (split-string command " ")
-    (let* ((buf-name (concat "*run:" command "*"))
-           (buf-proc (get-buffer-process buf-name)))
-      (if buf-proc
-          (message "Process is already running.")
-        (let ((buf (get-buffer buf-name)))
-          (when buf (kill-buffer buf))
-          (let ((name (file-name-nondirectory program))
-                (buf (get-buffer-create buf-name)))
-            (switch-to-buffer (apply 'make-comint-in-buffer name buf program nil args))
-            (run-hooks (intern-soft (concat "comint-" name "-hook")))))))))
-
 (defun ssh (server command &optional buffer-name-prefix)
   (interactive
    (list (read-string "Destination: " nil 'my-history)
