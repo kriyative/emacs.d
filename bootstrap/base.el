@@ -126,29 +126,6 @@
       (balance-windows))
     (select-window cur)))
 
-(defun iso-calendar ()
-  (interactive)
-  (setq european-calendar-style nil)
-  (setq calendar-date-display-form
-        '(year
-          "-"
-          (if (< (length month) 2) (concat "0" month) month)
-          "-"
-          (if (< (length day) 2) (concat "0" day) day)))
-  (setq diary-date-forms
-        '((year "-" month "-" day "[^0-9]")
-          (month "/" day "[^/0-9]")
-          (month "/" day "/" year "[^0-9]")
-          (monthname " *" day "[^,0-9]")
-          (monthname " *" day ", *" year "[^0-9]")
-          (dayname "\\W")))
-  (cond
-   ((string-match "^2[12]" emacs-version)
-    (update-calendar-mode-line))
-   (t
-    (when (fboundp 'calendar-update-mode-line)
-      (calendar-update-mode-line)))))
-
 (defun spaced (seq) (join " " seq))
 
 (defun re-matches (re str)

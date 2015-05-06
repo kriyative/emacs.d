@@ -13,14 +13,14 @@
 (defun pwcrypt/find-all (name)
   (with-pwcrypt pwcrypt-file
     (let ((match-points '()))
-      (while (re-search-forward (concat "**[ ]*" "\\(" name ".*$\\)") nil t)
+      (while (re-search-forward (concat "^**[ ]*" "\\(" name ".*$\\)") nil t)
         (let* ((beg (match-beginning 1))
                (match-str (buffer-substring-no-properties beg (match-end 1))))
           (setq match-points (cons (cons match-str beg) match-points))))
       (reverse match-points))))
 
 ;; (pwcrypt/find-all "Bitbucket")
-;; (pwcrypt/find-all "Hipchat")
+;; (pwcrypt/find-all "Costco")
 
 (defun pwcrypt/find-first (name)
   (first (pwcrypt/find-all name)))
@@ -67,7 +67,9 @@
   (getf (pwcrypt/get (pwcrypt/find-first key)) property))
 
 (defun pwcrypt/copy-property (key property)
-  (funcall interprogram-cut-function (pwcrypt/get-property key property)))
+  (let ((v (pwcrypt/get-property key property)))
+    (kill-new v)
+    (funcall interprogram-cut-function v)))
 
 (defun pwcrypt/copy-username (arg)
   (interactive (pwcrypt/read-entry))

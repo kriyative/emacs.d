@@ -1,5 +1,6 @@
 (load-relative
- (concat (symbol-name (or window-system 'tty)) ".el"))
+ (concat "window-" (symbol-name (or window-system 'tty)) ".el"))
+
 (blink-cursor-mode -1)
 (tool-bar-mode -1)
 ;; (menu-bar-mode -1)

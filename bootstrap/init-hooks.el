@@ -1,3 +1,88 @@
+;;;;;;;;;;;;;;;; global ;;;;;;;;;;;;;;;;
+
+(setq inhibit-startup-message t
+      inhibit-splash-screen t
+      backup-inhibited t
+      remote-shell-program "ssh"
+      truncate-partial-width-windows t
+      visible-bell 'top-bottom
+      url-proxy-services nil
+      compilation-scroll-output t
+      transient-mark-mode t
+      shell-file-name "bash"
+      max-mini-window-height 1
+
+      completion-ignored-extensions (nconc completion-ignored-extensions
+                                           '(".fasl"
+                                             ".dfsl"
+                                             ".x86f"
+                                             ".err"
+                                             ".ufasl"
+                                             ".DS_Store"))
+
+      mc-gpg-path (locate-path "gpg" exec-path)
+      ispell-program-name (locate-path "aspell" exec-path))
+
+;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
+
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+(put 'narrow-to-page 'disabled nil)
+(put 'erase-buffer 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+(defun confirm-exit ()
+  (y-or-n-p "Exit Emacs, Are you sure? "))
+
+(setq kill-emacs-query-functions
+      (cons 'confirm-exit kill-emacs-query-functions))
+
+(defun setup-telnet-mode ()
+  (setq telnet-remote-echoes nil))
+(add-hook 'telnet-mode-hook 'setup-telnet-mode)
+
+(defun setup-dired-mode ()
+  (local-set-key "k" 'dired-kill-subdir))
+(add-hook 'dired-mode-hook 'setup-dired-mode)
+
+(defun setup-comint-mode ()
+  (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
+  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer))
+
+(eval-after-load 'comint
+  `(setup-comint-mode))
+
+(add-hook 'diary-hook 'appt-make-list)
+
+(defun compilation-mode-colorize-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+
+(defun setup-ansi-color ()
+  (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+  (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
+  (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
+  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
+
+(eval-after-load 'ansi-color
+  '(setup-ansi-color))
+
+(defun setup-edit-server ()
+  (setq edit-server-default-major-mode 'normal-mode
+        edit-server-new-frame nil))
+
+(eval-after-load 'edit-server
+  '(setup-edit-server))
+
+;;;;;;;;;;;;;;;; outline ;;;;;;;;;;;;;;;;
+
 (defun setup-outline-minor-mode ()
   (local-set-key "\C-c\C-e" 'show-entry)
   (local-set-key (kbd "C-c +") 'show-entry)
@@ -10,6 +95,8 @@
 
 (eval-after-load 'outline-mode
   '(add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
+
+;;;;;;;;;;;;;;;; text ;;;;;;;;;;;;;;;;
 
 (defun setup-text-mode ()
   (auto-fill-mode -1)
@@ -35,36 +122,23 @@
     (set-face-foreground 'tex-verbatim-face "gray30")))
 (add-hook 'tex-mode-hook 'setup-tex-mode)
 
-(defun confirm-exit ()
-  (y-or-n-p "Exit Emacs, Are you sure? "))
-(setq kill-emacs-query-functions
-      (cons 'confirm-exit kill-emacs-query-functions))
-
 (defun setup-view-mode ()
   (local-set-key "\C-x]" 'narrow-forward-page)
   (local-set-key "\C-x[" 'narrow-backward-page))
 (add-hook 'view-mode-hook 'setup-view-mode)
 
-(add-hook 'diary-display-hook 'fancy-diary-display)
-;; (add-hook 'calendar-load-hook 'mark-diary-entries)
-(add-hook 'list-diary-entries-hook 'sort-diary-entries t)
+(eval-after-load 'adoc-mode
+  '(add-to-list 'auto-mode-alist '("\\.doc$" . adoc-mode)))
 
-(defun setup-telnet-mode ()
-  (setq telnet-remote-echoes nil))
-(add-hook 'telnet-mode-hook 'setup-telnet-mode)
+;;;;;;;;;;;;;;;; version management ;;;;;;;;;;;;;;;;
 
-(defun setup-dired-mode ()
-  (local-set-key "k" 'dired-kill-subdir))
-(add-hook 'dired-mode-hook 'setup-dired-mode)
+(defun setup-vc-mode ()
+  (setq vc-mistrust-permissions t
+        vc-initial-comment t
+        vc-consult-headers nil
+        vc-make-backup-files t))
 
-(defun setup-comint-mode ()
-  (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
-  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer))
-
-(eval-after-load 'comint
-  `(setup-comint-mode))
-
-(add-hook 'diary-hook 'appt-make-list)
+(eval-after-load 'vc '(setup-vc-mode))
 
 (defun setup-cvs-mode ()
   (font-lock-mode 1))
@@ -82,8 +156,25 @@
   (setq log-edit-keep-buffer t)
   (setenv "CVS_RSH" "ssh"))
 
-(eval-after-load 'pcvs
-  '(cvs-mode-init))
+(eval-after-load 'pcvs '(cvs-mode-init))
+
+(defun setup-magit ()
+  (set-face-attribute 'magit-item-highlight nil
+                      :background "lightgrey"
+                      :foreground "black")
+  (set-face-attribute 'magit-tag nil :foreground "black")
+  (setq magit-last-seen-setup-instructions "1.4.0"))
+
+(eval-after-load 'magit '(setup-magit))
+
+(defun alt-vc-git-annotate-command (file buf &optional rev)
+  (let ((name (file-relative-name file)))
+    (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
+
+(eval-after-load 'vc-git
+  '(fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
+
+;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
 (defun setup-message-mode ()
   (setup-text-mode)
@@ -133,38 +224,30 @@
   (global-set-key "\C-xm" 'my-compose-mail)
   (add-hook 'message-mode-hook 'setup-message-mode))
 
-(eval-after-load 'message
-  '(setup-message))
+(eval-after-load 'message '(setup-message))
 
-(defun compilation-mode-colorize-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
+;;;;;;;;;;;;;;;; info ;;;;;;;;;;;;;;;;
 
-(defun setup-ansi-color ()
-  (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-  (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
-  (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
-  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
+(defun setup-info ()
+  (set-face-attribute 'info-header-node nil :foreground "black")
+  (set-face-attribute 'info-node nil :foreground "black")
+  (add-to-list 'Info-default-directory-list "/usr/local/share/info/"))
 
-(eval-after-load 'ansi-color
-  '(setup-ansi-color))
+(eval-after-load 'info '(setup-info))
 
-(defun setup-magit ()
-  (set-face-attribute 'magit-item-highlight nil
-                      :background "lightgrey"
-                      :foreground "black")
-  (set-face-attribute 'magit-tag nil :foreground "black")
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+;;;;;;;;;;;;;;;; man ;;;;;;;;;;;;;;;;
 
-(eval-after-load 'magit
-  '(setup-magit))
+(defun setup-man ()
+  (setenv "MANPATH"
+          (join ":"
+                '("/usr/local/share/man/"
+                  "/usr/share/man/")))
+  (setenv "MANWIDTH" "80")
+  (add-hook 'Man-mode-hook (lambda () (setq Man-fontify-manpage nil))))
+  
+(eval-after-load 'man '(setup-man))
 
-(eval-after-load 'info
-  '(progn
-     (set-face-attribute 'info-header-node nil :foreground "black")
-     (set-face-attribute 'info-node nil :foreground "black")))
+;;;;;;;;;;;;;;;; jabber ;;;;;;;;;;;;;;;;
 
 (defun jabber-chat-html-body (xml-data who mode)
   "Print body for received message in XML-DATA."
@@ -237,23 +320,25 @@
   (add-to-list 'jabber-alert-message-hooks 'jabber-message-display)
   (jabber-keepalive-start))
 
-(eval-after-load 'jabber
-  '(setup-jabber))
+(eval-after-load 'jabber '(setup-jabber))
 
-(defun setup-python ()
-  (setq python-remove-cwd-from-path nil)
-  (setq jedi:setup-keys t)
-  (require 'jedi)
-  (add-hook 'python-mode-hook 'jedi:setup))
+;; HipChat via jabber.el
+;;
+;; from: https://gist.github.com/pufuwozu/4002033
+(defun hipchat-join (room)
+  (interactive "sRoom name: ")
+  (jabber-groupchat-join (jabber-read-account)
+                         (concat hipchat-number "_" room "@conf.hipchat.com")
+                         hipchat-nickname
+                         t))
 
-(eval-after-load 'python
-  '(setup-python))
+;; Mention nicknames in a way that HipChat clients will pickup
+(defun hipchat-mention (nickname)
+  (interactive
+   (list (jabber-muc-read-nickname jabber-group "Nickname: ")))
+  (insert (concat "@\"" nickname "\" ")))
 
-(defun setup-javascript-mode ()
-  (setq indent-tabs-mode nil))
-
-(eval-after-load 'js2-mode
-  '(add-hook 'javascript-mode-hook 'setup-javascript-mode))
+;;;;;;;;;;;;;;;; guide-key ;;;;;;;;;;;;;;;;
 
 (defun setup-guide-key ()
   (guide-key-mode 1)
@@ -261,8 +346,9 @@
                                        "C-c C-x")
         guide-key/popup-window-position 'bottom))
 
-(eval-after-load 'guide-key
-  '(setup-guide-key))
+(eval-after-load 'guide-key '(setup-guide-key))
+
+;;;;;;;;;;;;;;;; html ;;;;;;;;;;;;;;;;
 
 (defun setup-html-mode ()
   (visual-line-mode -1)
@@ -272,12 +358,7 @@
 (eval-after-load 'sgml-mode
   '(add-hook 'html-mode-hook 'setup-html-mode))
 
-(defun setup-edit-server ()
-  (setq edit-server-default-major-mode 'normal-mode
-        edit-server-new-frame nil))
-
-(eval-after-load 'edit-server
-  '(setup-edit-server))
+;;;;;;;;;;;;;;;; erc ;;;;;;;;;;;;;;;;
 
 (defun erc-mode-hook ()
   (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
@@ -290,6 +371,8 @@
 
 (eval-after-load 'erc
   '(add-hook 'erc-mode-hook 'erc-mode-hook))
+
+;;;;;;;;;;;;;;;; mode-line-stats ;;;;;;;;;;;;;;;;
 
 (defun setup-mls-battery ()
   (setq mls-battery-formatters (list
@@ -320,8 +403,7 @@
                                         (35.0 "warn")
                                         (0.0  "crit"))))))))
 
-(eval-after-load 'mls-battery
-  '(setup-mls-battery))
+(eval-after-load 'mls-battery '(setup-mls-battery))
 
 (defun setup-mls ()
   (require 'mls-battery)
@@ -344,8 +426,81 @@
 ;; (eval-after-load 'mode-line-stats
 ;;   `(setup-mls))
 
+;;;;;;;;;;;;;;;; efun ;;;;;;;;;;;;;;;;
+
 (defun setup-efun-cmds ()
   (global-set-key "\C-x\C-f" 'x-find-file))
 
-(eval-after-load 'efun-cmds
-  '(setup-efun-cmds))
+(eval-after-load 'efun-cmds '(setup-efun-cmds))
+
+;;;;;;;;;;;;;;;; dictionary ;;;;;;;;;;;;;;;;
+
+(defun dictionary-init ()
+  (load-library "dictionary-init")
+  ;; (setq dictionary-server "dict.org")
+  (global-set-key "\C-cs" 'dictionary-search)
+  (global-set-key "\C-cm" 'dictionary-match-words))
+
+(eval-after-load 'dictionary '(dictionary-init))
+
+;;;;;;;;;;;;;;;; ibuffer ;;;;;;;;;;;;;;;;
+
+(eval-after-load 'ibuffer '(setq ibuffer-expert t))
+
+;;;;;;;;;;;;;;;; calendar ;;;;;;;;;;;;;;;;
+
+(defun iso-calendar ()
+  (interactive)
+  (setq european-calendar-style nil)
+  (setq calendar-date-display-form
+        '(year
+          "-"
+          (if (< (length month) 2) (concat "0" month) month)
+          "-"
+          (if (< (length day) 2) (concat "0" day) day)))
+  (setq diary-date-forms
+        '((year "-" month "-" day "[^0-9]")
+          (month "/" day "[^/0-9]")
+          (month "/" day "/" year "[^0-9]")
+          (monthname " *" day "[^,0-9]")
+          (monthname " *" day ", *" year "[^0-9]")
+          (dayname "\\W")))
+  (cond
+   ((string-match "^2[12]" emacs-version)
+    (update-calendar-mode-line))
+   (t
+    (when (fboundp 'calendar-update-mode-line)
+      (calendar-update-mode-line)))))
+
+(defun setup-calendar ()
+  (iso-calendar)
+  (add-hook 'diary-display-hook 'fancy-diary-display)
+  ;; (add-hook 'calendar-load-hook 'mark-diary-entries)
+  (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
+  (setq display-time-day-and-date t
+        display-time-world-list '(("America/Los_Angeles" "Cupertino")
+                                  ("America/New_York" "New York")
+                                  ("Europe/London" "London")
+                                  ("Europe/Paris" "Paris")
+                                  ("Asia/Calcutta" "Chennai")
+                                  ("Asia/Singapore" "Singapore")
+                                  ("Australia/Sydney" "Sydney")
+                                  ("Pacific/Auckland" "Auckland"))
+        display-time-world-time-format "%a %d %b %R %Z"))
+
+(eval-after-load 'calendar '(setup-calendar))
+
+(defun setup-diary ()
+  ;; (setq appt-message-warning-time 10)
+  (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
+  (when (file-exists-p diary-file) (diary 0)))
+
+(eval-after-load 'diary '(setup-diary))
+
+;;;;;;;;;;;;;;;; bbdb ;;;;;;;;;;;;;;;;
+
+(defun setup-bbdb ()
+  (bbdb-insinuate-message)
+  (bbdb-initialize 'message 'sc))
+
+(eval-after-load 'bbdb '(setup-bbdb))

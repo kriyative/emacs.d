@@ -13,25 +13,8 @@
 (set-frame-font x-font t t)
 (setq default-frame-alist `((font . ,x-font)))
 
-(defun setup-ss ()
-  (define-key ctl-z-map "%" 'ss/info))
-
-(eval-after-load 'ss
-  '(setup-ss))
-
-(try-require 'ss)
-
-(global-set-key '[C-z space] 'emms-pause)
-
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
-
-(defun frame-visible? (&optional frame)
-  (eq t (cdr (assoc 'visibility (frame-parameters)))))
-
 (defun x-notify (message &optional title)
-  (let ((alert-default-style (if (frame-visible?) 'message 'notifications)))
+  (let ((alert-default-style 'notifications))
     (alert message :title (or title (concat "emacs@" system-name)))))
 
 ;; (x-notify "hello")
@@ -40,9 +23,5 @@
   (x-notify status (concat "emacs - " (buffer-name buffer))))
 
 (push 'compilation-end-notifier compilation-finish-functions)
-
-(require 'password-mode)
-(require 'org)
-(require 'org-passwords)
 
 (mouse-avoidance-mode 'banish)

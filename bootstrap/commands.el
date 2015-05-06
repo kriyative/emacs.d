@@ -46,27 +46,59 @@
 (defun get-region-or-read-terms (prompt)
   (replace-regexp-in-string "[ ]+" "+" (or (region) (read-string prompt))))
 
+(require 'w3m)
+(require 'browse-url)
+
+(defun w3m-browse-url-other-window (url &optional new-session)
+  (save-excursion
+    (when (one-window-p)
+      (split-window-horizontally))
+    (other-window 1)
+    (let ((w3m-use-tab nil))
+      (w3m-browse-url url new-session))))
+
+(defun w3m-new-buffer ()
+  (interactive)
+  (w3m-copy-buffer nil nil nil 'empty nil))
+
+(defun w3m-mode-hook ()
+  (define-key w3m-mode-map "\M-t" 'w3m-new-buffer))
+
+(eval-after-load 'w3m
+  '(add-hook 'w3m-mode-hook 'w3m-mode-hook))
+
+(eval-after-load 'browse-url
+  '(setq browse-url-browser-function 'w3m-browse-url-other-window))
+
+(defun query-string-encode (s)
+  (replace-regexp-in-string "[ ]+" "+" s))
+
 (defun google (q)
-  (interactive (list (get-region-or-read-terms "Google: ")))
+  (interactive
+   (list (query-string-encode (or (region) (read-string "Google: ")))))
   (browse-url
    (concat "https://www.google.com/search?q=" q)))
 
-(defun ddg (q)
-  (interactive (list (get-region-or-read-terms "DuckDuckGo: ")))
+(defun ddg ()
+  (interactive)
   (browse-url
-   (concat "https://duckduckgo.com/?q=" q)))
+   (concat "https://duckduckgo.com/?q="
+           (query-string-encode (or (region) (read-string "DuckDuckGo: "))))))
 
 (defun mdn (q)
-  (interactive (list (get-region-or-read-terms "MDN: ")))
+  (interactive
+   (list (query-string-encode (or (region) (read-string "MDN: ")))))
   (google (concat "site:developer.mozilla.org " q)))
 
-(defun wikipedia (q)
-  (interactive (list (get-region-or-read-terms "Wikipedia: ")))
+(defun wikipedia ()
+  (interactive)
   (browse-url
    (concat "http://en.wikipedia.org/w/index.php?search="
-           (capitalize q))))
+	   (query-string-encode
+            (capitalize (or (region) (read-string "Wikipedia: ")))))))
 
 (defun emacswiki (q)
   (interactive (list (get-region-or-read-terms "emacswiki: ")))
   (browse-url
-   (concat "http://www.emacswiki.org/emacs/Search?action=index&match=" q)))
+   (concat "http://www.emacswiki.org/emacs/Search?action=index&match="
+           (query-string-encode q))))

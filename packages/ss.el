@@ -104,4 +104,20 @@
   (interactive)
   (message "%s" (ss/current)))
 
+(defun ss/stat-ps (ps-cmd &optional num-rows)
+  (save-excursion
+    (shell-command ps-cmd t t))
+  (forward-line (1+ (or num-rows 10)))
+  (delete-region (point) (point-max))
+  (newline 2))
+
+(defun ss/stat ()
+  (interactive)
+  (with-current-buffer (get-buffer-create "*ss-stat*")
+    (local-set-key "g" 'ss/stat)
+    (delete-region (point-min) (point-max))
+    (ss/stat-ps "top -b -n 1" 20)
+    (ss/stat-ps "ps axk-pcpu -o pid,user,pcpu,cputime:10,comm")
+    (ss/stat-ps "ps axk-size -o pid,user,%mem,size:10,comm")))
+
 (provide 'ss)

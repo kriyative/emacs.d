@@ -14,16 +14,13 @@
 
 (load-relative
  "bootstrap/base.el"
- "bootstrap/c.el"
- "bootstrap/lisp.el"
- "bootstrap/org.el"
- "bootstrap/hooks.el"
- "bootstrap/ctlz.el"
- "bootstrap/keybindings.el"
- "bootstrap/misc.el"
- "bootstrap/utils.el"
+ "bootstrap/init-hooks.el"
+ "bootstrap/init-prog-modes.el"
+ "bootstrap/init-org.el"
+ "bootstrap/init-keys.el"
+ "bootstrap/plat.el"
  "bootstrap/window.el"
- "bootstrap/w3-services.el")
+ "bootstrap/commands.el")
 
 (try-require 'ibuffer)
 (try-require 'vc)
