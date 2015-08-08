@@ -64,3 +64,5 @@
 (define-key ctl-z-map [down]  'buf-move-down)
 (define-key ctl-z-map [up]    'buf-move-up)
 (define-key ctl-z-map "p" 'emms-pause)
+
+(define-key dired-mode-map [C-return] 'dired-open-file)

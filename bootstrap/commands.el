@@ -102,3 +102,10 @@
   (browse-url
    (concat "http://www.emacswiki.org/emacs/Search?action=index&match="
            (query-string-encode q))))
+
+(defun dired-open-file ()
+  "In Dired, open a file using its default application."
+  (interactive)
+  (let ((file (dired-get-filename nil t)))
+    (message "Opening %s..." file)
+    (call-process "gnome-open" nil 0 nil file)))
