@@ -35,7 +35,9 @@
   (setq org-export-html-postamble nil))
 
 (eval-after-load 'org
-  '(org-mode-init))
+  '(progn
+     (require 'ob-clojure)
+     (org-mode-init)))
 
 (defun wicked/remember-review-file ()
   "Open `remember-data-file'."
