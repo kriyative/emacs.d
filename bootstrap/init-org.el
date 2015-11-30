@@ -59,3 +59,17 @@
 
 (eval-after-load 'org-passwords
   '(setup-org-passwords))
+
+(defun org-page-init ()
+  (setq op/repository-directory "/home/ram/work/kriyative/kriyative-org-page/"
+        op/site-domain "http://kriyative.github.io/"
+        op/site-main-title "kriyative"
+        op/site-sub-title "Musings of yet another Lisp programmer"
+        op/personal-github-link "http://github.com/kriyative"
+        op/personal-avatar nil ;; "http://www.gravatar.com/avatar/6dcf36ddd0aa73e04e125e3c10f6ff05.png"
+        op/theme-root-directory "/home/ram/work/kriyative/mustache-themes/"
+        op/theme 'kriyative
+        op/doc-root "file:///home/ram/work/kriyative/kriyative-org-page"))
+
+(eval-after-load 'org-page
+  '(org-page-init))
