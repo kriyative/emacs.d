@@ -30,6 +30,8 @@
   (define-key org-mode-map (kbd "C-c (") 'show-all)
   (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
   (define-key org-mode-map '[C-tab] nil)
+  (define-key org-mode-map "\M-n" 'next-page)
+  (define-key org-mode-map "\M-p" 'prev-page)
   (when org-agenda-files
     (add-hook 'display-time-hook 'show-daily-agenda))
   (setq org-export-html-postamble nil))
