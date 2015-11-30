@@ -109,3 +109,15 @@
   (let ((file (dired-get-filename nil t)))
     (message "Opening %s..." file)
     (call-process "gnome-open" nil 0 nil file)))
+
+(defun next-page ()
+  (interactive)
+  (widen)
+  (forward-page)
+  (narrow-to-page))
+
+(defun prev-page ()
+  (interactive)
+  (widen)
+  (backward-page 2)
+  (narrow-to-page))
