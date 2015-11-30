@@ -24,7 +24,6 @@
 
 (try-require 'ibuffer)
 (try-require 'vc)
-(try-require 'longlines)
 (try-require 'adaptive-wrap)
 (try-require 'font-lock)
 (try-require 'calendar)

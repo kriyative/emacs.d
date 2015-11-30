@@ -104,7 +104,7 @@
 (add-hook 'text-mode-hook 'setup-text-mode)
 
 (defun setup-indented-text-mode ()
-  (longlines-mode 1))
+  (setup-text-mode))
 (add-hook 'indented-text-mode-hook 'setup-indented-text-mode)
 
 (defun setup-nroff-mode ()
