@@ -47,7 +47,10 @@
 (add-hook 'telnet-mode-hook 'setup-telnet-mode)
 
 (defun setup-dired-mode ()
-  (local-set-key "k" 'dired-kill-subdir))
+  (local-set-key "k" 'dired-kill-subdir)
+  (local-set-key ">" 'dired-omit-mode)
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
+        dired-omit-mode t))
 (add-hook 'dired-mode-hook 'setup-dired-mode)
 
 (defun setup-comint-mode ()
