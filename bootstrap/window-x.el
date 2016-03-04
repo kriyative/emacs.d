@@ -9,9 +9,8 @@
 (defvar x-font nil)
 (setq x-font "Liberation Mono 10")
 (let ((x-font
-       ;; "Andale Mono 11"
-       ;; "Consolas 10"
-       ;; "DejaVu Sans Mono Book 11"
+       ;; "Consolas 12"
+       ;; "DejaVu Sans Mono Book 10"
        ;; "Droid Sans Mono 10"
        ;; "FreeMono 11"
        ;; "Inconsolata 11"
