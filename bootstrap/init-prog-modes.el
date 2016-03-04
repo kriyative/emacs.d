@@ -340,3 +340,22 @@ currently under the curser"
 
 (eval-after-load 'python
   '(setup-python))
+
+;;;;;;;;;;;;;;;; Bigloo BEE ;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path "/usr/local/share/emacs/24.5/site-lisp/bigloo")
+(add-to-list 'exec-path "/app/bigloo/bin")
+(autoload 'bdb "bdb" "bdb mode" t)
+(autoload 'bee-mode "bee-mode" "bee mode" t)
+
+(defun setup-bee ()
+  (setq auto-mode-alist
+        (append '(("\\.scm$" . bee-mode)
+                  ("\\.sch$" . bee-mode)
+                  ("\\.scme$" . bee-mode)
+                  ("\\.bgl$" . bee-mode)
+                  ("\\.bee$" . bee-mode))
+                auto-mode-alist)))
+
+(eval-after-load 'bee-mode
+  '(setup-python))
