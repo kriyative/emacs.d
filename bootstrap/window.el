@@ -8,6 +8,9 @@
 (set-default 'cursor-in-non-selected-windows nil)
 (set-default 'mode-line-in-non-selected-windows nil)
 
+(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+(setq initial-frame-alist nil)
+
 (defun light-theme-white ()
   (interactive)
   (let ((fgcolor "black")
