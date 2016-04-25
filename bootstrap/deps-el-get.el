@@ -19,12 +19,12 @@
         csv-mode
         dictionary
         edit-server
-        elnode
-        elnode-org
         emacs-jabber
         emacs-w3m
         emms
+        geiser
         guide-key
+        jedi
         js2-mode
         lua-mode
         magit
@@ -33,10 +33,9 @@
         rudel
         symon))
 
-(el-get 'sync el-get-pkgs)
-
 (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
-(el-get-bundle nicferrier/elwikicreole)
 (el-get-bundle kriyative/emacs-fun)
+
+(el-get 'sync el-get-pkgs)
