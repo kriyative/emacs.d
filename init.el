@@ -33,12 +33,11 @@
 (try-require 'buffer-move)
 (try-require 'vc-git)
 (try-require 'magit)
-
 (try-require 'js2-mode)
 (try-require 'guide-key)
 (try-require 'dictionary)
-
 (try-require 'pwcrypt)
+(try-require 'dired-x)
 
 (display-time)
 (appt-activate 1)
