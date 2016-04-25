@@ -183,7 +183,9 @@ currently under the curser"
   (outline-minor-mode 1))
 
 (eval-after-load 'clojure-mode
-  '(add-hook 'clojure-mode-hook 'clojure-mode-hook))
+  '(progn
+     (add-hook 'clojure-mode-hook 'clojure-mode-hook)
+     (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-mode))))
 
 (eval-after-load 'cider-repl
   '(cider-repl-add-shortcut "sayoonara" 'cider-quit))
