@@ -191,7 +191,8 @@ currently under the curser"
   '(cider-repl-add-shortcut "sayoonara" 'cider-quit))
 
 (defun cider-mode-hook ()
-  (cider-turn-on-eldoc-mode)
+  (when (fboundp 'cider-turn-on-eldoc-mode)
+    (cider-turn-on-eldoc-mode))
   (outline-minor-mode)
   (define-key cider-mode-map "\C-c\C-k" 'cider-load-buffer-ext)
   (setq cider-completion-use-context nil))

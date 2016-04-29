@@ -19,21 +19,21 @@
         csv-mode
         dictionary
         edit-server
-        emacs-jabber
+        ;; emacs-jabber
         emacs-w3m
-        emms
-        geiser
+        ;; emms
+        ;; geiser
         guide-key
         jedi
         js2-mode
         lua-mode
-        magit
+        ;; magit
         mode-line-stats
         org-passwords
-        rudel
+        ;; rudel
         symon))
 
-(el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
+;; (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle kriyative/emacs-fun)
