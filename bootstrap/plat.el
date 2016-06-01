@@ -1,2 +1,2 @@
-(case system-type
-  'gnu/linux (load-relative "plat-linux.el"))
+(when (equal 'gnu/linux system-type)
+  (load-relative "plat-linux.el"))
