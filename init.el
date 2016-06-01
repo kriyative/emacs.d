@@ -38,6 +38,7 @@
 (try-require 'dictionary)
 (try-require 'pwcrypt)
 (try-require 'dired-x)
+(try-require 'epa-file)
 
 (display-time)
 (appt-activate 1)

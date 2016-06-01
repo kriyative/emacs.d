@@ -508,3 +508,8 @@
   (bbdb-initialize 'message 'sc))
 
 (eval-after-load 'bbdb '(setup-bbdb))
+
+(defun setup-epa-file ()
+  (epa-file-enable))
+
+(eval-after-load 'epa-file '(setup-epa-file))
