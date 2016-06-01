@@ -121,3 +121,24 @@
   (widen)
   (backward-page 2)
   (narrow-to-page))
+
+(defun rmail-mime-buffer ()
+  "MIME decode the contents of the current buffer."
+  (interactive)
+  (let* ((data (buffer-string))
+         (buf (get-buffer-create "*RMAIL*"))
+         (rmail-mime-mbox-buffer rmail-view-buffer)
+         (rmail-mime-view-buffer buf))
+    (set-buffer buf)
+    (setq buffer-undo-list t)
+    (let ((inhibit-read-only t))
+      ;; Decoding the message in fundamental mode for speed, only
+      ;; switching to rmail-mime-mode at the end for display.  Eg
+      ;; quoted-printable-decode-region gets very slow otherwise (Bug#4993).
+      (fundamental-mode)
+      (erase-buffer)
+      (insert data)
+      (rmail-mime-show t)
+      (rmail-mime-mode)
+      (set-buffer-modified-p nil))
+    (view-buffer buf)))
