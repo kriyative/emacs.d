@@ -27,7 +27,7 @@
         jedi
         js2-mode
         lua-mode
-        ;; magit
+        magit
         mode-line-stats
         org-passwords
         ;; rudel
