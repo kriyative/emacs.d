@@ -513,3 +513,14 @@
   (epa-file-enable))
 
 (eval-after-load 'epa-file '(setup-epa-file))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun setup-emms ()
+  (emms-all)
+  (emms-default-players)
+  (setq emms-source-file-default-directory "~/Music/")
+  (require 'emms-player-mpv)
+  (add-to-list 'emms-player-list 'emms-player-mpv))
+
+(eval-after-load 'emms-setup '(setup-emms))

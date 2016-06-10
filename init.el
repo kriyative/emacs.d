@@ -39,6 +39,7 @@
 (try-require 'pwcrypt)
 (try-require 'dired-x)
 (try-require 'epa-file)
+(try-require 'emms-setup)
 
 (display-time)
 (appt-activate 1)
