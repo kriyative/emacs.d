@@ -11,31 +11,31 @@
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
-(defvar el-get-pkgs nil)
-(setq el-get-pkgs
-      '(adaptive-wrap
-        alert
-        buffer-move
-        csv-mode
-        dictionary
-        edit-server
-        ;; emacs-jabber
-        emacs-w3m
-        ;; emms
-        ;; geiser
-        guide-key
-        jedi
-        js2-mode
-        lua-mode
-        magit
-        mode-line-stats
-        org-passwords
-        ;; rudel
-        symon))
+(defvar el-get-minimal-pkgs '(adaptive-wrap
+                              alert
+                              buffer-move
+                              edit-server
+                              emacs-w3m
+                              magit
+                              org-passwords))
+(defvar el-get-full-pkgs (append el-get-minimal-pkgs
+                                 '(csv-mode
+                                   dictionary
+                                   ;; emacs-jabber
+                                   emms
+				   emms-player-mpv
+                                   ;; geiser
+                                   guide-key
+                                   jedi
+                                   js2-mode
+                                   lua-mode
+                                   mode-line-stats
+                                   ;; rudel
+                                   symon)))
 
 ;; (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle kriyative/emacs-fun)
 
-(el-get 'sync el-get-pkgs)
+(el-get 'sync el-get-minimal-pkgs)
