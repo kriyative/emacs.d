@@ -235,7 +235,20 @@
 (defun setup-info ()
   (set-face-attribute 'info-header-node nil :foreground "black")
   (set-face-attribute 'info-node nil :foreground "black")
-  (add-to-list 'Info-default-directory-list "/usr/local/share/info/"))
+  (require 'find-lisp)
+  (let* ((local-info-directory (expand-file-name "~/.emacs.d/info"))
+         (local-info-dirfile (concat local-info-directory "/dir")))
+    (unless (file-directory-p local-info-directory)
+      (mkdir local-info-directory))
+    (mapcar (lambda (f)
+              (call-process "install-info"
+                            nil
+                            '(" *info-setup*" t)
+                            nil
+                            f
+                            local-info))
+            (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
+    (add-to-list 'Info-directory-list local-info)))
 
 (eval-after-load 'info '(setup-info))
 
