@@ -142,3 +142,9 @@
       (rmail-mime-mode)
       (set-buffer-modified-p nil))
     (view-buffer buf)))
+
+(require 'ansi-color)
+(defun ansi-colorize-region (&optional start end)
+  "ANSI colorize a region"
+  (interactive (list (mark) (point)))
+  (ansi-color-apply-on-region start end))
