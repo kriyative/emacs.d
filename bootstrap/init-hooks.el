@@ -534,6 +534,7 @@
   (emms-default-players)
   (setq emms-source-file-default-directory "~/Music/")
   (require 'emms-player-mpv)
-  (add-to-list 'emms-player-list 'emms-player-mpv))
+  (add-to-list 'emms-player-list 'emms-player-mpv)
+  (setq emms-playlist-default-major-mode 'emms-playlist-mode))
 
 (eval-after-load 'emms-setup '(setup-emms))
