@@ -18,24 +18,38 @@
                               emacs-w3m
                               magit
                               org-passwords))
-(defvar el-get-full-pkgs (append el-get-minimal-pkgs
-                                 '(csv-mode
-                                   dictionary
-                                   ;; emacs-jabber
-                                   emms
-				   emms-player-mpv
-                                   ;; geiser
-                                   guide-key
-                                   jedi
-                                   js2-mode
-                                   lua-mode
-                                   mode-line-stats
-                                   ;; rudel
-                                   symon)))
+(defvar el-get-full-pkgs nil)
+(setq el-get-full-pkgs
+      (append el-get-minimal-pkgs
+              '(clj-refactor
+                csv-mode
+                dictionary
+                ;; emacs-jabber
+                emms
+                emms-player-mpv
+                ;; floobits
+                ;; geiser
+                guide-key
+                ;; hydra
+                ;; inflections
+                jedi
+                js2-mode
+                lua-mode
+                markdown-mode
+                mode-line-stats
+                ;; multiple-cursors
+                mu4e
+                paredit
+                ;; peg
+                ;; rudel
+                ;; symon
+                ;; tree-mode
+                ;; yasnippet
+                )))
 
 ;; (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
+(el-get 'sync el-get-full-pkgs)
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle kriyative/emacs-fun)
-
-(el-get 'sync el-get-minimal-pkgs)
+(el-get-bundle expez/edn.el)
