@@ -66,14 +66,17 @@
  telnet
  :config (setq telnet-remote-echoes nil))
 
+(defun dired-mode-hook ()
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
+        dired-omit-mode t))
+
 (use-package
  dired-x
  :bind (:map dired-mode-map
              ("k" . dired-kill-subdir)
              (">" . dired-omit-mode)
              ([C-return] . dired-open-file))
- :config (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-               dired-omit-mode t))
+ :config (add-hook 'dired-mode-hook 'dired-mode-hook))
 
 (defun setup-diary ()
   (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
