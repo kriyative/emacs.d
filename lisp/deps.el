@@ -43,6 +43,7 @@
                 ;; mode-line-stats
                 ;; multiple-cursors
                 mu4e
+                mu4e-multi
                 paredit
                 ;; peg
                 ;; rudel
