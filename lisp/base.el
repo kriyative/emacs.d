@@ -32,48 +32,7 @@
         (add-to-list 'exec-path path append)))
     (setenv "PATH" (join ":" exec-path))))
 
-(defun toggle-frame-width ()
-  "Toggle between narrow and wide frame layouts"
-  (interactive)
-  (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
-    (if (< (frame-width) z-wid)
-	(set-frame-width (selected-frame) z-wid)
-      (set-frame-width (selected-frame) 81))))
 
-(defun my-previous-window ()
-  "Switch to previous window"
-  (interactive)
-  (other-window -1))
-
-(defun my-next-window ()
-  "Switch to next window"
-  (interactive)
-  (other-window 1))
-
-(defun my-other-buffer ()
-  "Replacement for bury-buffer"
-  (interactive)
-  (switch-to-buffer (other-buffer)))
-
-(defun kill-files-matching (pattern)
-  "Kill all buffers whose filenames match specified regexp"
-  (interactive "sRegexp: ")
-  (dolist (buffer (buffer-list))
-    (let ((file-name (buffer-file-name buffer)))
-      (if (and file-name (string-match pattern file-name))
-	  (kill-buffer buffer)))))
-
-(defun narrow-forward-page (arg)
-  (interactive "p")
-  (widen)
-  (forward-page arg)
-  (narrow-to-page))
-
-(defun narrow-backward-page (arg)
-  (interactive "p")
-  (widen)
-  (backward-page (1+ (or arg 1)))
-  (narrow-to-page))
 
 (defun region ()
   (when mark-active
@@ -85,11 +44,6 @@
 	 (default (or word-at-point
 		      (and symbol-at-point (symbol-name symbol-at-point)))))
     (read-from-minibuffer (or label "Term: ") default)))
-
-(defun toggle-debug-on-error ()
-  (interactive)
-  (setq debug-on-error (not debug-on-error))
-  (message "debug-on-error set to `%s'" debug-on-error))
 
 (defun n-col-view (n)
   (let ((cur (selected-window)))
@@ -104,27 +58,6 @@
         (balance-windows)))
     (select-window cur)))
 
-(defun 3col-view ()
-  (interactive)
-  (n-col-view 3))
-
-(defun 2col-view ()
-  (interactive)
-  (n-col-view 2))
-
-(defun fill-vertical-panes ()
-  (interactive)
-  (delete-other-windows)
-  (let ((pane-width 80)
-        (cur (selected-window)))
-    (save-excursion 
-      (dotimes (i (1- (/ (/ (frame-pixel-width) (frame-char-width))
-                         pane-width)))
-        (split-window-horizontally pane-width)
-        (other-window 1)
-        (bury-buffer))
-      (balance-windows))
-    (select-window cur)))
 
 (defun spaced (seq) (join " " seq))
 
@@ -179,10 +112,6 @@
   (make-local-variable 'truncate-partial-width-windows)
   (setq truncate-partial-width-windows v))
 
-(defun turn-on-line-truncation ()
-  (interactive)
-  (set-all-line-truncation t))
-
 (defun test-string-match (item x) (string-match x item))
 
 (defun find-file-if-exists (path &optional find-file-function find-file-args)
@@ -204,17 +133,19 @@
     (when (file-exists-p path)
       (apply 'load path load-args))))
 
-(defun other-window-send-keys (keys)
-  (interactive (list (read-key-sequence "Keysequence: ")))
-  (let ((window (selected-window)))
-    (unwind-protect
-        (save-excursion
-          (other-window (or current-prefix-arg 1))
-          (let ((last-kbd-macro (read-kbd-macro keys)))
-            (call-last-kbd-macro)))
-      (select-window window))))
-
 (defun try-require (feature)
   (condition-case nil
       (require feature)
     (error (message "Error loading feature %s" feature))))
+
+(defun compilation-mode-colorize-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+
+(defun setup-ansi-color ()
+  (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+  (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
+  (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
+  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))

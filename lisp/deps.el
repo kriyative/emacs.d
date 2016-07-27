@@ -11,17 +11,21 @@
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
-(defvar el-get-minimal-pkgs '(adaptive-wrap
-                              alert
-                              buffer-move
-                              edit-server
-                              emacs-w3m
-                              magit
-                              org-passwords))
+(defvar el-get-minimal-pkgs nil)
+(setq el-get-minimal-pkgs
+      '(adaptive-wrap
+        alert
+        buffer-move
+        edit-server
+        emacs-w3m
+        ;; magit
+        org-passwords))
+
 (defvar el-get-full-pkgs nil)
 (setq el-get-full-pkgs
       (append el-get-minimal-pkgs
-              '(clj-refactor
+              '(;; clj-refactor
+                bbdb
                 csv-mode
                 dictionary
                 ;; emacs-jabber
@@ -36,7 +40,7 @@
                 js2-mode
                 lua-mode
                 markdown-mode
-                mode-line-stats
+                ;; mode-line-stats
                 ;; multiple-cursors
                 mu4e
                 paredit
@@ -45,11 +49,14 @@
                 ;; symon
                 ;; tree-mode
                 ;; yasnippet
+                slime
+		use-package
                 )))
 
-;; (el-get-bundle clojure-emacs/ac-cider :checkout "0.2.1")
-(el-get 'sync el-get-full-pkgs)
+(el-get-bundle magit :checkout "2.7.0")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
-(el-get-bundle kriyative/emacs-fun)
-(el-get-bundle expez/edn.el)
+(el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
+;; (el-get-bundle expez/edn.el)
+
+(el-get 'sync el-get-full-pkgs)

@@ -1,3 +1,87 @@
+(defun toggle-frame-width ()
+  "Toggle between narrow and wide frame layouts"
+  (interactive)
+  (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
+    (if (< (frame-width) z-wid)
+	(set-frame-width (selected-frame) z-wid)
+      (set-frame-width (selected-frame) 81))))
+
+(defun my-previous-window ()
+  "Switch to previous window"
+  (interactive)
+  (other-window -1))
+
+(defun my-next-window ()
+  "Switch to next window"
+  (interactive)
+  (other-window 1))
+
+(defun my-other-buffer ()
+  "Replacement for bury-buffer"
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
+(defun kill-files-matching (pattern)
+  "Kill all buffers whose filenames match specified regexp"
+  (interactive "sRegexp: ")
+  (dolist (buffer (buffer-list))
+    (let ((file-name (buffer-file-name buffer)))
+      (if (and file-name (string-match pattern file-name))
+	  (kill-buffer buffer)))))
+
+(defun narrow-forward-page (arg)
+  (interactive "p")
+  (widen)
+  (forward-page arg)
+  (narrow-to-page))
+
+(defun narrow-backward-page (arg)
+  (interactive "p")
+  (widen)
+  (backward-page (1+ (or arg 1)))
+  (narrow-to-page))
+
+(defun toggle-debug-on-error ()
+  (interactive)
+  (setq debug-on-error (not debug-on-error))
+  (message "debug-on-error set to `%s'" debug-on-error))
+
+(defun 3col-view ()
+  (interactive)
+  (n-col-view 3))
+
+(defun 2col-view ()
+  (interactive)
+  (n-col-view 2))
+
+(defun fill-vertical-panes ()
+  (interactive)
+  (delete-other-windows)
+  (let ((pane-width 80)
+        (cur (selected-window)))
+    (save-excursion 
+      (dotimes (i (1- (/ (/ (frame-pixel-width) (frame-char-width))
+                         pane-width)))
+        (split-window-horizontally pane-width)
+        (other-window 1)
+        (bury-buffer))
+      (balance-windows))
+    (select-window cur)))
+
+(defun turn-on-line-truncation ()
+  (interactive)
+  (set-all-line-truncation t))
+
+(defun other-window-send-keys (keys)
+  (interactive (list (read-key-sequence "Keysequence: ")))
+  (let ((window (selected-window)))
+    (unwind-protect
+        (save-excursion
+          (other-window (or current-prefix-arg 1))
+          (let ((last-kbd-macro (read-kbd-macro keys)))
+            (call-last-kbd-macro)))
+      (select-window window))))
+
 (defun psql (&optional prompt)
   (interactive "p")
   (switch-to-buffer

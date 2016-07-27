@@ -1,5 +1,4 @@
-(load-relative
- (concat "window-" (symbol-name (or window-system 'tty)) ".el"))
+(load (concat "window/" (symbol-name (or window-system 'tty))))
 
 (blink-cursor-mode -1)
 (when (fboundp 'tool-bar-mode)

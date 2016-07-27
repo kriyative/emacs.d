@@ -1,65 +1,13 @@
-(defun load-relative (&rest paths)
-  (dolist (path paths)
-    (let ((init-path (file-name-directory load-file-name)))
-      (load (concat init-path path)))))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
+(load "deps")
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/packages/"))
-
-(load-relative "bootstrap/deps-el-get.el")
-
-(require 'efun-base)
-(require 'efun-cmds)
-
-(load-relative
- "bootstrap/base.el"
- "bootstrap/init-hooks.el"
- "bootstrap/init-prog-modes.el"
- "bootstrap/init-org.el"
- "bootstrap/init-keys.el"
- "bootstrap/plat.el"
- "bootstrap/window.el"
- "bootstrap/commands.el")
-
-(try-require 'ibuffer)
-(try-require 'vc)
-(try-require 'adaptive-wrap)
-(try-require 'font-lock)
-(try-require 'calendar)
-(try-require 'appt)
-(try-require 'shell)
-(try-require 'info)
-(try-require 'buffer-move)
-(try-require 'vc-git)
-(try-require 'magit)
-(try-require 'js2-mode)
-(try-require 'guide-key)
-(try-require 'dictionary)
-(try-require 'pwcrypt)
-(try-require 'dired-x)
-(try-require 'epa-file)
-(try-require 'emms-setup)
-
-(display-time)
-(appt-activate 1)
-(winner-mode 1)
-(set-default 'truncate-lines t)
-(set-default 'truncate-partial-width-windows t)
-(set-default 'line-move-visual nil)
-
-;; raise the limit for bindings and unwind-protect contexts
-(setq max-specpdl-size 5000)
-
-(setq server-use-tcp t)
-(ignore-errors
-  (server-start))
-(edit-server-start)
-
-(load-file-if-exists "~/.personal.el")
-
-(when (file-exists-p (expand-file-name "~/.bash_profile"))
-  (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
+;; (use-package efun-base)
+(load "base")
+(load "setup")
+(load "plat")
+(load "window")
+(load "commands")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
