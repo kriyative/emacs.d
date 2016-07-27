@@ -182,7 +182,11 @@
                         :foreground "black"))
   (when (facep 'magit-tag)
     (set-face-attribute 'magit-tag nil :foreground "black"))
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (mapcar (lambda (m) (unbind-key "<C-tab>" m))
+          (list magit-mode-map
+                magit-stash-mode-map
+                magit-log-mode-map)))
 
 (use-package magit :config (setup-magit))
 
