@@ -735,8 +735,7 @@ currently under the curser"
 (setq max-specpdl-size 5000)
 
 (setq server-use-tcp t)
-(ignore-errors
-  (server-start))
+(server-start)
 (edit-server-start)
 
 (load-file-if-exists "~/.personal.el")
