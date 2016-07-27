@@ -381,6 +381,24 @@
 
 (use-package org-passwords :config (setup-org-passwords))
 
+;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
+
+(defun setup-mu4e ()
+  (setq mu4e-maildir       "~/Mail" ;; top-level Maildir
+        mu4e-get-mail-command "offlineimap -o"
+        mu4e-view-prefer-html t
+        mu4e-hide-index-messages t
+        mu4e-split-view 'vertical
+        mu4e-headers-visible-columns (/ (frame-width) 2)
+        mu4e-headers-fields '((:human-date .  12) ;; alternatively, use :human-date
+                              ;; (:flags      .   6)
+                              (:from       .  16)
+                              (:subject    .  nil))))
+
+(use-package mu4e :config (setup-mu4e))
+
+(use-package mu4e-multi :config (mu4e-multi-enable))
+
 ;;;;;;;;;;;;;;;; lisp ;;;;;;;;;;;;;;;;
 
 (defun setup-lisp-indent-function (&optional indent-function)
