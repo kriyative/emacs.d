@@ -48,6 +48,9 @@
 (set-default 'truncate-partial-width-windows t)
 (set-default 'line-move-visual nil)
 
+;; raise the limit for bindings and unwind-protect contexts
+(setq max-specpdl-size 5000)
+
 (setq server-use-tcp t)
 (ignore-errors
   (server-start))
