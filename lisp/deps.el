@@ -18,7 +18,7 @@
         buffer-move
         edit-server
         emacs-w3m
-        ;; magit
+        magit
         org-passwords))
 
 (defvar el-get-full-pkgs nil)
@@ -54,7 +54,6 @@
 		use-package
                 )))
 
-(el-get-bundle magit :checkout "2.7.0")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
