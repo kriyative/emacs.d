@@ -45,6 +45,7 @@
                 mu4e
                 mu4e-multi
                 paredit
+                projectile
                 ;; peg
                 ;; rudel
                 ;; symon

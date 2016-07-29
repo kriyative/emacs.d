@@ -239,7 +239,8 @@
 (defun setup-guide-key ()
   (guide-key-mode 1)
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-z"
-                                       "C-c" "C-c C-d" "C-c C-x")
+                                       "C-c" "C-c C-d" "C-c C-x"
+                                       "C-c p")
         guide-key/popup-window-position 'bottom))
 
 (use-package guide-key :config (setup-guide-key))
@@ -401,6 +402,10 @@
 (use-package mu4e :config (setup-mu4e))
 
 (use-package mu4e-multi :config (mu4e-multi-enable))
+
+;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
+
+(use-package projectile :config (projectile-global-mode))
 
 ;;;;;;;;;;;;;;;; lisp ;;;;;;;;;;;;;;;;
 
