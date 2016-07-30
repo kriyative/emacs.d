@@ -696,13 +696,20 @@ currently under the curser"
   (require 'rudel-obby)
   (require 'rudel-socket))
 
+(defvar *current-rudel-session* nil)
+
 (defun rudel-start-host ()
   (interactive)
   (let ((info (list :address rudel-session-host
                     :port rudel-session-port
                     :transport-backend rudel-session-transport
                     :protocol-backend rudel-session-protocol)))
-    (rudel-host-session info)))
+    (setq *current-rudel-session* (rudel-host-session info))))
+
+(defun rudel-remove-user-by-name (username)
+  (when *current-rudel-session*
+    (rudel-remove-user *current-rudel-session*
+                       (rudel-find-user *current-rudel-session* username))))
 
 (defun rudel-join ()
   (interactive)
