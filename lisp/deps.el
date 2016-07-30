@@ -54,7 +54,8 @@
                 slime
                 )))
 
-;; (el-get-bundle magit :checkout "1.4.2")
+(el-get-bundle magit/git-modes :checkout "1.0.0")
+(el-get-bundle magit/magit :checkout "1.4.2")
 (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle juergenhoetzel/password-mode)
 (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
