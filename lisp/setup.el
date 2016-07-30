@@ -1,6 +1,7 @@
 ;;;;;;;;;;;;;;;; global ;;;;;;;;;;;;;;;;
 
-(global-auto-complete-mode -1)
+(when (fboundp 'global-auto-complete-mode)
+  (global-auto-complete-mode -1))
 
 (setq inhibit-startup-message t
       inhibit-splash-screen t
