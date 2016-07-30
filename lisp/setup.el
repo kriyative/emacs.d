@@ -399,6 +399,7 @@
 (use-package mu4e :config (setup-mu4e))
 
 (use-package mu4e-multi :config (mu4e-multi-enable))
+(use-package mu4e-maildir :config (mu4e-maildirs-extension))
 
 ;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
 

@@ -62,3 +62,4 @@
 ;; (el-get-bundle expez/edn.el)
 
 (el-get 'sync el-get-full-pkgs)
+(el-get-bundle agpchil/mu4e-maildirs-extension)
