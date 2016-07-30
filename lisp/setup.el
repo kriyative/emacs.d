@@ -684,6 +684,40 @@ currently under the curser"
 
 (use-package python :config (setup-python))
 
+;;;;;;;;;;;;;;;; rudel ;;;;;;;;;;;;;;;;
+
+(defun start-rudel-session ()
+  (require 'rudel-obby-server)
+  (require 'rudel-interactive)
+  (require 'rudel-transport)
+  (require 'rudel-protocol)
+  (require 'rudel-backend)
+  (require 'rudel-obby)
+  (require 'rudel-socket)
+  (let ((info (list :address rudel-session-host
+                    :port rudel-session-port
+                    :transport-backend rudel-session-transport
+                    :protocol-backend rudel-session-protocol)))
+    (rudel-host-session info)))
+
+(use-package rudel
+  :init (setq rudel-session-host "0.0.0.0"
+              rudel-session-port 6522
+              rudel-session-transport '(tcp .
+                                            [object rudel-tcp-backend
+                                                    "tcp"
+                                                    (0 2)
+                                                    (listen connect)])
+              rudel-session-protocol '(obby .
+                                            [object rudel-obby-backend
+                                                    "obby"
+                                                    (0 3)
+                                                    (join host
+                                                          change-color
+                                                          track-subscriptions
+                                                          encrypt)]))
+  :config (setup-rudel))
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")

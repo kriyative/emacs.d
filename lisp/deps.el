@@ -47,7 +47,7 @@
                 paredit
                 projectile
                 ;; peg
-                ;; rudel
+                rudel
                 ;; symon
                 ;; tree-mode
                 ;; yasnippet
