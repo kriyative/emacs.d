@@ -686,22 +686,37 @@ currently under the curser"
 
 ;;;;;;;;;;;;;;;; rudel ;;;;;;;;;;;;;;;;
 
-(defun start-rudel-session ()
+(defun setup-rudel ()
   (require 'rudel-obby-server)
   (require 'rudel-interactive)
   (require 'rudel-transport)
   (require 'rudel-protocol)
   (require 'rudel-backend)
   (require 'rudel-obby)
-  (require 'rudel-socket)
+  (require 'rudel-socket))
+
+(defun rudel-start-host ()
+  (interactive)
   (let ((info (list :address rudel-session-host
                     :port rudel-session-port
                     :transport-backend rudel-session-transport
                     :protocol-backend rudel-session-protocol)))
     (rudel-host-session info)))
 
+(defun rudel-join ()
+  (interactive)
+  (let ((info (list :host rudel-session-host
+                    :address rudel-session-host
+                    :port rudel-session-port
+                    :encryption nil
+                    :global-password ""
+                    :user-password ""
+                    :transport-backend rudel-session-transport
+                    :protocol-backend rudel-session-protocol)))
+    (rudel-join-session info)))
+
 (use-package rudel
-  :init (setq rudel-session-host "0.0.0.0"
+  :init (setq rudel-session-host "localhost"
               rudel-session-port 6522
               rudel-session-transport '(tcp .
                                             [object rudel-tcp-backend
