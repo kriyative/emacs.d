@@ -63,3 +63,4 @@
 
 (el-get 'sync el-get-full-pkgs)
 (el-get-bundle agpchil/mu4e-maildirs-extension)
+(el-get-bundle iqbalansari/mu4e-alert)

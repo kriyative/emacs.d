@@ -315,7 +315,9 @@
 
 (defun setup-bbdb ()
   (bbdb-insinuate-message)
-  (bbdb-initialize 'message 'sc))
+  (bbdb-initialize 'message 'mu4e)
+  (setq bbdb-mail-user-agent 'message-user-agent
+        bbdb-mua-pop-up nil))
 
 (use-package bbdb :config (setup-bbdb))
 
@@ -388,20 +390,103 @@
   (setq mu4e-headers-visible-columns (/ (frame-width) 2)))
 
 (defun setup-mu4e ()
+  (require 'org-mu4e)
   (setq mu4e-maildir       "~/Mail" ;; top-level Maildir
-        mu4e-get-mail-command "offlineimap"
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-update-interval 30
+        ;; fix for duplicate UID per:
+        ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
+        mu4e-change-filenames-when-moving t
         mu4e-view-prefer-html t
         mu4e-hide-index-messages t
         mu4e-split-view 'vertical
         mu4e-headers-fields '((:human-date .  12) ;; alternatively, use :human-date
                               ;; (:flags      .   6)
-                              (:from       .  16)
-                              (:subject    .  nil)))
+                              (:from       .  24)
+                              (:subject    .  nil))
+        mu4e-sent-messages-behavior 'delete
+        mu4e-view-show-addresses t
+        mu4e-view-mode-hook '(bbdb-mua-auto-update visual-line-mode)
+        org-mu4e-convert-to-html t
+        message-sendmail-f-is-evil 't
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "/usr/bin/msmtp"
+        mu4e-compose-dont-reply-to-self t
+        message-kill-buffer-on-exit t
+        mu4e-compose-format-flowed nil)
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook))
 
 (use-package mu4e :config (setup-mu4e))
-(use-package mu4e-multi :config (mu4e-multi-enable))
+
+;; (require 'mu4e-multi)
+(use-package mu4e-multi
+  :bind (("C-x m" . mu4e-multi-compose-new))
+  :config (progn
+            (mu4e-multi-enable)
+            (add-hook 'message-send-mail-hook 'mu4e-multi-compose-set-account)
+            (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)
+            (setq mu4e-user-mail-address-list
+                  (mapcar (lambda (p)
+                            (cdr (assoc 'user-mail-address (cdr p))))
+                          mu4e-multi-account-alist))))
+
 (use-package mu4e-maildir :config (mu4e-maildirs-extension))
+
+(use-package mu4e-alert
+  :config (progn
+            (mu4e-alert-set-default-style 'notifications)
+            (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)))
+
+(defun mu4e-multi-smtpmail-set-msmtp-account ()
+  "Set the account for msmtp.
+This function is intended to added in the
+`message-send-mail-hook'.  Searches for the account in the
+`mu4e-multi-account-alist' variable by matching the email given
+in the \"from\" field.  Note that all msmtp accounts should
+defined in the ~/.msmtprc file and names should be matching the
+keys of the `mu4e-multi-account-alist'."
+  (setq message-sendmail-extra-arguments
+        (list
+         "-a"
+         (catch 'exit
+           (let* ((from (message-fetch-field "from"))
+                  (email (and from
+                              (string-match thing-at-point-email-regexp from)
+                              (match-string-no-properties 0 from)))
+                  (email (replace-regexp-in-string "[<>]" "" email)))
+             (if email
+                 (cl-dolist (alist mu4e-multi-account-alist)
+                   (when (string= email (cdr (assoc 'user-mail-address (cdr alist))))
+                     (throw 'exit (car alist))))
+               (catch 'exit (mu4e-multi-minibuffer-read-account))))))))
+
+(defvar window-configuration-stack nil)
+
+(defun push-window-configuration ()
+  (push (current-window-configuration) window-configuration-stack))
+
+(defun pop-window-configuration ()
+  (pop window-configuration-stack))
+
+(defun switch-to-mu4e ()
+  (interactive)
+  (push-window-configuration)
+  (delete-other-windows)
+  (switch-to-buffer "*scratch*")
+  (mu4e))
+
+(defun switch-back ()
+  (interactive)
+  (let ((window-conf (pop-window-configuration)))
+    (when window-conf
+      (set-window-configuration window-conf))))
+
+(defun switch-to-emms ()
+  (interactive)
+  (push-window-configuration)
+  (delete-other-windows)
+  (emms-playlist-mode-go))
 
 ;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
 
@@ -788,7 +873,9 @@ currently under the curser"
 (define-key ctl-z-map "g" 'toggle-debug-on-error)
 (define-key ctl-z-map "j" 'jump-to-register)
 (define-key ctl-z-map "l" 'cider-jack-in)
+(define-key ctl-z-map "m" 'switch-to-mu4e)
 (define-key ctl-z-map "o" 'browse-url-chromium)
+(define-key ctl-z-map "q" 'switch-back)
 (define-key ctl-z-map "r" 'cider-switch-to-current-repl-buffer)
 (define-key ctl-z-map "t" 'toggle-truncate-lines)
 (define-key ctl-z-map "u" 'browse-url)
