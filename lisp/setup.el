@@ -393,7 +393,7 @@
   (require 'org-mu4e)
   (setq mu4e-maildir       "~/Mail" ;; top-level Maildir
         mu4e-get-mail-command "mbsync -a"
-        mu4e-update-interval 30
+        mu4e-update-interval 60
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
         mu4e-change-filenames-when-moving t
@@ -413,53 +413,37 @@
         message-send-mail-function 'message-send-mail-with-sendmail
         sendmail-program "/usr/bin/msmtp"
         mu4e-compose-dont-reply-to-self t
+        mu4e-compose-keep-self-cc nil
         message-kill-buffer-on-exit t
-        mu4e-compose-format-flowed nil)
+        mu4e-compose-format-flowed nil
+        mu4e-headers-leave-behavior 'apply)
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook))
 
-(use-package mu4e :config (setup-mu4e))
+(use-package mu4e
+  :demand t
+  :config (setup-mu4e))
 
-;; (require 'mu4e-multi)
 (use-package mu4e-multi
+  :demand t
   :bind (("C-x m" . mu4e-multi-compose-new))
   :config (progn
-            (mu4e-multi-enable)
-            (add-hook 'message-send-mail-hook 'mu4e-multi-compose-set-account)
-            (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)
             (setq mu4e-user-mail-address-list
                   (mapcar (lambda (p)
                             (cdr (assoc 'user-mail-address (cdr p))))
-                          mu4e-multi-account-alist))))
+                          mu4e-multi-account-alist))
+            (mu4e-multi-enable)
+            (add-hook 'message-send-mail-hook 'mu4e-multi-compose-set-account)
+            (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
 
-(use-package mu4e-maildir :config (mu4e-maildirs-extension))
+(use-package mu4e-maildirs-extension
+  :demand t
+  :config (mu4e-maildirs-extension))
 
 (use-package mu4e-alert
+  :demand t
   :config (progn
             (mu4e-alert-set-default-style 'notifications)
             (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)))
-
-(defun mu4e-multi-smtpmail-set-msmtp-account ()
-  "Set the account for msmtp.
-This function is intended to added in the
-`message-send-mail-hook'.  Searches for the account in the
-`mu4e-multi-account-alist' variable by matching the email given
-in the \"from\" field.  Note that all msmtp accounts should
-defined in the ~/.msmtprc file and names should be matching the
-keys of the `mu4e-multi-account-alist'."
-  (setq message-sendmail-extra-arguments
-        (list
-         "-a"
-         (catch 'exit
-           (let* ((from (message-fetch-field "from"))
-                  (email (and from
-                              (string-match thing-at-point-email-regexp from)
-                              (match-string-no-properties 0 from)))
-                  (email (replace-regexp-in-string "[<>]" "" email)))
-             (if email
-                 (cl-dolist (alist mu4e-multi-account-alist)
-                   (when (string= email (cdr (assoc 'user-mail-address (cdr alist))))
-                     (throw 'exit (car alist))))
-               (catch 'exit (mu4e-multi-minibuffer-read-account))))))))
 
 (defvar window-configuration-stack nil)
 
