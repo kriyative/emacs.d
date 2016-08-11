@@ -1,5 +1,7 @@
 ;;;;;;;;;;;;;;;; global ;;;;;;;;;;;;;;;;
 
+(load-file-if-exists "~/.personal.el")
+
 (when (fboundp 'global-auto-complete-mode)
   (global-auto-complete-mode -1))
 
@@ -888,8 +890,6 @@ currently under the curser"
 (setq server-use-tcp t)
 (server-start)
 (edit-server-start)
-
-(load-file-if-exists "~/.personal.el")
 
 (when (file-exists-p (expand-file-name "~/.bash_profile"))
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
