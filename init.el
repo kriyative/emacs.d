@@ -8,6 +8,7 @@
 (load "plat")
 (load "window")
 (load "commands")
+(load "post")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
