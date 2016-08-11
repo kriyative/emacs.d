@@ -256,7 +256,6 @@
 (defun setup-erc ()
   (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
   (setq erc-max-buffer-size 30000
-        erc-user-full-name "kriyative"
         erc-hide-list '("JOIN" "NICK" "PART" "QUIT")
         erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
         erc-fill-function 'erc-fill-static
