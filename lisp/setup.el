@@ -372,8 +372,6 @@
   (define-key org-mode-map '[C-tab] nil)
   (define-key org-mode-map "\M-n" 'next-page)
   (define-key org-mode-map "\M-p" 'prev-page)
-  (when org-agenda-files
-    (add-hook 'display-time-hook 'show-daily-agenda))
   (setq org-export-html-postamble nil))
 
 (use-package org :config (setup-org))
