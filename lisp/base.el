@@ -149,3 +149,28 @@
   (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
   (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
+
+(defun parse-relative-time (time-str)
+  (destructuring-bind (sec min hour day month year dow dst zone)
+      (parse-time-string time-str)
+    (destructuring-bind (sec1 min1 hour1 day1 month1 year1 dow1 dst1 zone1)
+	(decode-time)
+      (encode-time (or sec sec1)
+		   (or min min1)
+		   (or hour hour1)
+		   (or day day1)
+		   (or month month1)
+		   (or year year1)
+		   (or zone zone1)))))
+
+;; (time-less-p (parse-relative-time "9 am") (current-time))
+
+(defvar daily-agenda-timer (parse-relative-time "9:00 am"))
+;; (decode-time daily-agenda-timer)
+
+(require 'org)
+(defun show-daily-agenda ()
+  (unless (time-less-p (current-time) daily-agenda-timer)
+    (setq daily-agenda-timer (time-add daily-agenda-timer
+				       (seconds-to-time 86400)))
+    (org-agenda-list)))
