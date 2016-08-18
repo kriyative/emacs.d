@@ -390,6 +390,10 @@
 (defun mu4e-headers-mode-hook ()
   (setq mu4e-headers-visible-columns (/ (frame-width) 2)))
 
+(defun mu4e-action-view-in-system-browser (msg)
+  (let ((browse-url-browser-function 'browse-url-default-browser))
+    (mu4e-action-view-in-browser msg)))
+
 (defun setup-mu4e ()
   (require 'org-mu4e)
   (setq mu4e-maildir       "~/Mail" ;; top-level Maildir
@@ -420,6 +424,7 @@
         mu4e-headers-leave-behavior 'apply
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
 	)
+  (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook))
 
 (use-package mu4e
