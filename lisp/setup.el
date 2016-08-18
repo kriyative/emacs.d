@@ -862,6 +862,7 @@ currently under the curser"
 (define-key ctl-z-map "\C-b" 'winner-undo)
 (define-key ctl-z-map "\C-f" 'winner-redo)
 (define-key ctl-z-map "\C-l" 'bury-buffer)
+(define-key ctl-z-map "e" 'switch-to-emms)
 (define-key ctl-z-map "g" 'toggle-debug-on-error)
 (define-key ctl-z-map "j" 'jump-to-register)
 (define-key ctl-z-map "l" 'cider-jack-in)
