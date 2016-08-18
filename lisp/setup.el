@@ -417,7 +417,9 @@
         mu4e-compose-keep-self-cc nil
         message-kill-buffer-on-exit t
         mu4e-compose-format-flowed nil
-        mu4e-headers-leave-behavior 'apply)
+        mu4e-headers-leave-behavior 'apply
+        ;; mu4e-html2text-command "html2text -utf8 -width 72"
+	)
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook))
 
 (use-package mu4e
