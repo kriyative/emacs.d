@@ -474,11 +474,28 @@
     (when window-conf
       (set-window-configuration window-conf))))
 
+(defvar *switch-to-apps* nil)
+
+(defun switch-to-app (app)
+  (interactive
+   (list
+    (completing-read "Switch to: "
+                     (sort (mapcar 'car *switch-to-apps*) 'string-lessp))))
+  (message app)
+  (push-window-configuration)
+  (delete-other-windows)
+  (let* ((app (intern app))
+         (handler (cdr (assq app *switch-to-apps*))))
+    (funcall handler)))
+
 (defun switch-to-emms ()
   (interactive)
   (push-window-configuration)
   (delete-other-windows)
   (emms-playlist-mode-go))
+
+(add-to-list '*switch-to-apps* '(mu4e . mu4e))
+(add-to-list '*switch-to-apps* '(emms . emms-playlist-mode-go))
 
 ;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
 
@@ -875,6 +892,8 @@ currently under the curser"
 (define-key ctl-z-map "v" 'magit-status)
 (define-key ctl-z-map "w" 'window-configuration-to-register)
 (define-key ctl-z-map "W" 'visual-line-mode)
+(define-key ctl-z-map "z" 'switch-to-app)
+(define-key ctl-z-map "\C-z" 'switch-to-app)
 (define-key ctl-z-map "|" 'toggle-window-split)
 (define-key ctl-z-map [left]  'buf-move-left)
 (define-key ctl-z-map [right] 'buf-move-right)
