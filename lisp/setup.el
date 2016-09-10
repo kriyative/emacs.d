@@ -328,11 +328,12 @@
 (use-package epa-file :config (setup-epa-file))
 
 (defun setup-emms ()
+  (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
   (setq emms-source-file-default-directory "~/Music/")
-  (require 'emms-player-mpv)
-  (add-to-list 'emms-player-list 'emms-player-mpv)
+  ;; (require 'emms-player-mpv)
+  ;; (add-to-list 'emms-player-list 'emms-player-mpv)
   (setq emms-playlist-default-major-mode 'emms-playlist-mode))
 
 (use-package emms-setup :config (setup-emms))
