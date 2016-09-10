@@ -451,7 +451,10 @@
 
 (use-package mu4e-maildirs-extension
   :demand t
-  :config (mu4e-maildirs-extension))
+  :config (progn
+            (mu4e-maildirs-extension)
+            (setq mu4e-maildirs-extension-count-command-format
+                  (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l"))))
 
 (use-package mu4e-alert
   :demand t
