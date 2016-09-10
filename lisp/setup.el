@@ -403,6 +403,7 @@
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
         mu4e-change-filenames-when-moving t
+        mu4e-headers-skip-duplicates t
         mu4e-view-prefer-html t
         mu4e-hide-index-messages t
         mu4e-split-view 'vertical
@@ -421,12 +422,16 @@
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-keep-self-cc nil
         message-kill-buffer-on-exit t
-        mu4e-compose-format-flowed nil
         mu4e-headers-leave-behavior 'apply
+        mu4e-compose-format-flowed t
+        org-mu4e-convert-to-html t
+        org-export-with-toc nil
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
 	)
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
-  (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook))
+  (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
+  (add-hook 'mu4e-compose-mode-hook 'org~mu4e-mime-switch-headers-or-body)
+  )
 
 (use-package mu4e
   :demand t
