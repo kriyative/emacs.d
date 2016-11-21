@@ -10,9 +10,9 @@
 ;; (emms-all)
 ;; (emms-default-players)
 
-(require 'password-mode)
-(require 'org)
-(require 'org-passwords)
+(use-package password-mode)
+(use-package org)
+(use-package org-passwords)
 
 (defun dired-open-file ()
   "In dired, open the file named on this line."
