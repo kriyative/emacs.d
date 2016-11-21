@@ -34,6 +34,7 @@
                 ;; floobits
                 ;; geiser
                 guide-key
+                graphviz-dot-mode
                 ;; hydra
                 ;; inflections
                 jedi
@@ -60,9 +61,10 @@
 ;; (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle cider :checkout "v0.14.0")
 (el-get-bundle juergenhoetzel/password-mode)
-(el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
+
 ;; (el-get-bundle expez/edn.el)
 
+(el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
 (el-get 'sync el-get-full-pkgs)
 (el-get-bundle agpchil/mu4e-maildirs-extension)
 (el-get-bundle iqbalansari/mu4e-alert)
