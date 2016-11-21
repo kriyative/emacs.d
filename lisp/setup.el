@@ -964,3 +964,5 @@ currently under the curser"
 
 (when (file-exists-p (expand-file-name "~/.bash_profile"))
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
+
+(setq custom-settings-file "~/.emacs.d/custom.el")
