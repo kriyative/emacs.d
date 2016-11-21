@@ -392,17 +392,25 @@
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
 (defun mu4e-headers-mode-hook ()
-  (setq mu4e-headers-visible-columns (/ (frame-width) 2)))
+  (setq mu4e-headers-visible-columns (/ (frame-width) 3)))
+
+(defun mu4e-view-mode-hook ()
+  (setq fill-column 132
+	browse-url-browser-function 'browse-url-chromium
+	shr-width nil
+	mu4e-compose-format-flowed t
+	use-hard-newlines nil))
 
 (defun mu4e-action-view-in-system-browser (msg)
-  (let ((browse-url-browser-function 'browse-url-default-browser))
+  (let ((browse-url-browser-function 'browse-url-chromium))
     (mu4e-action-view-in-browser msg)))
 
 (defun setup-mu4e ()
   (require 'org-mu4e)
-  (setq mu4e-maildir       "~/Mail" ;; top-level Maildir
-        mu4e-get-mail-command "mbsync -a"
-        mu4e-update-interval 60
+  (setq mu4e-maildir "~/Mail" ;; top-level Maildir
+	mu4e-get-mail-command "mbsync-all"
+	;; mu4e-get-mail-command "true"
+        mu4e-update-interval 300
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
         mu4e-change-filenames-when-moving t
@@ -427,14 +435,14 @@
         message-kill-buffer-on-exit t
         mu4e-headers-leave-behavior 'apply
         mu4e-compose-format-flowed t
-        org-mu4e-convert-to-html t
-        org-export-with-toc nil
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
-	)
+	mu4e-doc-dir mu4e-builddir
+        org-export-with-toc nil)
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
-  (add-hook 'mu4e-compose-mode-hook 'org~mu4e-mime-switch-headers-or-body)
-  )
+  (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
+  (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
+  (add-hook 'mu4e-compose-mode-hook 'message-mode-hook))
 
 (use-package mu4e
   :demand t
@@ -462,8 +470,22 @@
 (use-package mu4e-alert
   :demand t
   :config (progn
-            (mu4e-alert-set-default-style 'notifications)
+	    (mu4e-alert-set-default-style 'log)
+            ;; (mu4e-alert-set-default-style 'notifications)
+            ;; (alert-add-rule :category "mu4e-alert" :style 'fringe)
+            ;; (alert-add-rule :category "mu4e-alert" :style 'mode-line)
             (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)))
+
+(defun message-mode-hook ()
+  (setq message-fill-column nil
+	message-from-style 'angles
+	message-citation-line-function 'message-insert-citation-line
+	message-cite-style 'message-cite-style-gmail
+	message-yank-prefix ""
+	message-yank-empty-prefix ""))
+
+(use-package message-mode
+  :config (add-hook 'message-mode-hook message-mode-hook))
 
 (defvar window-configuration-stack nil)
 
