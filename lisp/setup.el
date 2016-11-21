@@ -686,14 +686,21 @@ currently under the curser"
 (defun setup-cider-repl ()
   (cider-repl-add-shortcut "sayoonara" 'cider-quit))
 
-(use-package cider-repl :config (setup-cider-repl))
+(use-package cider-repl
+  :init (setq cider-completion-use-context nil
+	      cider-prompt-for-symbol nil
+	      cider-repl-display-help-banner nil
+	      cider-use-overlays nil
+	      cider-repl-use-pretty-printing t)
+  :bind (("\C-c\M-o" . cider-repl-clear-buffer))
+  :config (setup-cider-repl))
 
 (defun cider-mode-hook ()
-  (when (fboundp 'cider-turn-on-eldoc-mode)
-    (cider-turn-on-eldoc-mode))
+  (eldoc-mode)
   (outline-minor-mode)
   (define-key cider-mode-map "\C-c\C-k" 'cider-load-buffer-ext)
-  (setq cider-completion-use-context nil))
+  (define-key cider-mode-map "\C-c," 'cider-test-run-loaded-tests)
+  (define-key cider-mode-map "\C-c\M-," 'cider-test-run-test))
 
 ;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
 
