@@ -377,7 +377,9 @@
   (define-key org-mode-map '[C-tab] nil)
   (define-key org-mode-map "\M-n" 'next-page)
   (define-key org-mode-map "\M-p" 'prev-page)
-  (setq org-export-html-postamble nil))
+  (setq org-export-html-postamble nil
+	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar")
+  (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t))))
 
 (use-package org :config (setup-org))
 
