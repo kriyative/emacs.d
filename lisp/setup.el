@@ -875,6 +875,8 @@ currently under the curser"
                                                           encrypt)]))
   :config (setup-rudel))
 
+(use-package graphviz-dot-mode
+  :config (setq graphviz-dot-view-command "xdot %s"))
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
