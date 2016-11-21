@@ -257,3 +257,22 @@
   "ANSI colorize a region"
   (interactive (list (mark) (point)))
   (ansi-color-apply-on-region start end))
+
+(defun alerts:disable ()
+  (interactive)
+  (setq alert-hide-all-notifications t))
+
+(defun alerts:enable ()
+  (interactive)
+  (setq alert-hide-all-notifications nil))
+
+(defun alerts:clear ()
+  (interactive)
+  (alert-log-clear '(:message "-- clear --")))
+
+(defun alerts:show ()
+  (interactive)
+  (let ((buf (get-buffer "*Alert*")))
+    (if buf
+        (pop-to-buffer buf)
+      (message "No *Alerts* buffer"))))
