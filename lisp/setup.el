@@ -331,12 +331,13 @@
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
-  (setq emms-source-file-default-directory "~/Music/")
+  (setq emms-source-file-default-directory "~/Music/"
+	emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
   ;; (require 'emms-player-mpv)
   ;; (add-to-list 'emms-player-list 'emms-player-mpv)
   (setq emms-playlist-default-major-mode 'emms-playlist-mode))
 
-(use-package emms-setup :config (setup-emms))
+(use-package emms :config (setup-emms))
 
 ;;;;;;;;;;;;;;;; org ;;;;;;;;;;;;;;;;
 
