@@ -460,6 +460,21 @@
   :demand t
   :config (setup-mu4e))
 
+(defun mu4e-stop ()
+  "Stop the mu4e update process"
+  (interactive)
+  (when (process-live-p mu4e~proc-process)
+    (stop-process mu4e~proc-process))
+  (setq mu4e-update-interval nil))
+
+(defun mu4e-start ()
+  "Start the mu4e update process if it's not already running"
+  (interactive)
+  (unless (and mu4e~proc-process
+	       (process-live-p mu4e~proc-process))
+    (mu4e~proc-start)
+    (setq mu4e-update-interval 300)))
+
 (use-package mu4e-multi
   :demand t
   :bind (("C-x m" . mu4e-multi-compose-new))
