@@ -216,17 +216,19 @@
     (unless (file-directory-p local-info-directory)
       (mkdir local-info-directory))
     (with-cwd local-info-directory
-      (mapcar (lambda (f)
-                (call-process "install-info"
-                              nil
-                              '(" *info-setup*" t)
-                              nil
-                              "--debug"
-                              f
-                              "dir")
-                (add-to-list 'Info-additional-directory-list (file-name-directory f)))
-              (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$")))
-    (add-to-list 'Info-directory-list local-info-directory)))
+      (dolist (f (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
+	(let ((d (file-name-directory f)))
+	  (when (directory-files d nil "\\.info$")
+	    (call-process "install-info"
+			  nil
+			  '(" *info-setup*" t)
+			  nil
+			  "--debug"
+			  f
+			  "dir")
+	    (add-to-list 'Info-additional-directory-list d)))))
+    (add-to-list 'Info-directory-list local-info-directory))
+  (add-to-list 'Info-directory-list "/app/stumpwm/share/info"))
 
 (defun setup-info ()
   (set-face-attribute 'info-header-node nil :foreground "black")
