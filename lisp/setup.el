@@ -186,6 +186,10 @@
 
 (use-package pcvs :config (setup-cvs))
 
+(defun magit-setup-hook ()
+  (local-unset-key [C-tab])
+  (define-key magit-mode-map [C-tab] nil))
+
 (defun setup-magit ()
   (when (facep 'magit-item-highlight)
     (set-face-attribute 'magit-item-highlight nil
@@ -193,7 +197,8 @@
                         :foreground "black"))
   (when (facep 'magit-tag)
     (set-face-attribute 'magit-tag nil :foreground "black"))
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (add-hook 'magit-mode-hook 'magit-setup-hook))
 
 (use-package magit :config (setup-magit))
 
