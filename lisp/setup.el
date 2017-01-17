@@ -81,10 +81,15 @@
              ([C-return] . dired-open-file))
  :config (add-hook 'dired-mode-hook 'dired-mode-hook))
 
+(unless (fboundp 'org-at-planning-p)
+  (defun org-at-planning-p ()
+    nil))
+
 (defun setup-diary ()
   (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
   (when (file-exists-p diary-file) (diary 0))
-  (add-hook 'diary-hook 'appt-make-list))
+  (add-hook 'diary-hook 'appt-make-list)
+  (setq org-agenda-include-diary t))
 
 (use-package diary-lib :config (setup-diary))
 
