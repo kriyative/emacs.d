@@ -847,10 +847,10 @@ currently under the curser"
 (defun setup-python ()
   (setq python-remove-cwd-from-path nil)
   (setq jedi:setup-keys t)
-  (require 'jedi)
   (add-hook 'python-mode-hook 'jedi:setup))
 
-(use-package python :config (setup-python))
+;; (use-package python :config (setup-python))
+(use-package jedi :config (setup-python))
 
 ;;;;;;;;;;;;;;;; rudel ;;;;;;;;;;;;;;;;
 
