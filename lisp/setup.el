@@ -631,11 +631,17 @@ currently under the curser"
   (slime-list-connections)
   (pop-to-buffer "*SLIME Connections*"))
 
+(defun my-url-browser-function (&rest args)
+  (apply (if current-prefix-arg
+	     'browse-url-chromium
+	   'w3m-browse-url-other-window)
+	 args))
+
 (defun my-slime-mode-hook ()
   (setq common-lisp-hyperspec-root
 	"file:///opt/cl-doc/HyperSpec/"
 	;; "http://www.lispworks.com/reference/HyperSpec/"
-	browse-url-browser-function 'w3m-browse-url-other-window)
+	browse-url-browser-function 'my-url-browser-function)
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
   (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections)
