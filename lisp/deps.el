@@ -18,7 +18,9 @@
         buffer-move
         edit-server
         emacs-w3m
-        org-passwords
+        gh
+        magit
+        magit-gh-pulls
 	use-package))
 
 (defvar el-get-full-pkgs nil)
@@ -56,8 +58,8 @@
                 slime
                 )))
 
-(el-get-bundle magit/git-modes :checkout "1.0.0")
-(el-get-bundle magit/magit :checkout "1.4.2")
+;; (el-get-bundle magit/git-modes :checkout "1.0.0")
+;; (el-get-bundle magit/magit :checkout "1.4.2")
 ;; (el-get-bundle cider :checkout "v0.8.2")
 (el-get-bundle cider :checkout "v0.14.0")
 (el-get-bundle juergenhoetzel/password-mode)
