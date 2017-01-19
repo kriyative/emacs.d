@@ -216,8 +216,9 @@
   "In Dired, open a file using its default application."
   (interactive)
   (let ((file (dired-get-filename nil t)))
-    (message "Opening %s..." file)
-    (call-process "xdg-open" nil 0 nil file)))
+    (unless (file-directory-p file)
+      (message "Opening %s..." file)
+      (call-process "xdg-open" nil 0 nil file))))
 
 (defun next-page ()
   (interactive)
