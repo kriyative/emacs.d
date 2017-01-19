@@ -401,6 +401,15 @@
 
 (use-package org-passwords :config (setup-org-passwords))
 
+(use-package org-gcal
+  :config
+  (setq org-gcal-client-id my-org-gcal-client-id
+	org-gcal-client-secret my-org-gcal-client-secret
+	org-gcal-file-alist my-org-gcal-file-alist)
+  ;; (setq org-agenda-mode-hook nil)
+  ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync))))
+
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
 (defun mu4e-headers-mode-hook ()
