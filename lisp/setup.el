@@ -407,6 +407,9 @@
   (setq mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
+  (if (mu4e-message-field mu4e~view-msg :body-html)
+      (toggle-truncate-lines 1)
+      (visual-line-mode))
   (setq fill-column 132
 	browse-url-browser-function 'browse-url-chromium
 	shr-width nil
@@ -436,7 +439,7 @@
                               (:subject    .  nil))
         mu4e-sent-messages-behavior 'delete
         mu4e-view-show-addresses t
-        mu4e-view-mode-hook '(bbdb-mua-auto-update visual-line-mode)
+        mu4e-view-mode-hook '(bbdb-mua-auto-update)
         org-mu4e-convert-to-html t
         message-sendmail-f-is-evil 't
         message-sendmail-extra-arguments '("--read-envelope-from")
