@@ -420,7 +420,7 @@
 
 (defun mu4e-view-mode-hook ()
   (if (mu4e-message-field mu4e~view-msg :body-html)
-      (toggle-truncate-lines 1)
+      (setq truncate-lines t)
       (visual-line-mode))
   (setq fill-column 132
 	browse-url-browser-function 'browse-url-chromium
@@ -456,7 +456,7 @@
         message-sendmail-f-is-evil 't
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program "/usr/bin/msmtp"
+        sendmail-program "msmtp"
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-keep-self-cc nil
         message-kill-buffer-on-exit t
