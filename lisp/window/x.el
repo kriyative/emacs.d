@@ -21,17 +21,16 @@
 (defun optimum-font-size ()
   (if (< 90 (display-dpi)) 14 11))
 
-(let* ((font-family "Consolas")
+(let* (
+       ;; (font-family "Consolas")
+       ;; (font-family "FreeMono")
+       (font-family "DejaVu Sans Mono Book")
+       ;; (font-family "Ubuntu Mono")
+       ;; (font-family "Liberation Mono")
+       ;; (font-family "Droid Sans Mono")
+       ;; (font-family "Inconsolata")
        (font-size (optimum-font-size))
        (x-font (concat font-family " " (prin1-to-string font-size)))
-       ;; "Consolas 10"
-       ;; "Consolas 14"
-       ;; "DejaVu Sans Mono Book 10"
-       ;; "Droid Sans Mono 10"
-       ;; "FreeMono 11"
-       ;; "Inconsolata 11"
-       ;; "Liberation Mono 13"
-       ;;  "Ubuntu Mono 14"
        )
   (set-frame-font x-font t t)
   (setq default-frame-alist `((font . ,x-font))))
