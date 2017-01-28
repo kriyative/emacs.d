@@ -202,6 +202,9 @@
 
 (use-package magit :config (setup-magit))
 
+(use-package magit-gh-pulls
+  :config (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
+
 (defun alt-vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
