@@ -30,11 +30,12 @@
                 bbdb
                 csv-mode
                 dictionary
-                ;; emacs-jabber
+                emacs-jabber
                 emms
                 emms-player-mpv
                 ;; floobits
                 ;; geiser
+                gnuplot-mode
                 guide-key
                 graphviz-dot-mode
                 ;; hydra
@@ -47,6 +48,7 @@
                 ;; multiple-cursors
                 mu4e
                 mu4e-multi
+                org-gcal
                 paredit
                 plantuml-mode
                 projectile
@@ -56,6 +58,7 @@
                 ;; tree-mode
                 ;; yasnippet
                 slime
+                xterm-color
                 )))
 
 ;; (el-get-bundle magit/git-modes :checkout "1.0.0")
@@ -70,3 +73,6 @@
 (el-get 'sync el-get-full-pkgs)
 (el-get-bundle agpchil/mu4e-maildirs-extension)
 (el-get-bundle iqbalansari/mu4e-alert)
+
+(el-get-bundle ianxm/emacs-scrum)
+(el-get-bundle bcbcarl/emacs-wttrin)
