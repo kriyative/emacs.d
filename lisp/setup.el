@@ -733,7 +733,8 @@ currently under the curser"
 (use-package clojure-mode :config (setup-clojure))
 
 (defun setup-cider-repl ()
-  (cider-repl-add-shortcut "sayoonara" 'cider-quit))
+  (cider-repl-add-shortcut "sayoonara" 'cider-quit)
+  (setq cider-repl-use-pretty-printing nil))
 
 (use-package cider-repl
   :init (setq cider-completion-use-context nil
