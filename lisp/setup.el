@@ -1016,3 +1016,8 @@ currently under the curser"
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (setq custom-settings-file "~/.emacs.d/custom.el")
+(defun setup-elscreen ()
+  (elscreen-toggle-display-tab))
+
+(use-package elscreen
+  :config (setup-elscreen))

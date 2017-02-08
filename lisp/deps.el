@@ -30,6 +30,7 @@
                 bbdb
                 csv-mode
                 dictionary
+                elscreen
                 emacs-jabber
                 emms
                 emms-player-mpv
