@@ -19,7 +19,7 @@
 ;; (display-dpi)
 
 (defun optimum-font-size ()
-  (if (< 100 (display-dpi)) 14 11))
+  (if (< 100 (display-dpi)) 13 9))
 
 (defun x-set-font (font-family &optional font-size)
   (let* ((font-size (or font-size (optimum-font-size)))
@@ -27,7 +27,7 @@
     (set-frame-font x-font t t)
     (setq default-frame-alist `((font . ,x-font)))))
 
-(x-set-font "DejaVu Sans Mono Book" 9)
+(x-set-font "DejaVu Sans Mono Book")
 
 ;; (x-set-font "Consolas")
 ;; (x-set-font "Noto Mono" 9)
