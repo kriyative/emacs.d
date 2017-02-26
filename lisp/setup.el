@@ -933,6 +933,19 @@ currently under the curser"
 
 (use-package graphviz-dot-mode
   :config (setq graphviz-dot-view-command "xdot %s"))
+
+(use-package wttrin)
+
+(use-package emacs-jabber)
+
+(defun setup-elscreen ()
+  (elscreen-toggle-display-tab))
+
+(use-package elscreen
+  :config (setup-elscreen))
+
+(use-package git-link)
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
@@ -1006,7 +1019,7 @@ currently under the curser"
 
 ;;;;;;;;;;;;;;;; run at startup ;;;;;;;;;;;;;;;;
 
-(display-time)
+(display-time-mode -1)
 (appt-activate 1)
 (winner-mode 1)
 (set-default 'truncate-lines t)
@@ -1024,8 +1037,5 @@ currently under the curser"
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (setq custom-settings-file "~/.emacs.d/custom.el")
-(defun setup-elscreen ()
-  (elscreen-toggle-display-tab))
 
-(use-package elscreen
-  :config (setup-elscreen))
+(elscreen-start)
