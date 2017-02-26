@@ -62,18 +62,12 @@
                 xterm-color
                 )))
 
-;; (el-get-bundle magit/git-modes :checkout "1.0.0")
-;; (el-get-bundle magit/magit :checkout "1.4.2")
-;; (el-get-bundle cider :checkout "v0.8.2")
+;; fix cider at known version
 (el-get-bundle cider :checkout "v0.14.0")
 (el-get-bundle juergenhoetzel/password-mode)
-
-;; (el-get-bundle expez/edn.el)
-
 (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
 (el-get 'sync el-get-full-pkgs)
 (el-get-bundle agpchil/mu4e-maildirs-extension)
 (el-get-bundle iqbalansari/mu4e-alert)
-
-(el-get-bundle ianxm/emacs-scrum)
+(el-get-bundle sshaw/git-link)
 (el-get-bundle bcbcarl/emacs-wttrin)
