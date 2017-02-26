@@ -316,7 +316,7 @@
   (add-hook 'diary-display-hook 'fancy-diary-display)
   ;; (add-hook 'calendar-load-hook 'mark-diary-entries)
   (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
-  (setq display-time-day-and-date t
+  (setq display-time-day-and-date nil
         display-time-world-list '(("America/Los_Angeles" "Cupertino")
                                   ("America/New_York" "New York")
                                   ("Europe/London" "London")
@@ -378,11 +378,15 @@
   (interactive)
   (org-time-stamp-inactive (format-time-string "%Y-%m-%d %H:%M:%S")))
 
+(defun my-org-mode-hook ()
+  (visual-line-mode)
+  (org-display-inline-images))
+
 (defun setup-org ()
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-hook 'org-mode-hook 'turn-on-font-lock)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (remove-hook 'org-mode-hook 'toggle-word-wrap)
+  (add-hook 'org-mode-hook 'my-org-mode-hook)
 
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
@@ -393,6 +397,7 @@
   (define-key org-mode-map '[C-tab] nil)
   (define-key org-mode-map "\M-n" 'next-page)
   (define-key org-mode-map "\M-p" 'prev-page)
+  (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-export-html-postamble nil
 	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar")
   (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t))))
