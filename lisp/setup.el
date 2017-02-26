@@ -422,12 +422,13 @@
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
 (defun mu4e-headers-mode-hook ()
-  (setq mu4e-headers-visible-columns (/ (frame-width) 3)))
+  (setq mu4e-split-view (if (< 128 (frame-width)) 'vertical 'horizontal)
+	mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
   (if (mu4e-message-field mu4e~view-msg :body-html)
       (setq truncate-lines t)
-      (visual-line-mode))
+    (visual-line-mode))
   (setq fill-column 132
 	browse-url-browser-function 'browse-url-chromium
 	shr-width nil
