@@ -2,6 +2,9 @@
 
 (load-file-if-exists "~/.personal.el")
 
+(when (fboundp 'init-deps)
+  (init-deps))
+
 (when (fboundp 'global-auto-complete-mode)
   (global-auto-complete-mode -1))
 
@@ -479,7 +482,6 @@
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook))
 
 (use-package mu4e
-  :demand t
   :config (setup-mu4e))
 
 (defun mu4e-stop ()
@@ -498,7 +500,6 @@
     (setq mu4e-update-interval 300)))
 
 (use-package mu4e-multi
-  :demand t
   :bind (("C-x m" . mu4e-multi-compose-new))
   :config (progn
             (setq mu4e-user-mail-address-list
@@ -510,14 +511,12 @@
             (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
 
 (use-package mu4e-maildirs-extension
-  :demand t
   :config (progn
             (mu4e-maildirs-extension)
             (setq mu4e-maildirs-extension-count-command-format
                   (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l"))))
 
 (use-package mu4e-alert
-  :demand t
   :config (progn
 	    (mu4e-alert-set-default-style 'log)
             ;; (mu4e-alert-set-default-style 'notifications)
@@ -1038,4 +1037,5 @@ currently under the curser"
 
 (setq custom-settings-file "~/.emacs.d/custom.el")
 
-(elscreen-start)
+(when (fboundp 'elscreen-start)
+  (elscreen-start))
