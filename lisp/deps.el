@@ -44,13 +44,12 @@
     markdown-mode
     ;; mode-line-stats
     ;; multiple-cursors
-    mu4e
-    mu4e-multi
     org-gcal
     paredit
     plantuml-mode
     projectile
     ;; peg
+    racket-mode
     rudel
     ;; symon
     ;; tree-mode
@@ -62,6 +61,8 @@
 
 (defun load-extended-deps ()
   (el-get 'sync el-get-extended-pkgs)
+  (el-get-bundle mu4e)
+  (el-get-bundle csantosb/mu4e-multi)
   (el-get-bundle juergenhoetzel/password-mode)  
   (el-get-bundle agpchil/mu4e-maildirs-extension)
   (el-get-bundle iqbalansari/mu4e-alert)
