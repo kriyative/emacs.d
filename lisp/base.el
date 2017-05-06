@@ -1,6 +1,7 @@
 (require 'cl)
 
-(defmacro if-let (binding then &optional else)
+(defmacro if-bind (binding then &optional else)
+  (declare (indent 1))
   (destructuring-bind (var predicate)
       binding
     `(let ((,var ,predicate))
@@ -8,8 +9,9 @@
            ,then
          ,else))))
 
-(defmacro when-let (binding &rest body)
-  `(if-let ,binding
+(defmacro when-bind (binding &rest body)
+  (declare (indent 1))
+  `(if-bind ,binding
      (progn
        ,@body)))
 
@@ -17,10 +19,10 @@
   (concat (file-name-as-directory path) file))
 
 (defun locate-path (file path-list)
-  (when-let (path (find-if (lambda (path)
-                             (let ((file-path (concat-path path file)))
-                               (and (file-exists-p file-path) file-path)))
-                           path-list))
+  (when-bind (path (find-if (lambda (path)
+			      (let ((file-path (concat-path path file)))
+				(and (file-exists-p file-path) file-path)))
+			    path-list))
     (concat-path path file)))
 
 (defvar base-exec-path exec-path)
@@ -31,8 +33,6 @@
       (when (file-directory-p path)
         (add-to-list 'exec-path path append)))
     (setenv "PATH" (join ":" exec-path))))
-
-
 
 (defun region ()
   (when mark-active
@@ -123,10 +123,10 @@
 
 (defun find-file-no-desktop (path)
   (require 'desktop)
-  (when-let (buf (find-file-if-exists f))
+  (when-bind (buf (find-file-if-exists f))
     (when (featurep 'desktop)
       (push (buffer-name buf)
-            desktop-clear-preserve-buffers))))
+	    desktop-clear-preserve-buffers))))
 
 (defun load-file-if-exists (path &rest load-args)
   (let ((path (expand-file-name path)))
