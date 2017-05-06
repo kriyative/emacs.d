@@ -19,7 +19,7 @@
 ;; (display-dpi)
 
 (defun optimum-font-size ()
-  (if (< 100 (display-dpi)) 13 9))
+  (if (< 100 (display-dpi)) 13 11))
 
 (defun x-set-font (font-family &optional font-size)
   (let* ((font-size (or font-size (optimum-font-size)))
@@ -67,3 +67,7 @@
 (push 'compilation-end-notifier compilation-finish-functions)
 
 (mouse-avoidance-mode 'none)
+
+(defun x-caps-lock-control ()
+  (interactive)
+  (call-process "setxkbmap" nil nil nil "-option" "ctrl:nocaps"))
