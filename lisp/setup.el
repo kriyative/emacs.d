@@ -483,7 +483,7 @@
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
-  (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
+  ;; (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook))
 
 (use-package mu4e
@@ -944,6 +944,7 @@ currently under the curser"
 
 (global-set-key [?\C-.] 'tags-search)
 (global-set-key [?\C-,] 'tags-loop-continue)
+(global-set-key "\C-x\C-f" 'x-find-file)
 
 (define-key ctl-x-4-map "k" 'other-window-send-keys)
 
@@ -964,6 +965,7 @@ currently under the curser"
 (define-key ctl-semicolon-map "0" 'go-home)
 (define-key ctl-semicolon-map "2" '2col-view)
 (define-key ctl-semicolon-map "3" '3col-view)
+(define-key ctl-semicolon-map "4" '4col-view)
 (define-key ctl-semicolon-map "9" 'fill-vertical-panes)
 (define-key ctl-semicolon-map "<" 'pop-tag-mark)
 (define-key ctl-semicolon-map "\C-b" 'winner-undo)
