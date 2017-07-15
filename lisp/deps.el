@@ -26,7 +26,6 @@
     bbdb
     csv-mode
     dictionary
-    elscreen
     emacs-jabber
     emms
     emms-player-mpv
@@ -61,6 +60,7 @@
 
 (defun load-extended-deps ()
   (el-get 'sync el-get-extended-pkgs)
+  (el-get-bundle knu/elscreen)
   (el-get-bundle mu4e)
   (el-get-bundle csantosb/mu4e-multi)
   (el-get-bundle juergenhoetzel/password-mode)  
