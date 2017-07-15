@@ -534,8 +534,8 @@
 	message-from-style 'angles
 	message-citation-line-function 'message-insert-citation-line
 	message-cite-style 'message-cite-style-gmail
-	message-yank-prefix ""
-	message-yank-empty-prefix ""))
+	message-yank-prefix "> "
+	message-yank-empty-prefix "> "))
 
 (use-package message-mode
   :config (add-hook 'message-mode-hook message-mode-hook))
