@@ -277,3 +277,14 @@
     (if buf
         (pop-to-buffer buf)
       (message "No *Alerts* buffer"))))
+(defun keepass (&optional kdb-file)
+  "A minimal keepass interaction mode using kpcli"
+  (interactive "fFind KDB file: ")
+  (switch-to-buffer
+   (make-comint "kpcli" "kpcli" nil
+                "--kdb" (expand-file-name kdb-file)))
+  (make-variable-buffer-local 'comint-password-prompt-regexp)
+  (setq comint-password-prompt-regexp
+        (concat "\\(^Please provide the master password:\\|"
+                comint-password-prompt-regexp
+                "\\)")))
