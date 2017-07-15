@@ -38,6 +38,7 @@
     ;; inflections
     jedi
     js2-mode
+    let-alist
     lua-mode
     magit-gh-pulls
     markdown-mode
@@ -45,6 +46,7 @@
     ;; multiple-cursors
     org-gcal
     paredit
+    pdf-tools
     plantuml-mode
     projectile
     ;; peg
