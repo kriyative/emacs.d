@@ -69,7 +69,8 @@
   (el-get-bundle agpchil/mu4e-maildirs-extension)
   (el-get-bundle iqbalansari/mu4e-alert)
   (el-get-bundle sshaw/git-link)
-  (el-get-bundle bcbcarl/emacs-wttrin))
+  (el-get-bundle bcbcarl/emacs-wttrin)
+  (el-get-bundle dxknight/chronos))
 
 (defun init-deps ()
   (el-get 'sync el-get-base-pkgs)
