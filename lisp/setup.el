@@ -74,7 +74,8 @@
 
 (defun dired-mode-hook ()
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-        dired-omit-mode t))
+        dired-omit-mode t
+	dired-listing-switches "-alh"))
 
 (use-package
  dired-x
