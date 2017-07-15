@@ -9,17 +9,34 @@
 (defvar x-font nil)
 ;; (setq x-font "Liberation Mono 10")
 
-(defun display-dpi ()
+(defun display-dimensions-inches ()
   (let* ((monitor-attribs (display-monitor-attributes-list))
          (attrib1 (first monitor-attribs))
          (mm-size (cdr (assq 'mm-size attrib1)))
-         (width-inches (* (first mm-size) 0.039)))
-    (round (/ (x-display-pixel-width) width-inches))))
+         (convert 0.039)
+         (width (* (first mm-size) convert))
+         (height (* (second mm-size) convert)))
+    (list :width (round width)
+          :height (round height)
+          :diagonal (round (sqrt (+ (* width width) (* height height)))))))
+
+;; (plist-get (display-dimensions-inches) :diagonal)
+
+(defun display-dpi ()
+  (let ((dim (display-dimensions-inches)))
+    (round (/ (x-display-pixel-width)
+              (plist-get dim :width)))))
 
 ;; (display-dpi)
 
+(defvar *current-display-dpi* (display-dpi))
+
 (defun optimum-font-size ()
-  (if (< 100 (display-dpi)) 13 11))
+  (let ((dpi (display-dpi)))
+    (cond
+     ((< 170 dpi) 14)
+     ((or (< 1920 (x-display-pixel-width)) (< 150 dpi)) 13)
+     (t 11))))
 
 (defun x-set-font (font-family &optional font-size)
   (let* ((font-size (or font-size (optimum-font-size)))
@@ -28,17 +45,20 @@
     (setq default-frame-alist `((font . ,x-font)))))
 
 (x-set-font "DejaVu Sans Mono Book")
-
 ;; (x-set-font "Consolas")
-;; (x-set-font "Noto Mono" 9)
-;; (x-set-font "DejaVu Sans Mono Book" 13)
-;; (x-set-font "Andale Mono" 10)
-;; (x-set-font "Bitstream Vera Sans Mono" 10)
-;; (x-set-font "FreeMono" 10)
-;; (x-set-font "Ubuntu Mono" 10)
-;; (x-set-font "Liberation Mono" 10)
+;; (x-set-font "Inconsolata")
+;; (x-set-font "Liberation Mono")
+
+;; (x-set-font "Consolas" 9)
+;; (x-set-font "Noto Mono")
+;; (x-set-font "DejaVu Sans Mono Book")
+;; (x-set-font "Andale Mono")
+;; (x-set-font "Bitstream Vera Sans Mono")
+;; (x-set-font "FreeMono")
+;; (x-set-font "Ubuntu Mono" 14)
+;; (x-set-font "Liberation Mono" 9)
 ;; (x-set-font "Droid Sans Mono" 10)
-;; (x-set-font "Inconsolata" 11)
+;; (x-set-font "Inconsolata" 10)
 ;; (x-set-font "Tlwg Mono" 11)
 
 (defvar *emacs-focused-p* t)
@@ -54,6 +74,17 @@
   (setq *emacs-focused-p* nil))
 
 (add-hook 'focus-out-hook 'focus-out-hook)
+
+(defun update-default-font ()
+  (unless (= (display-dpi) *current-display-dpi*)
+    (setq *current-display-dpi* (display-dpi))
+    ;; (x-set-font "Consolas")
+    (x-set-font "DejaVu Sans Mono Book")))
+
+(defun window-configuration-change-hook ()
+  (update-default-font))
+
+(add-hook 'window-configuration-change-hook 'window-configuration-change-hook)
 
 (defun x-notify (message &optional title)
   (let ((alert-default-style (if (emacs-focused-p) 'message 'notifications)))
