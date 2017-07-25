@@ -277,6 +277,12 @@
     (if buf
         (pop-to-buffer buf)
       (message "No *Alerts* buffer"))))
+
+(defun go-home ()
+  (interactive)
+  (delete-other-windows)
+  (switch-to-buffer "*scratch*"))
+
 (defun keepass (&optional kdb-file)
   "A minimal keepass interaction mode using kpcli"
   (interactive "fFind KDB file: ")
