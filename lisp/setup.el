@@ -922,6 +922,9 @@ currently under the curser"
 	     ("b"  . pdf-view-set-slice-from-bounding-box)
 	     ("r"  . pdf-view-reset-slice)))
 
+(use-package ediff
+  :config (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
