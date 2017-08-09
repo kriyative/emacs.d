@@ -51,7 +51,6 @@
     projectile
     ;; peg
     racket-mode
-    rudel
     ;; symon
     ;; tree-mode
     ;; yasnippet
