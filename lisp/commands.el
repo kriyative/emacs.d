@@ -71,6 +71,10 @@
   (setq debug-on-error (not debug-on-error))
   (message "debug-on-error set to `%s'" debug-on-error))
 
+(defun 4col-view ()
+  (interactive)
+  (n-col-view 4))
+
 (defun 3col-view ()
   (interactive)
   (n-col-view 3))
@@ -78,6 +82,15 @@
 (defun 2col-view ()
   (interactive)
   (n-col-view 2))
+
+(defun dev-split-view ()
+  (interactive)
+  (delete-other-windows)
+  (split-window-horizontally 85)
+  (save-excursion
+    (other-window 1)
+    (split-window-vertically)
+    (split-window-horizontally (/ (window-width) 2))))
 
 (defun fill-vertical-panes ()
   (interactive)
@@ -296,4 +309,6 @@
                     "\\)")))
     (switch-to-buffer buf)))
 
-
+(defun gcal-sync ()
+  (interactive)
+  (org-gcal-sync nil t))
