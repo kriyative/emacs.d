@@ -926,6 +926,11 @@ currently under the curser"
 (use-package ediff
   :config (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
+(use-package midnight
+  :config
+  (midnight-delay-set 'midnight-delay "9:00am")
+  (add-hook 'midnight-hook 'org-agenda-list))
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
