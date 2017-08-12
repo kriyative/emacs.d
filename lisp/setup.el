@@ -72,18 +72,17 @@
  telnet
  :config (setq telnet-remote-echoes nil))
 
-(defun dired-mode-hook ()
-  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-        dired-omit-mode t
-	dired-listing-switches "-alh"))
-
 (use-package
- dired-x
- :bind (:map dired-mode-map
-             ("k" . dired-kill-subdir)
-             (">" . dired-omit-mode)
-             ([C-return] . dired-open-file))
- :config (add-hook 'dired-mode-hook 'dired-mode-hook))
+  dired-x
+  :demand t
+  :bind (:map dired-mode-map
+              ("k" . dired-kill-subdir)
+              (">" . dired-omit-mode)
+              ([C-return] . dired-open-file))
+  :config
+  (set-default 'dired-omit-mode t)
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
+	dired-listing-switches "-alh"))
 
 (unless (fboundp 'org-at-planning-p)
   (defun org-at-planning-p ()
