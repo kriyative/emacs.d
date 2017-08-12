@@ -174,3 +174,19 @@
     (setq daily-agenda-timer (time-add daily-agenda-timer
 				       (seconds-to-time 86400)))
     (org-agenda-list)))
+
+;;; https://www.emacswiki.org/emacs/AddCommasToNumbers
+(defun add-number-grouping (number &optional separator)
+  "Add commas to NUMBER and return it as a string. Optional
+SEPARATOR is the string to use to separate groups. It defaults to
+a comma."
+  (when number
+    (let ((num (if (stringp number)
+                   number
+                 (number-to-string number)))
+          (op (or separator ",")))
+      (while (string-match "\\(.*[0-9]\\)\\([0-9][0-9][0-9].*\\)" num)
+        (setq num (concat
+                   (match-string 1 num) op
+                   (match-string 2 num))))
+      num)))
