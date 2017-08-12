@@ -483,7 +483,9 @@
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
   ;; (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
-  (add-hook 'mu4e-compose-mode-hook 'message-mode-hook))
+  (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
+  (add-to-list 'mu4e-bookmarks
+	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102)))
 
 (use-package mu4e
   :config (setup-mu4e))
