@@ -1,3 +1,5 @@
+(el-get-bundle rudel)
+
 ;;;;;;;;;;;;;;;; rudel ;;;;;;;;;;;;;;;;
 
 (defun setup-rudel ()
