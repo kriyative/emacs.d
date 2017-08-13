@@ -23,9 +23,10 @@
 ;; (plist-get (display-dimensions-inches) :diagonal)
 
 (defun display-dpi ()
-  (let ((dim (display-dimensions-inches)))
-    (round (/ (x-display-pixel-width)
-              (plist-get dim :width)))))
+  (when (eq window-system 'x)
+    (let ((dim (display-dimensions-inches)))
+      (round (/ (x-display-pixel-width)
+                (plist-get dim :width))))))
 
 ;; (display-dpi)
 
@@ -44,7 +45,8 @@
     (set-frame-font x-font t t)
     (setq default-frame-alist `((font . ,x-font)))))
 
-(x-set-font "DejaVu Sans Mono Book")
+(when (eq window-system 'x)
+  (x-set-font "DejaVu Sans Mono Book"))
 ;; (x-set-font "Consolas")
 ;; (x-set-font "Inconsolata")
 ;; (x-set-font "Liberation Mono")
@@ -76,13 +78,14 @@
 (add-hook 'focus-out-hook 'focus-out-hook)
 
 (defun update-default-font ()
-  (unless (= (display-dpi) *current-display-dpi*)
+  (unless (eq (display-dpi) *current-display-dpi*)
     (setq *current-display-dpi* (display-dpi))
     ;; (x-set-font "Consolas")
     (x-set-font "DejaVu Sans Mono Book")))
 
 (defun window-configuration-change-hook ()
-  (update-default-font))
+  (when (eq window-system 'x)
+    (update-default-font)))
 
 (add-hook 'window-configuration-change-hook 'window-configuration-change-hook)
 
