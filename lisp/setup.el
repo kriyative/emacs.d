@@ -926,10 +926,14 @@ currently under the curser"
 (use-package ediff
   :config (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
+(defun my-midnight-hook ()
+  (org-gcal-fetch)
+  (org-agenda-list))
+
 (use-package midnight
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
-  (add-hook 'midnight-hook 'org-agenda-list))
+  (add-hook 'midnight-hook 'my-midnight-hook))
 
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 

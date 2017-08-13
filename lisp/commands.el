@@ -308,7 +308,3 @@
                     comint-password-prompt-regexp
                     "\\)")))
     (switch-to-buffer buf)))
-
-(defun gcal-sync ()
-  (interactive)
-  (org-gcal-sync nil t))
