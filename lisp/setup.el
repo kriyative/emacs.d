@@ -482,7 +482,7 @@
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
-  ;; (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
+  (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-to-list 'mu4e-bookmarks
 	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102)))
@@ -513,7 +513,7 @@
                             (cdr (assoc 'user-mail-address (cdr p))))
                           mu4e-multi-account-alist))
             (mu4e-multi-enable)
-            (add-hook 'message-send-mail-hook 'mu4e-multi-compose-set-account)
+            (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
             (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
 
 (use-package mu4e-maildirs-extension
