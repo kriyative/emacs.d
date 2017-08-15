@@ -8,5 +8,6 @@
 (load "plat")
 (load "window")
 (load "commands")
+(load "overrides")
 (load "post")
 (load custom-settings-file 'noerror)
