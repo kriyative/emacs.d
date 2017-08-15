@@ -106,3 +106,17 @@ detect ACCOUNT from it."
         (message-remove-header "from")
         (message-add-header (format "From: %s\n" (message-make-from)))
         (message "Using account %s" account)))))
+
+;;; modify mark-for-trash in mu4e to not set the +T flag which
+;;; confuses Gmail into retaining messages in the Trash folder forever
+(setq mu4e-marks
+      (cons `(trash
+              :char ("d" . "▼")
+              :prompt "dtrash"
+              :dyn-target ,(lambda (target msg) (mu4e-get-trash-folder msg))
+              :action ,(lambda (docid msg target)
+                         (mu4e~proc-move docid
+                                         (mu4e~mark-check-target target) "-N")))
+            (remove-if (lambda (x)
+                         (equal 'trash (car x)))
+                       mu4e-marks)))
