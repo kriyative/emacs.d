@@ -84,3 +84,25 @@
 	    (shr-indent)))))
     (unless (string-match "[ \t\r\n ]\\'" text)
       (delete-char -1)))))
+
+
+;;; slight fix to prevent accidentally clobbering compose settings
+(defun mu4e-multi-compose-set-account (&optional account)
+  "Set the ACCOUNT for composing.
+With Optional Argument ACCOUNT, set all variables for that given
+identifier, else it tries to retrieve the message in context and
+detect ACCOUNT from it."
+  (interactive)
+  (let* ((msg (or mu4e-compose-parent-message
+                  (ignore-errors (mu4e-message-at-point))))
+         (account (or account
+                      (mu4e-multi-get-msg-account msg)))
+         (account-vars (cdr (assoc account mu4e-multi-account-alist))))
+    (when account-vars
+      (mapc #'(lambda (var)
+                (set (make-local-variable (car var)) (cdr var)))
+            account-vars)
+      (when (memq major-mode '(mu4e-compose-mode message-mode))
+        (message-remove-header "from")
+        (message-add-header (format "From: %s\n" (message-make-from)))
+        (message "Using account %s" account)))))

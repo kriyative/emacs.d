@@ -514,6 +514,7 @@
                           mu4e-multi-account-alist))
             (mu4e-multi-enable)
             (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
+            (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
             (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
 
 (use-package mu4e-maildirs-extension
