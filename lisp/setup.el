@@ -936,6 +936,12 @@ currently under the curser"
   (midnight-delay-set 'midnight-delay "9:00am")
   (add-hook 'midnight-hook 'my-midnight-hook))
 
+(use-package image
+  :bind (:map image-mode-map
+              ("w" . image-transform-fit-to-width)
+              ("h" . image-transform-fit-to-height)
+              ("s" .  image-transform-set-scale)))
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
