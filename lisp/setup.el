@@ -73,7 +73,7 @@
  :config (setq telnet-remote-echoes nil))
 
 (use-package
-  dired-x
+    dired-x
   :demand t
   :bind (:map dired-mode-map
               ("k" . dired-kill-subdir)
@@ -92,7 +92,8 @@
   (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
   (when (file-exists-p diary-file) (diary 0))
   (add-hook 'diary-hook 'appt-make-list)
-  (setq org-agenda-include-diary t))
+  (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+  (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
 
 (use-package diary-lib :config (setup-diary))
 
@@ -359,6 +360,8 @@
   ;; (add-to-list 'emms-player-list 'emms-player-mpv)
   (setq emms-playlist-default-major-mode 'emms-playlist-mode))
 
+(add-hook 'emms-info-functions 'emms-info-track-description)
+
 (use-package emms :config (setup-emms))
 
 ;;;;;;;;;;;;;;;; org ;;;;;;;;;;;;;;;;
@@ -411,6 +414,15 @@
 
 (use-package org :config (setup-org))
 
+(use-package org-agenda
+  :config
+  (setq org-agenda-include-diary t
+        org-agenda-prefix-format (cons
+                                  '(agenda . " %i %-16:c%?-12t% s")
+                                  (remove-if (lambda (x)
+                                               (eq (car x) 'agenda))
+                                             org-agenda-prefix-format))))
+
 (defun setup-org-passwords ()
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
@@ -433,17 +445,17 @@
 	mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
-  (if (mu4e-message-field mu4e~view-msg :body-html)
-      (setq truncate-lines t)
-    (visual-line-mode))
+  ;; (if (mu4e-message-field mu4e~view-msg :body-html)
+  ;;     (setq truncate-lines t)
+  ;;   (visual-line-mode))
   (setq fill-column 132
-	browse-url-browser-function 'browse-url-chromium
+	browse-url-browser-function 'browse-url-default-browser
 	shr-width nil
 	mu4e-compose-format-flowed t
 	use-hard-newlines nil))
 
 (defun mu4e-action-view-in-system-browser (msg)
-  (let ((browse-url-browser-function 'browse-url-chromium))
+  (let ((browse-url-browser-function 'browse-url-default-browser))
     (mu4e-action-view-in-browser msg)))
 
 (defun setup-mu4e ()
@@ -485,7 +497,8 @@
   (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-to-list 'mu4e-bookmarks
-	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102)))
+	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102))
+  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
 
 (use-package mu4e
   :config (setup-mu4e))
@@ -504,6 +517,10 @@
 	       (process-live-p mu4e~proc-process))
     (mu4e~proc-start)
     (setq mu4e-update-interval 300)))
+;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
+(eval-after-load "enriched"
+  '(defun enriched-decode-display-prop (start end &optional param)
+     (list start end)))
 
 (use-package mu4e-multi
   :bind (("C-x m" . mu4e-multi-compose-new))
@@ -661,7 +678,7 @@ currently under the curser"
 
 (defun my-url-browser-function (&rest args)
   (apply (if current-prefix-arg
-	     'browse-url-chromium
+	     'browse-url-default-browser
 	   'w3m-browse-url-other-window)
 	 args))
 
@@ -892,10 +909,13 @@ currently under the curser"
 (use-package emacs-jabber)
 
 (defun setup-elscreen ()
-  (elscreen-toggle-display-tab))
+  (setq elscreen-display-tab nil))
 
 (use-package elscreen
-  :config (setup-elscreen))
+  :config (setup-elscreen)
+  :bind (:map elscreen-map
+              ("z" . elscreen-toggle)
+              ("\C-z" . elscreen-toggle)))
 
 (use-package git-link)
 
@@ -942,6 +962,13 @@ currently under the curser"
               ("h" . image-transform-fit-to-height)
               ("s" .  image-transform-set-scale)))
 
+(defun setup-geiser ()
+  ;; (geiser-set-scheme* 'chez)
+  )
+
+(use-package geiser
+  :config (add-hook 'geiser-mode-hook 'setup-geiser))
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\M-g")
@@ -959,9 +986,9 @@ currently under the curser"
 (global-set-key "\C-\\" 'compile)
 (global-set-key "\C-x\C-b" 'ibuffer)
 ;; (global-set-key "\C-xb" 'iswitchb-buffer)
+;; (global-set-key "\C-xb" 'switch-to-buffer)
 (global-set-key [C-M-left] 'previous-buffer)
 (global-set-key [C-M-right] 'next-buffer)
-
 (global-set-key [?\C-.] 'tags-search)
 (global-set-key [?\C-,] 'tags-loop-continue)
 (global-set-key "\C-x\C-f" 'x-find-file)
@@ -996,7 +1023,7 @@ currently under the curser"
 (define-key ctl-semicolon-map "j" 'jump-to-register)
 (define-key ctl-semicolon-map "l" 'cider-jack-in)
 (define-key ctl-semicolon-map "m" 'switch-to-mu4e)
-(define-key ctl-semicolon-map "o" 'browse-url-chromium)
+(define-key ctl-semicolon-map "o" 'browse-url-default-browser)
 (define-key ctl-semicolon-map "q" 'switch-back)
 (define-key ctl-semicolon-map "r" 'cider-switch-to-current-repl-buffer)
 (define-key ctl-semicolon-map "t" 'toggle-truncate-lines)
@@ -1034,7 +1061,7 @@ currently under the curser"
 (when (file-exists-p (expand-file-name "~/.bash_profile"))
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
-(setq custom-settings-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 
 (when (fboundp 'elscreen-start)
   (elscreen-start))
