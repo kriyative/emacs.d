@@ -10,4 +10,4 @@
 (load "commands")
 (load "overrides")
 (load "post")
-(load custom-settings-file 'noerror)
+(load custom-file 'noerror)
