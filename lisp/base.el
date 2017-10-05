@@ -84,7 +84,9 @@
              (spaced (mapcar (lambda (x)
                                (destructuring-bind (key val) x
                                  (concat (str key) "=\"" (str val) "\"")))
-                             (partition attrs 2)))))
+                             (partition attrs 2))))
+           (seq (x)
+             (if (listp x) x (list x))))
     (if (listp spec)
         (let ((head (first spec)))
           (destructuring-bind (tag &rest attribs) (seq head)
