@@ -7,11 +7,13 @@
   (interactive)
   (let* ((plantuml-file (concat (file-name-sans-extension buffer-file-name) ".png"))
          (plantuml-buf (get-buffer (file-name-nondirectory plantuml-file))))
+    (clear-image-cache plantuml-file)
     (if (not (buffer-live-p plantuml-buf))
 	(find-file plantuml-file)
       (progn
 	(pop-to-buffer plantuml-buf)
-	(revert-buffer nil t nil)))))
+        (with-current-buffer plantuml-buf
+          (revert-buffer nil t nil))))))
 
 ;;; fixes issue occasionally seen in rendering mu4e html messages
 (defun shr-insert (text)
