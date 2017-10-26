@@ -122,3 +122,37 @@ detect ACCOUNT from it."
             (remove-if (lambda (x)
                          (equal 'trash (car x)))
                        mu4e-marks)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; browse-url
+
+(defun browse-url-can-use-xdg-open ()
+  "Return non-nil if the \"xdg-open\" program can be used.
+xdg-open is a desktop utility that calls your preferred web browser.
+This requires you to be running either Gnome, KDE, Xfce4 or LXDE."
+  (and (getenv "DISPLAY")
+       (executable-find "xdg-open")
+       ;; xdg-open may call gnome-open and that does not wait for its child
+       ;; to finish.  This child may then be killed when the parent dies.
+       ;; Use nohup to work around.  See bug#7166, bug#8917, bug#9779 and
+       ;; http://lists.gnu.org/archive/html/emacs-devel/2009-07/msg00279.html
+       (executable-find "nohup")
+       (or (getenv "GNOME_DESKTOP_SESSION_ID")
+	   ;; GNOME_DESKTOP_SESSION_ID is deprecated, check on Dbus also.
+	   (condition-case nil
+	       (eq 0 (call-process
+		      "dbus-send" nil nil nil
+                      "--dest=org.gnome.SessionManager"
+                      "--print-reply"
+                      "/org/gnome/SessionManager"
+                      "org.gnome.SessionManager.CanShutdown"))
+	     (error nil))
+	   (equal (getenv "KDE_FULL_SESSION") "true")
+	   (condition-case nil
+	       (eq 0 (call-process
+		      "/bin/sh" nil nil nil
+		      "-c"
+		      ;; FIXME use string-match rather than grep.
+		      "xprop -root _DT_SAVE_MODE|grep xfce4"))
+	     (error nil))
+	   (member (getenv "DESKTOP_SESSION") '("LXDE" "Lubuntu" "stumpwm"))
+	   (equal (getenv "XDG_CURRENT_DESKTOP") "LXDE"))))
