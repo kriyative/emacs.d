@@ -308,3 +308,13 @@
                     comint-password-prompt-regexp
                     "\\)")))
     (switch-to-buffer buf)))
+
+(defvar daily-agenda-timer (parse-relative-time "9:00 am"))
+;; (decode-time daily-agenda-timer)
+
+(require 'org)
+(defun show-daily-agenda ()
+  (unless (time-less-p (current-time) daily-agenda-timer)
+    (setq daily-agenda-timer (time-add daily-agenda-timer
+				       (seconds-to-time 86400)))
+    (org-agenda-list)))
