@@ -11,64 +11,63 @@
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 
-(defvar el-get-base-pkgs
-  '(adaptive-wrap
-    alert
-    buffer-move
-    edit-server
-    emacs-w3m
-    gh
-    magit
-    use-package))
+(defvar el-get-base-pkgs nil)
+(setq el-get-base-pkgs
+      '(adaptive-wrap
+	alert
+	buffer-move
+	edit-server
+	emacs-w3m
+	gh
+	magit
+	use-package))
 
-(defvar el-get-extended-pkgs
-  '( ;; clj-refactor
-    bbdb
-    csv-mode
-    dictionary
-    diminish
-    ;; emacs-jabber
-    emms
-    emms-player-mpv
-    ;; floobits
-    geiser
-    gnuplot-mode
-    guide-key
-    graphviz-dot-mode
-    ;; hydra
-    ;; inflections
-    jedi
-    js2-mode
-    let-alist
-    lua-mode
-    magit-gh-pulls
-    markdown-mode
-    ;; mode-line-stats
-    ;; multiple-cursors
-    org-mode
-    org-gcal
-    org-sync
-    org-trello
-    paredit
-    pdf-tools
-    plantuml-mode
-    projectile
-    ;; peg
-    racket-mode
-    ;; symon
-    ;; tree-mode
-    ;; yasnippet
-    slime
-    window-numbering
-    xterm-color))
+(defvar el-get-extended-pkgs nil)
+(setq el-get-extended-pkgs
+      '( ;; clj-refactor
+	bbdb
+	csv-mode
+	dictionary
+	;; emacs-jabber
+	emms
+	emms-player-mpv
+	;; floobits
+	;; geiser
+	gnuplot-mode
+	guide-key
+	graphviz-dot-mode
+	;; hydra
+	;; inflections
+	jedi
+	js2-mode
+	let-alist
+	lua-mode
+	magit-gh-pulls
+	markdown-mode
+	;; mode-line-stats
+	;; multiple-cursors
+	org-gcal
+        org-passwords
+	paredit
+	;; pdf-tools
+	plantuml-mode
+	projectile
+	;; peg
+	racket-mode
+	seq
+	;; symon
+	;; tree-mode
+	;; yasnippet
+	slime
+	xterm-color))
 
 (defvar init-deps-hooks nil)
 
 (defun load-extended-deps ()
   (el-get 'sync el-get-extended-pkgs)
-  ;; (el-get-bundle knu/elscreen)
+  (el-get-bundle knu/elscreen)
   (el-get-bundle mu4e)
-  (el-get-bundle csantosb/mu4e-multi)
+  (el-get-bundle kriyative/mu4e-multi)
   (el-get-bundle juergenhoetzel/password-mode)  
   (el-get-bundle agpchil/mu4e-maildirs-extension)
   (el-get-bundle iqbalansari/mu4e-alert)
@@ -84,5 +83,7 @@
   ;; fix cider at known version
   (el-get-bundle cider :checkout "v0.16.0")
   (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
+  (el-get-bundle cask/cask)
+  (add-to-list 'exec-path (expand-file-name "~/.emacs.d/el-get/cask/bin/"))
   (dolist (hook init-deps-hooks)
     (funcall hook)))
