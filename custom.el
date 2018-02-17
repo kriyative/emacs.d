@@ -6,7 +6,7 @@
  '(auth-source-save-behavior nil)
  '(package-selected-packages
    (quote
-    (oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
+    (dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
@@ -22,6 +22,7 @@
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))
  '(jabber-chat-prompt-system ((t (:foreground "red"))))
  '(jabber-title-medium ((t (:height 1.5))))
+ '(magit-tag ((t (:background "yellow" :foreground "black"))))
  '(mu4e-header-highlight-face ((t (:background "grey" :underline t :weight bold))))
  '(mu4e-unread-face ((t (:inherit font-lock-keyword-face :foreground "blue" :weight bold)))))
 (put 'narrow-to-region 'disabled nil)

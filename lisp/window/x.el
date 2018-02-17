@@ -45,12 +45,13 @@
     (set-frame-font x-font t t)
     (setq default-frame-alist `((font . ,x-font)))))
 
+;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
   (x-set-font "DejaVu Sans Mono Book"))
-;; (x-set-font "Consolas")
+;; (x-set-font "Hack")
+;; (x-set-font "Consolas" 12)
 ;; (x-set-font "Inconsolata")
 ;; (x-set-font "Liberation Mono")
-
 ;; (x-set-font "Consolas" 9)
 ;; (x-set-font "Noto Mono")
 ;; (x-set-font "DejaVu Sans Mono Book")
@@ -88,6 +89,7 @@
     (update-default-font)))
 
 (add-hook 'window-configuration-change-hook 'window-configuration-change-hook)
+;; (remove-hook 'window-configuration-change-hook 'window-configuration-change-hook)
 
 (defun x-notify (message &optional title)
   (let ((alert-default-style (if (emacs-focused-p) 'message 'notifications)))

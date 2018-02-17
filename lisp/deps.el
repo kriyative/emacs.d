@@ -26,11 +26,12 @@
     bbdb
     csv-mode
     dictionary
-    emacs-jabber
+    diminish
+    ;; emacs-jabber
     emms
     emms-player-mpv
     ;; floobits
-    ;; geiser
+    geiser
     gnuplot-mode
     guide-key
     graphviz-dot-mode
@@ -44,7 +45,10 @@
     markdown-mode
     ;; mode-line-stats
     ;; multiple-cursors
+    org-mode
     org-gcal
+    org-sync
+    org-trello
     paredit
     pdf-tools
     plantuml-mode
@@ -55,13 +59,14 @@
     ;; tree-mode
     ;; yasnippet
     slime
+    window-numbering
     xterm-color))
 
 (defvar init-deps-hooks nil)
 
 (defun load-extended-deps ()
   (el-get 'sync el-get-extended-pkgs)
-  (el-get-bundle knu/elscreen)
+  ;; (el-get-bundle knu/elscreen)
   (el-get-bundle mu4e)
   (el-get-bundle csantosb/mu4e-multi)
   (el-get-bundle juergenhoetzel/password-mode)  
@@ -69,12 +74,15 @@
   (el-get-bundle iqbalansari/mu4e-alert)
   (el-get-bundle sshaw/git-link)
   (el-get-bundle bcbcarl/emacs-wttrin)
-  (el-get-bundle dxknight/chronos))
+  (el-get-bundle dxknight/chronos)
+  (el-get-bundle dired-hacks)
+  (el-get-bundle emacsmirror/auto-dim-other-buffers)
+  (el-get-bundle technomancy/circleci.el))
 
 (defun init-deps ()
   (el-get 'sync el-get-base-pkgs)
   ;; fix cider at known version
-  (el-get-bundle cider :checkout "v0.14.0")
+  (el-get-bundle cider :checkout "v0.16.0")
   (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
   (dolist (hook init-deps-hooks)
     (funcall hook)))

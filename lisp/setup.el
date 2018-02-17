@@ -5,9 +5,6 @@
 (when (fboundp 'init-deps)
   (init-deps))
 
-(when (fboundp 'global-auto-complete-mode)
-  (global-auto-complete-mode -1))
-
 (setq inhibit-startup-message t
       inhibit-splash-screen t
       backup-inhibited t
@@ -50,6 +47,12 @@
   (y-or-n-p "Exit Emacs, Are you sure? "))
 
 (add-to-list 'kill-emacs-query-functions 'confirm-exit)
+
+(defun post-startup-hook ()
+  (when (fboundp 'global-auto-complete-mode)
+    (global-auto-complete-mode -1)))
+
+(add-hook 'emacs-startup-hook 'post-startup-hook)
 
 (use-package
  ibuffer
@@ -102,7 +105,7 @@
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
-  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
+  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply))
 
 (use-package ansi-color :config (setup-ansi-color))
 
@@ -429,14 +432,26 @@
 
 (use-package org-passwords :config (setup-org-passwords))
 
+(require 'org)
 (use-package org-gcal
   :config
-  (setq org-gcal-client-id my-org-gcal-client-id
-	org-gcal-client-secret my-org-gcal-client-secret
-	org-gcal-file-alist my-org-gcal-file-alist)
+  ;; (setq org-gcal-client-id my-org-gcal-client-id
+  ;;       org-gcal-client-secret my-org-gcal-client-secret
+  ;;       org-gcal-file-alist my-org-gcal-file-alist)
   ;; (setq org-agenda-mode-hook nil)
   ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync))))
+  ;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
+  )
+
+(use-package org-blog)
+
+;;;;;;;;;;;;;;;; logging ;;;;;;;;;;;;;;;;
+
+;; (defun setup-log4e ()
+;;   (log4e:deflogger "hoge" "%t [%l] %m" "%H:%M:%S"))
+
+;; (use-package log4e
+;;   :config (setup-log4e))
 
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
@@ -488,6 +503,7 @@
         message-kill-buffer-on-exit t
         mu4e-headers-leave-behavior 'apply
         mu4e-compose-format-flowed t
+	mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
 	mu4e-doc-dir mu4e-builddir
         org-export-with-toc nil)
@@ -501,30 +517,20 @@
   (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
 
 (use-package mu4e
+  :demand t
   :config (setup-mu4e))
 
-(defun mu4e-stop ()
-  "Stop the mu4e update process"
-  (interactive)
-  (when (process-live-p mu4e~proc-process)
-    (stop-process mu4e~proc-process))
-  (setq mu4e-update-interval nil))
-
-(defun mu4e-start ()
-  "Start the mu4e update process if it's not already running"
-  (interactive)
-  (unless (and mu4e~proc-process
-	       (process-live-p mu4e~proc-process))
-    (mu4e~proc-start)
-    (setq mu4e-update-interval 300)))
 ;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
 (eval-after-load "enriched"
   '(defun enriched-decode-display-prop (start end &optional param)
      (list start end)))
 
 (use-package mu4e-multi
+  :demand t
   :bind (("C-x m" . mu4e-multi-compose-new))
   :config (progn
+            (when (fboundp 'setup-mu4e-multi-account)
+              (setup-mu4e-multi-account))
             (setq mu4e-user-mail-address-list
                   (mapcar (lambda (p)
                             (cdr (assoc 'user-mail-address (cdr p))))
@@ -538,23 +544,30 @@
   :config (progn
             (mu4e-maildirs-extension)
             (setq mu4e-maildirs-extension-count-command-format
-                  (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l"))))
-
-(use-package mu4e-alert
-  :config (progn
-	    (mu4e-alert-set-default-style 'log)
-            ;; (mu4e-alert-set-default-style 'notifications)
-            ;; (alert-add-rule :category "mu4e-alert" :style 'fringe)
-            ;; (alert-add-rule :category "mu4e-alert" :style 'mode-line)
-            (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)))
+                  (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l")
+		  mu4e-maildirs-extension-maildir-format-spec
+		  (lambda(m)
+		    (list (cons ?i (plist-get m :indent))
+			  (cons ?p (plist-get m :prefix))
+			  (cons ?l (plist-get m :level))
+			  (cons ?e (plist-get m :expand))
+			  (cons ?P (plist-get m :path))
+			  (cons ?n (plist-get m :name))
+			  (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
+			  (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))))
 
 (defun message-mode-hook ()
   (setq message-fill-column nil
 	message-from-style 'angles
 	message-citation-line-function 'message-insert-citation-line
 	message-cite-style 'message-cite-style-gmail
-	message-yank-prefix "> "
-	message-yank-empty-prefix "> "))
+        message-yank-prefix "> "
+        message-yank-cited-prefix "> "
+        message-yank-empty-prefix "> "
+        ;; message-yank-prefix "  "
+        ;; message-yank-cited-prefix "  "
+        ;; message-yank-empty-prefix "  "
+        ))
 
 (use-package message-mode
   :config (add-hook 'message-mode-hook message-mode-hook))
@@ -605,7 +618,8 @@
 
 ;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
 
-(use-package projectile :config (projectile-global-mode))
+;; (use-package projectile :config (projectile-global-mode))
+;; (projectile-global-mode -1)
 
 ;;;;;;;;;;;;;;;; lisp ;;;;;;;;;;;;;;;;
 
@@ -739,6 +753,7 @@ currently under the curser"
   (setup-lisp-indent-function)
   (local-set-key "\M-." 'find-function)
   (font-lock-mode 1)
+  (auto-complete-mode -1)
   (eldoc-mode 1))
 
 (defun lisp-mode-init ()
@@ -898,24 +913,24 @@ currently under the curser"
 ;; (use-package python :config (setup-python))
 (use-package jedi :config (setup-python))
 
+(defun alert--log-clear-log ()
+  (let ((buf (get-buffer "*Alerts*")))
+    (when (bufferp buf)
+      (with-current-buffer buf
+	(delete-region (point-min) (point-max))))))
 
+(use-package alert
+  :config
+  (setq alert-log-messages t))
 
+;; (alert "Sending an alert" :title "Test")
 
 (use-package graphviz-dot-mode
   :config (setq graphviz-dot-view-command "xdot %s"))
 
 (use-package wttrin)
 
-(use-package emacs-jabber)
-
-(defun setup-elscreen ()
-  (setq elscreen-display-tab nil))
-
-(use-package elscreen
-  :config (setup-elscreen)
-  :bind (:map elscreen-map
-              ("z" . elscreen-toggle)
-              ("\C-z" . elscreen-toggle)))
+;; (use-package emacs-jabber)
 
 (use-package git-link)
 
@@ -948,8 +963,8 @@ currently under the curser"
   :config (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
 (defun my-midnight-hook ()
-  (org-gcal-fetch)
-  (org-agenda-list))
+  (org-gcal-multi-fetch)
+  (org-agenda-list nil nil 'day))
 
 (use-package midnight
   :config
@@ -968,6 +983,45 @@ currently under the curser"
 
 (use-package geiser
   :config (add-hook 'geiser-mode-hook 'setup-geiser))
+
+(use-package csv-mode
+  :config
+  (setq csv-align-style 'auto))
+
+(use-package org-sync
+  :config
+  (load "os-github"))
+
+(global-unset-key "\C-z")
+
+(defvar ctlx-ctlj-map (make-sparse-keymap))
+(let ((k "\C-x\C-j"))
+  (define-prefix-command 'ctlx-ctlj-prefix 'ctlx-ctlj-map k)
+  (global-set-key k 'ctlx-ctlj-prefix))
+
+(use-package window-numbering
+  :config
+  (dotimes (i 10)
+    (define-key ctlx-ctlj-map
+      (prin1-to-string i)
+      (intern (concat "select-window-" (prin1-to-string i)))))
+  (window-numbering-mode)
+  (window-numbering-update))
+
+(use-package diminish
+  :config
+  (dolist (m '(eldoc-mode
+               guide-key-mode
+               auto-revert-mode
+               outline-minor-mode
+               org-indent-mode
+               visual-line-mode
+               overwrite-mode))
+    (diminish m)))
+
+(use-package epa
+  :config
+  (setq epa-pinentry-mode 'loopback))
 
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
@@ -1062,6 +1116,3 @@ currently under the curser"
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (setq custom-file "~/.emacs.d/custom.el")
-
-(when (fboundp 'elscreen-start)
-  (elscreen-start))
