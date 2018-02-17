@@ -28,6 +28,7 @@
 	bbdb
 	csv-mode
 	dictionary
+        diminish
 	;; emacs-jabber
 	emms
 	emms-player-mpv
@@ -59,6 +60,7 @@
 	;; tree-mode
 	;; yasnippet
 	slime
+        window-numbering
 	xterm-color))
 
 (defvar init-deps-hooks nil)
