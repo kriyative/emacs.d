@@ -105,7 +105,7 @@
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
-  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply))
+  (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
 
 (use-package ansi-color :config (setup-ansi-color))
 
@@ -430,10 +430,13 @@
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
-(use-package org-passwords :config (setup-org-passwords))
+(use-package org-passwords
+  :if (memq 'org-passwords enable-features)
+  :config (setup-org-passwords))
 
 (require 'org)
 (use-package org-gcal
+  :if (memq 'org-gcal enable-features)
   :config
   ;; (setq org-gcal-client-id my-org-gcal-client-id
   ;;       org-gcal-client-secret my-org-gcal-client-secret
@@ -452,6 +455,7 @@
 
 ;; (use-package log4e
 ;;   :config (setup-log4e))
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync))))
 
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
@@ -935,6 +939,7 @@ currently under the curser"
 (use-package git-link)
 
 (use-package pdf-tools
+  :if (memq 'pdf-tools enable-features)
   :config
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-page)
@@ -982,6 +987,7 @@ currently under the curser"
   )
 
 (use-package geiser
+  :if (memq 'geiser enable-features)
   :config (add-hook 'geiser-mode-hook 'setup-geiser))
 
 (use-package csv-mode
