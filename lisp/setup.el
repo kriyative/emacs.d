@@ -438,12 +438,12 @@
 (use-package org-gcal
   :if (memq 'org-gcal enable-features)
   :config
-  ;; (setq org-gcal-client-id my-org-gcal-client-id
-  ;;       org-gcal-client-secret my-org-gcal-client-secret
-  ;;       org-gcal-file-alist my-org-gcal-file-alist)
-  ;; (setq org-agenda-mode-hook nil)
-  ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))
-  ;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
+  (setq org-gcal-client-id my-org-gcal-client-id
+        org-gcal-client-secret my-org-gcal-client-secret
+        org-gcal-file-alist my-org-gcal-file-alist)
+  (setq org-agenda-mode-hook nil)
+  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
   )
 
 (use-package org-blog)
@@ -455,7 +455,6 @@
 
 ;; (use-package log4e
 ;;   :config (setup-log4e))
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync))))
 
 ;;;;;;;;;;;;;;;; mail ;;;;;;;;;;;;;;;;
 
@@ -573,7 +572,7 @@
         ;; message-yank-empty-prefix "  "
         ))
 
-(use-package message-mode
+(use-package message
   :config (add-hook 'message-mode-hook message-mode-hook))
 
 (defvar window-configuration-stack nil)
@@ -1020,7 +1019,7 @@ currently under the curser"
                guide-key-mode
                auto-revert-mode
                outline-minor-mode
-               org-indent-mode
+               ;; org-indent-mode
                visual-line-mode
                overwrite-mode))
     (diminish m)))
