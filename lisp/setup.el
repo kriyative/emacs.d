@@ -238,7 +238,8 @@
 			  "dir")
 	    (add-to-list 'Info-additional-directory-list d)))))
     (add-to-list 'Info-directory-list local-info-directory))
-  (add-to-list 'Info-directory-list "/app/stumpwm/share/info"))
+  (add-to-list 'Info-directory-list "/app/stumpwm/share/info")
+  (add-to-list 'Info-directory-list "/usr/local/share/info"))
 
 (defun setup-info ()
   (set-face-attribute 'info-header-node nil :foreground "black")

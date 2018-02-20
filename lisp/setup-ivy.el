@@ -1,3 +1,5 @@
+(el-get-bundle swiper)
+
 (use-package swiper
   :config
   (progn
