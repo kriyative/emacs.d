@@ -574,7 +574,7 @@
         ))
 
 (use-package message
-  :config (add-hook 'message-mode-hook message-mode-hook))
+  :config (add-hook 'message-mode-hook 'message-mode-hook))
 
 (defvar window-configuration-stack nil)
 
