@@ -84,7 +84,8 @@
   (start-screensaver)
   (emms-mode-line -1)
   (mu4e-alert-enable-mode-line-display)
-  (setq browse-url-firefox-arguments '("-new-window")))
+  (setq browse-url-firefox-arguments '("-new-window")
+        exwm-workspace-show-all-buffers nil))
 
 (defun lock-screen ()
   (interactive)
@@ -129,6 +130,7 @@
   (global-set-key "\C-c!" 'exec!)
   (define-key exwm-mode-map "\C-c&" 'spawn&)
   (global-set-key "\C-c&" 'spawn&)
+  (global-set-key "\C-xb" 'exwm-workspace-switch-to-buffer)
   (dolist (k '(XF86AudioLowerVolume
                XF86AudioRaiseVolume
                XF86AudioPlay
@@ -153,6 +155,7 @@
   ;; (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
   ;; (add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
   (exwm-config-default)
+  (ido-mode -1)
   (my-exwm-init))
 
 ;; (use-package exwm-cm
@@ -317,8 +320,6 @@
 ;;    "xrandr --output eDP1 --left-of HDMI1 --auto"))
 ;; (add-hook 'exwm-randr-screen-change-hook 'exwm-randr-screen-change-hook)
 ;; (exwm-randr-enable)
-
-(setq exwm-workspace-show-all-buffers t)
 
 (defun exwm-workspace-pull-window (buffer-or-name)
   (interactive
