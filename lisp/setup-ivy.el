@@ -1,11 +1,24 @@
 (el-get-bundle swiper)
 
+(defun ivy-display-function-popup-window (text)
+  (let ((buf (get-buffer-create "*ivy-completions*")))
+    (with-displayed-buffer-window
+     buf
+     nil
+     nil
+     (with-current-buffer buf
+       (insert
+        (setq ivy-insert-debug
+              (substring text 1)))))))
+
 (use-package swiper
+  :diminish (ivy-mode . "")
+  :init
+  (ivy-mode 1)
   :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t
-          enable-recursive-minibuffers t))
+  (setq ivy-use-virtual-buffers t
+        enable-recursive-minibuffers t
+        ivy-display-function 'ivy-display-function-popup-window)
   :bind (("C-M-s" . swiper)
          ("\C-c\C-r" . ivy-resume)
          ("M-x"      . counsel-M-x)
