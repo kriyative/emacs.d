@@ -182,3 +182,16 @@ a comma."
                    (match-string 1 num) op
                    (match-string 2 num))))
       num)))
+
+;; adapted from:
+;; https://stackoverflow.com/questions/900372/in-emacs-how-do-i-change-the-minibuffer-completion-list-window
+(defun vertical-display-completions (buf alist)
+  "put the *completions* buffer in the rightmost vertical window"
+  (let ((windows (delete (minibuffer-window) (window-list))))
+    (when (eq 1 (length windows))
+      (with-selected-window (car windows)
+        (split-window-horizontally)))
+    (let ((target-window (window-at (frame-width) (- (frame-height) 2)))
+          (pop-up-windows t))
+      (set-window-buffer target-window buf)
+      target-window)))

@@ -28,6 +28,9 @@
       mc-gpg-path (locate-path "gpg" exec-path)
       ispell-program-name (locate-path "aspell" exec-path))
 
+(add-to-list 'display-buffer-alist
+             '("\\*Completions\\*" vertical-display-completions))
+
 ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
 
 (prefer-coding-system       'utf-8)
