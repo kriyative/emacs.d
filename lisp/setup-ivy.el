@@ -17,6 +17,7 @@
   (ivy-mode 1)
   :config
   (setq ivy-use-virtual-buffers t
+        ivy-height 100
         enable-recursive-minibuffers t
         ivy-display-function 'ivy-display-function-popup-window)
   :bind (("C-M-s" . swiper)
