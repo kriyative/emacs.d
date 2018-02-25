@@ -58,25 +58,25 @@
 (add-hook 'emacs-startup-hook 'post-startup-hook)
 
 (use-package
- ibuffer
- :config (setq ibuffer-expert t))
+    ibuffer
+  :config (setq ibuffer-expert t))
 
 (use-package
- vc
- :config (setq vc-mistrust-permissions t
-               vc-initial-comment t
-               vc-consult-headers nil
-               vc-make-backup-files t))
+    vc
+  :config (setq vc-mistrust-permissions t
+                vc-initial-comment t
+                vc-consult-headers nil
+                vc-make-backup-files t))
 
 (use-package
- comint
- :config (progn
-           (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
-           (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)))
+    comint
+  :config (progn
+            (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
+            (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)))
 
 (use-package
- telnet
- :config (setq telnet-remote-echoes nil))
+    telnet
+  :config (setq telnet-remote-echoes nil))
 
 (use-package
     dired-x
@@ -113,25 +113,25 @@
 (use-package ansi-color :config (setup-ansi-color))
 
 (use-package
- edit-server
- :config (setq edit-server-default-major-mode 'normal-mode
-               edit-server-new-frame nil))
+    edit-server
+  :config (setq edit-server-default-major-mode 'normal-mode
+                edit-server-new-frame nil))
 
 (use-package
- outline-mode
- :bind (("\C-c\C-e" . show-entry)
-        ("C-c +"    . show-entry)
-        ("\C-c["    . show-entry)
-        ("\C-c\C-a" . show-all)
-        ("C-c ("    . show-all)
-        ("\C-c{"    . show-all)
-        ("\C-c\C-t" . hide-body)
-        ("\C-c}"    . hide-body)
-        ("C-c )"    . hide-body)
-        ("\C-c\C-c" . hide-entry)
-        ("C-c -"    . hide-entry)
-        ("\C-c]"    . hide-entry))
- :config (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
+    outline-mode
+  :bind (("\C-c\C-e" . show-entry)
+         ("C-c +"    . show-entry)
+         ("\C-c["    . show-entry)
+         ("\C-c\C-a" . show-all)
+         ("C-c ("    . show-all)
+         ("\C-c{"    . show-all)
+         ("\C-c\C-t" . hide-body)
+         ("\C-c}"    . hide-body)
+         ("C-c )"    . hide-body)
+         ("\C-c\C-c" . hide-entry)
+         ("C-c -"    . hide-entry)
+         ("\C-c]"    . hide-entry))
+  :config (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
 
 ;;;;;;;;;;;;;;;; setup various modes ;;;;;;;;;;;;;;;;
 
@@ -220,8 +220,8 @@
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
 
 (use-package
- vc-git
- :config (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
+    vc-git
+  :config (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
 
 (defun add-el-get-info-dirs ()
   (require 'find-lisp)
@@ -276,8 +276,8 @@
         truncate-partial-width-windows t))
 
 (use-package
- sgml-mode
- :config (add-hook 'html-mode-hook 'setup-html-mode))
+    sgml-mode
+  :config (add-hook 'html-mode-hook 'setup-html-mode))
 
 (defun setup-erc ()
   (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
@@ -290,14 +290,14 @@
 (use-package erc :config (setup-erc))
 
 (use-package
- efun-cmds
- :bind (("\C-x\C-f" . x-find-file)))
+    efun-cmds
+  :bind (("\C-x\C-f" . x-find-file)))
 
 (use-package
- dictionary
- :bind (("\C-cs" . dictionary-search)
-        ("\C-cm" . dictionary-match-words))
- :config (load-library "dictionary-init"))
+    dictionary
+  :bind (("\C-cs" . dictionary-search)
+         ("\C-cm" . dictionary-match-words))
+  :config (load-library "dictionary-init"))
 
 (defun iso-calendar ()
   (interactive)
@@ -893,11 +893,11 @@ currently under the curser"
          compilation-error-regexp-alist)))
 
 (use-package
- cc-mode
- :config (progn
-           (add-hook 'c-mode-hook 'c-mode-hook)
-           (add-hook 'objc-mode-hook 'objc-mode-setup-hook)
-           (java-mode-init)))
+    cc-mode
+  :config (progn
+            (add-hook 'c-mode-hook 'c-mode-hook)
+            (add-hook 'objc-mode-hook 'objc-mode-setup-hook)
+            (java-mode-init)))
 
 ;;;;;;;;;;;;;;;; js2-mode ;;;;;;;;;;;;;;;;
 
