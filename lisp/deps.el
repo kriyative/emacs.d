@@ -50,7 +50,7 @@
 	org-gcal
         org-passwords
 	paredit
-	;; pdf-tools
+        pdf-tools
 	plantuml-mode
 	projectile
 	;; peg
@@ -83,7 +83,8 @@
 (defun init-deps ()
   (el-get 'sync el-get-base-pkgs)
   ;; fix cider at known version
-  (el-get-bundle cider :checkout "v0.16.0")
+  ;; (el-get-bundle cider :checkout "v0.17.0snapshot")
+  (el-get-bundle cider)
   (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
   (el-get-bundle cask/cask)
   (add-to-list 'exec-path (expand-file-name "~/.emacs.d/el-get/cask/bin/"))

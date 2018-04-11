@@ -388,8 +388,10 @@ maildir)."
   "Stop the mu4e update process"
   (interactive)
   (when (process-live-p mu4e~proc-process)
-    (stop-process mu4e~proc-process))
+    (kill-process mu4e~proc-process))
   (setq mu4e-update-interval nil))
+
+;; (mu4e-stop)
 
 (defun mu4e-start ()
   "Start the mu4e update process if it's not already running"
@@ -398,6 +400,8 @@ maildir)."
 	       (process-live-p mu4e~proc-process))
     (mu4e~proc-start)
     (setq mu4e-update-interval 300)))
+
+;; (mu4e-start)
 
 (defun top-mem-abusers ()
   (interactive)
@@ -429,3 +433,28 @@ maildir)."
 (defun set-window-pixel-width (&optional width)
   (interactive "nWidth: ")
   (set-window-width* width t))
+
+;; from: http://sachachua.com/blog/2007/11/setting-up-appointment-reminders-in-org/
+;; Make appt aware of appointments from the agenda
+(defun org-agenda-to-appt ()
+  "Activate appointments found in `org-agenda-files'."
+  (interactive)
+  (require 'org)
+  (let* ((today (org-date-to-gregorian
+		 (time-to-days (current-time))))
+	 (files org-agenda-files) entries file)
+    (while (setq file (pop files))
+      (setq entries (append entries (org-agenda-get-day-entries
+				     file today :timestamp))))
+    (setq entries (delq nil entries))
+    (mapc (lambda(x)
+	    (let* ((event (org-trim (get-text-property 1 'txt x)))
+		   (time-of-day (get-text-property 1 'time-of-day x)) tod)
+	      (when time-of-day
+		(setq tod (number-to-string time-of-day)
+		      tod (when (string-match
+                                 "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)" tod)
+                            (concat (match-string 1 tod) ":"
+                                    (match-string 2 tod))))
+		(if tod (appt-add tod event)))))
+          entries)))

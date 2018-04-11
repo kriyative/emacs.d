@@ -19,7 +19,7 @@
       (set-foreground-color fgcolor)
       (set-background-color bgcolor)
       (set-face-foreground 'mode-line bgcolor)
-      (set-face-background 'mode-line fgcolor)
+      (set-face-background 'mode-line "grey40")
       (set-cursor-color "red")
       (set-face-foreground 'default fgcolor))
     (set-face-foreground 'region fgcolor)

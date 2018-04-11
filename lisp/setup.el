@@ -16,7 +16,11 @@
       transient-mark-mode t
       shell-file-name "bash"
       max-mini-window-height 1
-
+      ;; completion-styles '(basic partial-completion)
+      completion-cycle-threshold nil
+      read-buffer-completion-ignore-case nil
+      completion-ignore-case nil
+      read-file-name-completion-ignore-case t
       completion-ignored-extensions (nconc completion-ignored-extensions
                                            '(".fasl"
                                              ".dfsl"
@@ -24,9 +28,25 @@
                                              ".err"
                                              ".ufasl"
                                              ".DS_Store"))
-
       mc-gpg-path (locate-path "gpg" exec-path)
-      ispell-program-name (locate-path "aspell" exec-path))
+      ispell-program-name (locate-path "aspell" exec-path)
+      auto-window-vscroll nil)
+
+(use-package ido
+  :disabled t
+  :bind (("\C-x\C-f" . ido-find-file)
+         ("\C-xb" . ido-switch-buffer))
+  :config
+  (setq ido-enable-flex-matching t
+        ido-everywhere t
+        ;; ido-use-filename-at-point 'guess
+        ido-use-filename-at-point nil
+        ido-create-new-buffer 'always
+        ido-ignore-extensions t
+        ido-show-dot-for-dired t
+        ido-ignore-directories nil
+        ido-enable-dot-prefix t)
+  (ido-mode 1))
 
 (add-to-list 'display-buffer-alist
              '("\\*Completions\\*" vertical-display-completions))
@@ -416,8 +436,12 @@
   (define-key org-mode-map "\M-p" 'prev-page)
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-export-html-postamble nil
-	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar")
-  (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t))))
+	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
+        org-log-done 'time)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ditaa . t)
+     (sh . t))))
 
 (use-package org :config (setup-org))
 
@@ -467,14 +491,20 @@
 	mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
-  ;; (if (mu4e-message-field mu4e~view-msg :body-html)
-  ;;     (setq truncate-lines t)
-  ;;   (visual-line-mode))
-  (setq fill-column 132
+  (when (and mu4e~view-msg
+             (mu4e-message-field mu4e~view-msg :body-html))
+    (setq truncate-lines t))
+  (setq fill-column 85
 	browse-url-browser-function 'browse-url-default-browser
-	shr-width nil
-	mu4e-compose-format-flowed t
-	use-hard-newlines nil))
+	shr-width nil)
+  (visual-line-mode))
+
+(defun mu4e-compose-mode-hook ()
+  (setq mu4e-compose-format-flowed t
+        mu4e-compose-dont-reply-to-self t
+        mu4e-compose-keep-self-cc nil
+        mu4e-compose-complete-addresses t
+	use-hard-newlines t))
 
 (defun mu4e-action-view-in-system-browser (msg)
   (let ((browse-url-browser-function 'browse-url-default-browser))
@@ -490,7 +520,7 @@
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
         mu4e-change-filenames-when-moving t
         mu4e-headers-skip-duplicates t
-        mu4e-view-prefer-html t
+        mu4e-view-prefer-html nil
         mu4e-hide-index-messages t
         mu4e-split-view 'vertical
         mu4e-headers-fields '((:human-date .  12) ;; alternatively, use :human-date
@@ -505,20 +535,21 @@
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
         sendmail-program "msmtp"
-        mu4e-compose-dont-reply-to-self t
-        mu4e-compose-keep-self-cc nil
         message-kill-buffer-on-exit t
         mu4e-headers-leave-behavior 'apply
-        mu4e-compose-format-flowed t
 	mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
 	mu4e-doc-dir mu4e-builddir
+        mu4e-use-fancy-chars nil
+        mu4e-index-cleanup t      ;; don't do a full cleanup check
+        mu4e-index-lazy-check nil ;; don't consider up-to-date dirs
         org-export-with-toc nil)
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
+  (add-hook 'mu4e-compose-mode-hook 'mu4e-compose-mode-hook)
   (add-to-list 'mu4e-bookmarks
 	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102))
   (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
@@ -807,8 +838,11 @@ currently under the curser"
 
 (defun setup-cider ()
   (add-hook 'cider-mode-hook 'cider-mode-hook)
-  (setq cider-lein-parameters "trampoline repl :headless"))
+  (setq cider-lein-parameters "trampoline repl :headless"
+        cider-clojure-global-options "-Adev:nrepl")
+  (add-to-list 'clojure-build-tool-files "deps.edn"))
 
+;; (unload-feature 'cider t)
 (use-package cider :config (setup-cider))
 
 (defun cider-remove-current-ns (&optional buffer)
@@ -1102,6 +1136,7 @@ currently under the curser"
 (define-key ctl-semicolon-map [down]  'buf-move-down)
 (define-key ctl-semicolon-map [up]    'buf-move-up)
 (define-key ctl-semicolon-map "p" 'emms-pause)
+(define-key ctl-semicolon-map "\C-e" 'emms-play-playlist)
 
 ;; (define-key dired-mode-map [C-return] 'dired-open-file)
 

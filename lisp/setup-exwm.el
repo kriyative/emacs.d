@@ -77,7 +77,10 @@
                  " TapButton2=3"
                  " TapButton3=2"
                  " PalmDetect=1"))
-  (exec! "setxkbmap -option ctrl:nocaps -option ctrl:ralt_rctrl")
+  (exec! (concat "setxkbmap "
+                 "-option ctrl:nocaps"
+                 ;; "-option ctrl:ralt_rctrl"
+                 ))
   (exec! "xsetroot -cursor_name left_ptr -bg black")
   (spawn& "dropbox start")
   (start-redshift)
@@ -122,9 +125,6 @@
       (exec! "redshift -x"))))
 
 (defun setup-exwm-bind-keys ()
-  (global-set-key (kbd "s-l") 'lock-screen)
-  (define-key exwm-mode-map "\C-c\C-l" 'lock-screen)
-  (global-set-key "\C-c\C-l" 'lock-screen)
   (define-key exwm-mode-map "\C-c\C-k" nil)
   (define-key exwm-mode-map "\C-c!" 'exec!)
   (global-set-key "\C-c!" 'exec!)
@@ -132,6 +132,7 @@
   (global-set-key "\C-c&" 'spawn&)
   (global-set-key "\C-xb" 'exwm-workspace-switch-to-buffer)
   (dolist (k '(XF86AudioLowerVolume
+               XF86AudioMute
                XF86AudioRaiseVolume
                XF86AudioPlay
                XF86AudioStop
@@ -139,6 +140,7 @@
                XF86AudioNext
                XF86MonBrightnessUp
                XF86MonBrightnessDown
+               pause
                print
                ?\C-\;))
     (pushnew k exwm-input-prefix-keys)))
@@ -189,6 +191,7 @@
 
 (global-set-key (kbd "<XF86AudioLowerVolume>") 'pulseaudio-control-decrease-volume)
 (global-set-key (kbd "<XF86AudioRaiseVolume>") 'pulseaudio-control-increase-volume)
+(global-set-key (kbd "<XF86AudioMute>") 'pulseaudio-control-toggle-current-sink-mute)
 (pulseaudio-control-default-keybindings)
 
 (define-key exwm-mode-map (kbd "s-q") #'exwm-input-send-next-key)
@@ -226,7 +229,7 @@
 
 (use-package battery
   :config
-  (setq battery-mode-line-format " %L:%b%p%%"
+  (setq battery-mode-line-format " %L:%b%p%% "
         battery-update-interval 10)
   (display-battery-mode))
 
@@ -277,6 +280,7 @@
 
 (global-set-key (kbd "<print>") 'scrot)
 (global-set-key (kbd "C-<print>") 'scrot-select)
+(global-set-key (kbd "s-<pause>") 'lock-screen)
 
 (defun pulseaudio-set-default-sink (sink)
   (pulseaudio-control--call-pactl (concat "set-default-sink " sink))
@@ -286,9 +290,11 @@
   (interactive
    (list
     (completing-read "Profile: "
-                     '("mpow.a2dp"
-                       "mpow.headset"
-                       "built-in"))))
+                     '("a2dp"
+                       "built-in"
+                       "dp"
+                       "headset"
+                       "usb"))))
   (exec! (list "set-audio-profile" profile))
   (let ((sink (cdr (car (pulseaudio-control--get-sinks)))))
     (pulseaudio-set-default-sink sink)))
@@ -334,3 +340,10 @@
     (unless id
       (error "Not a window: %S" buffer))
     (exwm-workspace-move-window exwm-workspace-current-index id)))
+
+;;; xrandr info in frame-parameters
+;; [[mu4e:msgid:ch11ng/exwm/issues/379/374007853@github.com]]
+;; (mapcar (lambda (i)
+;;           (vector (frame-parameter i 'exwm-randr-output)
+;;                   (frame-parameter i 'exwm-active)))
+;;         exwm-workspace--list)

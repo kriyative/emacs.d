@@ -4,12 +4,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
+ '(blink-cursor-mode nil)
+ '(fringe-mode 5 nil (fringe))
+ '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
     (dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
+ '(safe-local-variable-values (quote ((checkdoc-package-keywords-flag))))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
- '(smtpmail-smtp-service 25))
+ '(smtpmail-smtp-service 25)
+ '(tool-bar-mode nil)
+ '(window-divider-default-places t)
+ '(window-divider-mode t)
+ '(window-divider-default-right-width 4)
+ '(window-divider-default-bottom-width 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
