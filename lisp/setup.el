@@ -513,8 +513,8 @@
 (defun setup-mu4e ()
   (require 'org-mu4e)
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
-	mu4e-get-mail-command "mbsync-all"
-	;; mu4e-get-mail-command "true"
+        mu4e-get-mail-command "mbsync-all"
+        ;; mu4e-get-mail-command "true"
         mu4e-update-interval 300
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
@@ -537,9 +537,9 @@
         sendmail-program "msmtp"
         message-kill-buffer-on-exit t
         mu4e-headers-leave-behavior 'apply
-	mu4e-html2text-command 'mu4e-shr2text
+        mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
-	mu4e-doc-dir mu4e-builddir
+        mu4e-doc-dir mu4e-builddir
         mu4e-use-fancy-chars nil
         mu4e-index-cleanup t      ;; don't do a full cleanup check
         mu4e-index-lazy-check nil ;; don't consider up-to-date dirs
