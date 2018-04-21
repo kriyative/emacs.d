@@ -458,3 +458,7 @@ maildir)."
                                     (match-string 2 tod))))
 		(if tod (appt-add tod event)))))
           entries)))
+
+(defun copy-org-link (&optional arg)
+  (interactive)
+  (kill-append (plist-get (get-text-property (point) 'htmlize-link) :uri) t))
