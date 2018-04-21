@@ -32,9 +32,6 @@
          (args (cdr program-and-args)))
     (apply 'start-process program-name program-name program args)))
 
-(global-set-key (kbd "s-!") 'exec!)
-(global-set-key (kbd "s-&") 'spawn&)
-
 (use-package mu4e-alert
   :config
   (progn
@@ -124,13 +121,26 @@
       (kill-process redshift-proc)
       (exec! "redshift -x"))))
 
+(defmacro setup-exwm-input-set-keys (&rest key-bindings)
+  `(dolist (kb ',key-bindings)
+     (destructuring-bind (key cmd)
+         kb
+       (exwm-input-set-key (kbd key) cmd))))
+
+(defun dired-home-dir ()
+  (interactive)
+  (dired (expand-file-name "~/")))
+
 (defun setup-exwm-bind-keys ()
   (define-key exwm-mode-map "\C-c\C-k" nil)
   (define-key exwm-mode-map "\C-c!" 'exec!)
-  (global-set-key "\C-c!" 'exec!)
-  (define-key exwm-mode-map "\C-c&" 'spawn&)
-  (global-set-key "\C-c&" 'spawn&)
-  (global-set-key "\C-xb" 'exwm-workspace-switch-to-buffer)
+  (setup-exwm-input-set-keys
+   ("s-!" exec!)
+   ("\C-c!" exec!)
+   ("s-&" spawn&)
+   ("\C-c&" spawn&)
+   ("\C-xb" exwm-workspace-switch-to-buffer)
+   ("<XF86Explorer>" dired-home-dir))
   (dolist (k '(XF86AudioLowerVolume
                XF86AudioMute
                XF86AudioRaiseVolume
@@ -140,9 +150,13 @@
                XF86AudioNext
                XF86MonBrightnessUp
                XF86MonBrightnessDown
+               XF86Explorer
                pause
+               s-pause
                print
-               ?\C-\;))
+               \C-print
+               ?\C-\;
+               f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12))
     (pushnew k exwm-input-prefix-keys)))
 
 (use-package exwm
@@ -181,21 +195,20 @@
 ;;   :config
 ;;   (common-mode-line-mode 1))
 
-(global-set-key (kbd "<XF86AudioPlay>") 'emms-pause)
-(global-set-key (kbd "<XF86AudioStop>") 'emms-stop)
-(global-set-key (kbd "<XF86AudioPrev>") 'emms-previous)
-(global-set-key (kbd "<XF86AudioNext>") 'emms-next)
+(setup-exwm-input-set-keys
+ ("<XF86AudioPlay>" emms-pause)
+ ("<XF86AudioStop>" emms-stop)
+ ("<XF86AudioPrev>" emms-previous)
+ ("<XF86AudioNext>" emms-next))
 
 (el-get-bundle flexibeast/pulseaudio-control)
 (use-package pulseaudio-control)
 
-(global-set-key (kbd "<XF86AudioLowerVolume>") 'pulseaudio-control-decrease-volume)
-(global-set-key (kbd "<XF86AudioRaiseVolume>") 'pulseaudio-control-increase-volume)
-(global-set-key (kbd "<XF86AudioMute>") 'pulseaudio-control-toggle-current-sink-mute)
+(setup-exwm-input-set-keys
+ ("<XF86AudioLowerVolume>" pulseaudio-control-decrease-volume)
+ ("<XF86AudioRaiseVolume>" pulseaudio-control-increase-volume)
+ ("<XF86AudioMute>" pulseaudio-control-toggle-current-sink-mute))
 (pulseaudio-control-default-keybindings)
-
-(define-key exwm-mode-map (kbd "s-q") #'exwm-input-send-next-key)
-(define-key exwm-mode-map (kbd "s-S-q") #'exwm-input-send-next-key)
 
 (el-get-bundle browse-kill-ring)
 
@@ -213,10 +226,11 @@
 (use-package browse-kill-ring
   :bind (("\C-x\C-y" . browse-kill-ring)
          :map browse-kill-ring-mode-map
-         ("<return>" . browse-kill-ring-select))
+         ("<return>" . browse-kill-ring-insert-and-quit))
   :config
   (setq browse-kill-ring-show-preview nil
         browse-kill-ring-separator "----------------"
+        browse-kill-ring-display-style 'one-line
         select-enable-primary t
         yank-pop-change-selection t))
 
@@ -224,8 +238,9 @@
   (interactive)
   (mouse-avoidance-banish-mouse))
 
-(global-set-key (kbd "\C-c\C-b") 'banish-mouse)
-(global-set-key (kbd "s-C-b") 'banish-mouse)
+(setup-exwm-input-set-keys
+ ("\C-c\C-b" banish-mouse)
+ ("s-C-b" banish-mouse))
 
 (use-package battery
   :config
@@ -259,8 +274,10 @@
   (interactive)
   (change-brightness 1))
 
-(global-set-key (kbd "<XF86MonBrightnessUp>") 'increase-brightness)
-(global-set-key (kbd "<XF86MonBrightnessDown>") 'decrease-brightness)
+(setup-exwm-input-set-keys
+ ("s-<pause>" lock-screen)
+ ("<XF86MonBrightnessUp>" increase-brightness)
+ ("<XF86MonBrightnessDown>" decrease-brightness))
 
 (defun scrot (&optional n)
   (interactive "p")
@@ -277,10 +294,6 @@
   (message "Select area to capture in screenshot")
   (message "Screenshot saved in %s"
            (exec! '("scrot" "-s" "-e" "echo $f"))))
-
-(global-set-key (kbd "<print>") 'scrot)
-(global-set-key (kbd "C-<print>") 'scrot-select)
-(global-set-key (kbd "s-<pause>") 'lock-screen)
 
 (defun pulseaudio-set-default-sink (sink)
   (pulseaudio-control--call-pactl (concat "set-default-sink " sink))
