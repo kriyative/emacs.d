@@ -383,3 +383,27 @@
   (setup-exwm-input-set-keys
    ("\C-x\C-y" browse-kill-ring)))
 
+(require 'magit-popup)
+
+(magit-define-popup gnome-screenshot-popup
+  "Show popup buffer featuring Gnome screenshot commands"
+  'exwm-commands
+  :switches '((?a "Area"      "--area")
+              (?b "Border"    "--include-border")
+              (?c "Clipboard" "--clipboard")
+              (?w "Window"    "--window"))
+  :options  '((?d "Delay" "--delay=" read-number)
+              (?e "Border effect" "--border-effect="
+                  (lambda (prompt &rest args)
+                    (completing-read
+                     prompt
+                     '("shadow" "border" "vintage" "none")))))
+  :actions  '((?x "Execute" gnome-screenshot))
+  :default-action 'gnome-screenshot)
+
+(defun gnome-screenshot (args)
+  (interactive (list (gnome-screenshot-arguments)))
+  (exec! (list* "gnome-screenshot" args)))
+
+(setup-exwm-input-set-keys
+ ("<print>" gnome-screenshot-popup))
