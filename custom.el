@@ -15,10 +15,10 @@
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
  '(tool-bar-mode nil)
+ '(window-divider-default-bottom-width 0)
  '(window-divider-default-places t)
- '(window-divider-mode t)
  '(window-divider-default-right-width 4)
- '(window-divider-default-bottom-width 0))
+ '(window-divider-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -26,7 +26,6 @@
  ;; If there is more than one, they won't work right.
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
  '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
- '(fringe ((t nil)))
  '(jabber-chat-prompt-foreign ((t (:weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))
  '(jabber-chat-prompt-system ((t (:foreground "red"))))
