@@ -360,3 +360,26 @@
 ;;           (vector (frame-parameter i 'exwm-randr-output)
 ;;                   (frame-parameter i 'exwm-active)))
 ;;         exwm-workspace--list)
+
+(el-get-bundle gpastel
+  :url "https://gitlab.petton.fr/DamienCassou/gpastel.git"
+  :features gpastel)
+
+(defun exwm-send-paste-key ()
+  (interactive)
+  (exwm-input--fake-key 22))
+
+(define-advice browse-kill-ring-insert-and-highlight (:around (old-function str) exwm-paste)
+  "Paste the selection appropriately in exwm mode buffers"
+  (if (derived-mode-p 'exwm-mode)
+      (progn
+        (kill-new str)
+        (call-interactively 'exwm-send-paste-key))
+    (funcall old-function str)))
+
+(use-package gpastel
+  :config
+  (gpastel-start-listening)
+  (setup-exwm-input-set-keys
+   ("\C-x\C-y" browse-kill-ring)))
+
