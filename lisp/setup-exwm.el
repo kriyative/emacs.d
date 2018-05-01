@@ -29,8 +29,9 @@
                              command))
          (program (car program-and-args))
          (program-name (file-name-nondirectory program))
+         (program-buffer (concat " *" program-name))
          (args (cdr program-and-args)))
-    (apply 'start-process program-name program-name program args)))
+    (apply 'start-process program-name program-buffer program args)))
 
 (use-package mu4e-alert
   :config
