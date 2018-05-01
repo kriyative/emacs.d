@@ -276,6 +276,7 @@
 
 (setup-exwm-input-set-keys
  ("s-<pause>" lock-screen)
+ ("C-<escape>" lock-screen)
  ("<XF86MonBrightnessUp>" increase-brightness)
  ("<XF86MonBrightnessDown>" decrease-brightness))
 
@@ -379,7 +380,18 @@
 
 (use-package gpastel
   :config
-  (gpastel-start-listening)
+  ;; fixme: reexec-daemon doesn't start correctly
+  ;; (gpastel-start-listening)
+  (spawn& (list gpastel-gpaste-client-command "start"))
+  (setq interprogram-paste-function (lambda ())
+        ;; No need to save the system clipboard before killing in
+        ;; Emacs because Emacs already knows about its content:
+        save-interprogram-paste-before-kill nil
+        ;; Register an handler for GPaste Update signals so we can
+        ;; immediately update the `kill-ring':
+        gpastel--dbus-object (gpastel-dbus-call #'dbus-register-signal
+                                                "Update"
+                                                #'gpastel--update-handler))
   (setup-exwm-input-set-keys
    ("\C-x\C-y" browse-kill-ring)))
 
