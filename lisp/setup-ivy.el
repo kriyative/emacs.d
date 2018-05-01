@@ -32,9 +32,10 @@
               ("\C-r" . counsel-expression-history))
   :config
   (setq ivy-use-virtual-buffers t
-        ivy-height 100
+        ivy-count-format ""
+        ivy-height 1000
         enable-recursive-minibuffers t
-        ivy-display-function nil ;; 'ivy-display-function-popup-window
+        ivy-display-function  'ivy-display-function-popup-window
         ))
 
 ;; (global-unset-key (kbd "\C-c\C-f"))
