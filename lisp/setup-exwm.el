@@ -270,13 +270,13 @@
              (read (current-buffer)))))
     (message "brightness: %S%%" (round v))))
 
-(defun decrease-brightness ()
-  (interactive)
-  (change-brightness -1))
+(defun decrease-brightness (&optional arg)
+  (interactive "p")
+  (change-brightness (* -1 (or arg 1))))
 
-(defun increase-brightness ()
-  (interactive)
-  (change-brightness 1))
+(defun increase-brightness (&optional arg)
+  (interactive "p")
+  (change-brightness (* 1 (or arg 1))))
 
 (setup-exwm-input-set-keys
  ("s-<pause>" lock-screen)
