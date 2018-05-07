@@ -372,7 +372,10 @@
 
 (defun exwm-send-paste-key ()
   (interactive)
-  (exwm-input--fake-key 22))
+  (exwm-input--set-focus
+   (exwm--buffer->id
+    (window-buffer (selected-window))))
+  (exwm-input--fake-key ?\C-v))
 
 (define-advice browse-kill-ring-insert-and-highlight (:around (old-function str) exwm-paste)
   "Paste the selection appropriately in exwm mode buffers"
