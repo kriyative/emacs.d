@@ -541,8 +541,10 @@
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
         mu4e-doc-dir mu4e-builddir
         mu4e-use-fancy-chars nil
-        mu4e-index-cleanup t      ;; don't do a full cleanup check
-        mu4e-index-lazy-check nil ;; don't consider up-to-date dirs
+        mu4e-index-cleanup t
+        ;; mu4e-index-cleanup nil      ;; don't do a full cleanup check
+        mu4e-index-lazy-check nil
+        ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
         org-export-with-toc nil)
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
