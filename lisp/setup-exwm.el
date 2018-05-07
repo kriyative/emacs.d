@@ -43,8 +43,12 @@
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
     (add-hook 'mu4e-message-changed-hook 'mu4e-alert-update-mail-count-modeline)))
 
+(defun my-exwm-input-set-simulation-keys (keys)
+  (dolist (k keys)
+    (exwm-input-set-simulation-key (car k) (cdr k))))
+
 (defun my-exwm-init ()
-  (exwm-input-set-simulation-keys
+  (my-exwm-input-set-simulation-keys
    '(([?\C-b] . left)
      ([?\C-f] . right)
      ([?\C-p] . up)
@@ -56,15 +60,14 @@
      ([?\M-v] . prior)
      ([?\C-v] . next)
      ([?\C-d] . delete)
-     ([?\C-k] . (S-end delete))
+     ([?\C-k] . (S-end C-x))
      ([?\M-w] . ?\C-c)
      ([?\C-w] . ?\C-x)
      ([?\C-y] . ?\C-v)
      ([?\C-\M-b] . (M-left))
      ([?\C-\M-f] . (M-right))
      ([?\C-s] . ?\C-f)
-     ([?\C-\M-s] . ?\/)
-     ))
+     ([?\C-\M-s] . ?\/)))
   (spawn& "/usr/lib/gnome-settings-daemon/gsd-xsettings")
   (exec! (concat "synclient"
                  " VertTwoFingerScroll=1"
