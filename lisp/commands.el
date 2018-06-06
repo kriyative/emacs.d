@@ -388,7 +388,8 @@ maildir)."
   "Stop the mu4e update process"
   (interactive)
   (when (process-live-p mu4e~proc-process)
-    (kill-process mu4e~proc-process))
+    (kill-process mu4e~proc-process)
+    (kill-buffer "*mu4e-proc*"))
   (setq mu4e-update-interval nil))
 
 ;; (mu4e-stop)
