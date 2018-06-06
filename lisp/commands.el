@@ -463,3 +463,37 @@ maildir)."
 (defun copy-org-link (&optional arg)
   (interactive)
   (kill-append (plist-get (get-text-property (point) 'htmlize-link) :uri) t))
+
+(defun dired-cwd-copy ()
+  (interactive)
+  (kill-append default-directory))
+
+(defun filter-buffers (pred)
+  (remove-if-not pred (buffer-list)))
+
+(defun get-buffers-matching (pattern)
+  (filter-buffers
+   (lambda (x)
+     (string-match pattern (buffer-name x)))))
+
+(defun get-shell-mode-buffers ()
+  (filter-buffers
+   (lambda (b)
+     (with-current-buffer b
+       (eq 'shell-mode major-mode)))))
+
+(defun dired-cwd-push-to-shell (&optional buffer)
+  (interactive
+   (let ((buffers (mapcar 'buffer-name (get-shell-mode-buffers))))
+     (if (< 1 (length buffers))
+         (list (completing-read "Shell: "
+                                buffers
+                                nil
+                                t
+                                nil
+                                nil
+                                (first buffers)))
+       buffers)))
+  (let ((dir default-directory))
+    (comint-simple-send (get-buffer-process (get-buffer buffer))
+                        (concat "cd " dir))))
