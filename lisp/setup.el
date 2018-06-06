@@ -86,7 +86,8 @@
   :config (setq vc-mistrust-permissions t
                 vc-initial-comment t
                 vc-consult-headers nil
-                vc-make-backup-files t))
+                vc-make-backup-files t
+                vc-display-status nil))
 
 (use-package
     comint
@@ -288,7 +289,7 @@
                                        "C-c p")
         guide-key/popup-window-position 'bottom))
 
-(use-package guide-key :config (setup-guide-key))
+;; (use-package guide-key :config (setup-guide-key))
 
 (defun setup-html-mode ()
   (visual-line-mode -1)
@@ -370,7 +371,7 @@
   (setq bbdb-mail-user-agent 'message-user-agent
         bbdb-mua-pop-up nil))
 
-(use-package bbdb :config (setup-bbdb))
+;; (use-package bbdb :config (setup-bbdb))
 
 (defun setup-epa-file ()
   (epa-file-enable))
@@ -441,7 +442,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ditaa . t)
-     (sh . t))))
+     (shell . t))))
 
 (use-package org :config (setup-org))
 
@@ -474,7 +475,7 @@
   ;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
   )
 
-(use-package org-blog)
+;; (use-package org-blog)
 
 ;;;;;;;;;;;;;;;; logging ;;;;;;;;;;;;;;;;
 
@@ -529,7 +530,7 @@
                               (:subject    .  nil))
         mu4e-sent-messages-behavior 'delete
         mu4e-view-show-addresses t
-        mu4e-view-mode-hook '(bbdb-mua-auto-update)
+        ;; mu4e-view-mode-hook '(bbdb-mua-auto-update)
         org-mu4e-convert-to-html t
         message-sendmail-f-is-evil 't
         message-sendmail-extra-arguments '("--read-envelope-from")
@@ -841,7 +842,8 @@ currently under the curser"
 (defun setup-cider ()
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-global-options "-Adev:nrepl")
+        cider-clojure-global-options "-Adev:nrepl"
+        cider-clojure-cli-global-options "-Adev:nrepl")
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 ;; (unload-feature 'cider t)
@@ -1033,9 +1035,7 @@ currently under the curser"
   :config
   (setq csv-align-style 'auto))
 
-(use-package org-sync
-  :config
-  (load "os-github"))
+;; (use-package org-sync :config (load "os-github"))
 
 (global-unset-key "\C-z")
 
@@ -1044,19 +1044,19 @@ currently under the curser"
   (define-prefix-command 'ctlx-ctlj-prefix 'ctlx-ctlj-map k)
   (global-set-key k 'ctlx-ctlj-prefix))
 
-(use-package window-numbering
-  :config
-  (dotimes (i 10)
-    (define-key ctlx-ctlj-map
-      (prin1-to-string i)
-      (intern (concat "select-window-" (prin1-to-string i)))))
-  (window-numbering-mode)
-  (window-numbering-update))
+;; (use-package window-numbering
+;;   :config
+;;   (dotimes (i 10)
+;;     (define-key ctlx-ctlj-map
+;;       (prin1-to-string i)
+;;       (intern (concat "select-window-" (prin1-to-string i)))))
+;;   (window-numbering-mode)
+;;   (window-numbering-update))
 
 (use-package diminish
   :config
   (dolist (m '(eldoc-mode
-               guide-key-mode
+               ;; guide-key-mode
                auto-revert-mode
                outline-minor-mode
                ;; org-indent-mode
@@ -1064,9 +1064,19 @@ currently under the curser"
                overwrite-mode))
     (diminish m)))
 
+;; (use-package delight)
+
 (use-package epa
   :config
   (setq epa-pinentry-mode 'loopback))
+
+(use-package restclient)
+
+(use-package clinic-mode
+  :load-path "/home/ram/work/omnypay/pantheon/pantheon-clinic/etc"
+  :demand t)
+
+;; (unload-feature 'clinic-mode t)
 
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 

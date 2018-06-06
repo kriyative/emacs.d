@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(blink-cursor-mode nil)
- '(fringe-mode 5 nil (fringe))
+ '(fringe-mode 4 nil (fringe))
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
@@ -17,8 +17,9 @@
  '(tool-bar-mode nil)
  '(window-divider-default-bottom-width 0)
  '(window-divider-default-places t)
- '(window-divider-default-right-width 4)
- '(window-divider-mode t))
+ '(window-divider-default-right-width 1)
+ ;; '(window-divider-mode t)  ;; exwm
+ '(window-divider-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

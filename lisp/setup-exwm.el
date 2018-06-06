@@ -335,15 +335,15 @@
 
 (add-hook 'exwm-update-title-hook 'exwm-update-title-hook)
 
-;; (require 'exwm-randr)
+(require 'exwm-randr)
 ;; (setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "DP2-2" 2 "HDMI1"))
-;; (defun exwm-randr-screen-change-hook ()
-;;   (start-process-shell-command
-;;    "xrandr"
-;;    nil
-;;    "xrandr --output eDP1 --left-of HDMI1 --auto"))
-;; (add-hook 'exwm-randr-screen-change-hook 'exwm-randr-screen-change-hook)
-;; (exwm-randr-enable)
+(defun exwm-randr-screen-change-hook ()
+  (start-process-shell-command
+   "xrandr"
+   nil
+   "xrandr --output eDP1 --left-of HDMI1"))
+(add-hook 'exwm-randr-screen-change-hook 'exwm-randr-screen-change-hook)
+(exwm-randr-enable)
 
 (defun exwm-workspace-pull-window (buffer-or-name)
   (interactive
@@ -426,3 +426,31 @@
 
 (setup-exwm-input-set-keys
  ("<print>" gnome-screenshot-popup))
+
+(defun terminal ()
+  (interactive)
+  (let ((buf (get-buffer "URxvt")))
+    (if (and buf (buffer-live-p buf))
+        (exwm-workspace-switch-to-buffer buf)
+      (spawn& "urxvt"))))
+
+(define-key ctl-semicolon-map "\C-t" 'terminal)
+
+(el-get-bundle purcell/disable-mouse)
+(use-package disable-mouse
+  :diminish disable-mouse-global-mode
+  :delight disable-mouse-global-mode
+  :config
+  (global-disable-mouse-mode))
+
+(defun my-exwm-layout-fullscreen-hook ()
+  (message "%s screensaver"
+           (if (exwm-layout--fullscreen-p)
+               (progn
+                 (stop-screensaver)
+                 "stopping")
+             (progn
+               (start-screensaver)
+               "starting"))))
+
+(add-hook 'exwm-layout-fullscreen-hooks 'my-exwm-layout-fullscreen-hook)

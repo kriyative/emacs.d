@@ -25,13 +25,14 @@
 (defvar el-get-extended-pkgs nil)
 (setq el-get-extended-pkgs
       '( ;; clj-refactor
-	bbdb
+	;;bbdb
 	csv-mode
+        ;; delight
 	dictionary
         diminish
 	;; emacs-jabber
 	emms
-	emms-player-mpv
+	;; emms-player-mpv
 	;; floobits
 	;; geiser
 	gnuplot-mode
@@ -49,12 +50,14 @@
 	;; multiple-cursors
 	org-gcal
         org-passwords
+        ;; org-sync
 	paredit
         pdf-tools
 	plantuml-mode
 	projectile
 	;; peg
 	racket-mode
+        restclient
 	seq
 	;; symon
 	;; tree-mode
@@ -83,8 +86,8 @@
 (defun init-deps ()
   (el-get 'sync el-get-base-pkgs)
   ;; fix cider at known version
-  ;; (el-get-bundle cider :checkout "v0.17.0snapshot")
-  (el-get-bundle cider)
+  (el-get-bundle cider :checkout "v0.17.0")
+  ;; (el-get-bundle cider)
   (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
   (el-get-bundle cask/cask)
   (add-to-list 'exec-path (expand-file-name "~/.emacs.d/el-get/cask/bin/"))
