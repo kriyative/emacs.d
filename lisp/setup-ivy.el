@@ -32,10 +32,11 @@
               ("\C-r" . counsel-expression-history))
   :config
   (setq ivy-use-virtual-buffers t
-        ivy-count-format ""
-        ivy-height 1000
+        ivy-count-format "%-4d "
+        ivy-height 10
         enable-recursive-minibuffers t
-        ivy-display-function  'ivy-display-function-popup-window
+        ;; ivy-display-function  'ivy-display-function-popup-window
+        *x-find-file-fallback* 'counsel-find-file
         ))
 
 ;; (global-unset-key (kbd "\C-c\C-f"))
@@ -49,3 +50,17 @@
   (global-set-key (kbd "\C-xl") 'count-lines-page))
 
 ;; (ivy-restore-key-bindings)
+
+(defun sequence->regexp (seq)
+  (concat "\\("
+          (mapconcat (lambda (x)
+                       (if (string-match "^\\." x)
+                           (concat "\\" x)
+                         x))
+                     seq
+                     "\\|")
+          "\\)"))
+
+(use-package counsel
+  :config
+  (setq counsel-find-file-ignore-regexp (sequence->regexp completion-ignored-extensions)))

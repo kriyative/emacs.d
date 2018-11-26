@@ -11,7 +11,7 @@
 (load "window")
 (load "commands")
 ;; (load "setup-helm")
-;; (load "setup-ivy")
+(load "setup-ivy")
 (load "overrides")
 (load "post")
 (load custom-file 'noerror)
