@@ -27,7 +27,8 @@
          ("\C-cj"    . counsel-git-grep)
          ("\C-ck"    . counsel-ag)
          ("\C-xl"    . counsel-locate)
-         ("C-S-o"    . counsel-rhythmbox))
+         ("C-S-o"    . counsel-rhythmbox)
+         ("\C-x\C-y" . counsel-yank-pop))
   :bind (:map read-expression-map
               ("\C-r" . counsel-expression-history))
   :config
