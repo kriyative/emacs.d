@@ -1,5 +1,7 @@
 ;;;;;;;;;;;;;;;; global ;;;;;;;;;;;;;;;;
 
+(defvar enable-features nil)
+
 (load-file-if-exists "~/.personal.el")
 
 (when (fboundp 'init-deps)
@@ -15,7 +17,7 @@
       compilation-scroll-output t
       transient-mark-mode t
       shell-file-name "bash"
-      max-mini-window-height 1
+      max-mini-window-height 0.25
       ;; completion-styles '(basic partial-completion)
       completion-cycle-threshold nil
       read-buffer-completion-ignore-case nil
@@ -236,6 +238,10 @@
 (use-package magit-gh-pulls
   :config (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
 
+(use-package magit-todos
+  :config (setq magit-todos-ignore-case t))
+
+
 (defun alt-vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
@@ -263,6 +269,7 @@
 	    (add-to-list 'Info-additional-directory-list d)))))
     (add-to-list 'Info-directory-list local-info-directory))
   (add-to-list 'Info-directory-list "/app/stumpwm/share/info")
+  (add-to-list 'Info-directory-list "/app/sbcl/share/info")
   (add-to-list 'Info-directory-list "/usr/local/share/info"))
 
 (defun setup-info ()
@@ -303,8 +310,8 @@
 (defun setup-erc ()
   (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
   (setq erc-max-buffer-size 30000
-        erc-hide-list '("JOIN" "NICK" "PART" "QUIT")
-        erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE")
+        erc-hide-list nil ;; '("JOIN" "NICK" "PART" "QUIT")
+        erc-track-exclude-types nil ;; '("JOIN" "NICK" "PART" "QUIT" "MODE")
         erc-fill-function 'erc-fill-static
         erc-fill-static-center 20))
 
@@ -384,8 +391,11 @@
   (emms-default-players)
   (setq emms-source-file-default-directory "~/Music/"
 	emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
-  ;; (require 'emms-player-mpv)
-  ;; (add-to-list 'emms-player-list 'emms-player-mpv)
+  ;; (require 'emms-player-mpd)
+  ;; (add-to-list 'emms-player-list 'emms-player-mpd)
+  ;; (add-to-list 'emms-info-functions 'emms-info-mpd)
+  ;; (setq emms-player-mpd-server-name "localhost"
+  ;;       emms-player-mpd-server-port "6600")
   (setq emms-playlist-default-major-mode 'emms-playlist-mode))
 
 (add-hook 'emms-info-functions 'emms-info-track-description)
@@ -514,9 +524,10 @@
 (defun setup-mu4e ()
   (require 'org-mu4e)
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
-        mu4e-get-mail-command "mbsync-all"
-        ;; mu4e-get-mail-command "true"
-        mu4e-update-interval 300
+        mu4e-get-mail-command "mbsync-all -u"
+        ;; mu4e-get-mail-command "/bin/true"
+        mu4e-update-interval nil
+        ;; mu4e-update-interval nil
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
         mu4e-change-filenames-when-moving t
@@ -532,7 +543,7 @@
         mu4e-view-show-addresses t
         ;; mu4e-view-mode-hook '(bbdb-mua-auto-update)
         org-mu4e-convert-to-html t
-        message-sendmail-f-is-evil 't
+        message-sendmail-f-is-evil t
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
         sendmail-program "msmtp"
@@ -581,21 +592,26 @@
             (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
             (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
 
+(defun my-mu4e-reload-main ()
+  (interactive)
+  (mu4e-maildirs-extension-force-update '(16)))
+
 (use-package mu4e-maildirs-extension
-  :config (progn
-            (mu4e-maildirs-extension)
-            (setq mu4e-maildirs-extension-count-command-format
-                  (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l")
-		  mu4e-maildirs-extension-maildir-format-spec
-		  (lambda(m)
-		    (list (cons ?i (plist-get m :indent))
-			  (cons ?p (plist-get m :prefix))
-			  (cons ?l (plist-get m :level))
-			  (cons ?e (plist-get m :expand))
-			  (cons ?P (plist-get m :path))
-			  (cons ?n (plist-get m :name))
-			  (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
-			  (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))))
+  :config
+  (mu4e-maildirs-extension)
+  (setq mu4e-maildirs-extension-count-command-format
+        (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l")
+	mu4e-maildirs-extension-maildir-format-spec
+	(lambda(m)
+	  (list (cons ?i (plist-get m :indent))
+		(cons ?p (plist-get m :prefix))
+		(cons ?l (plist-get m :level))
+		(cons ?e (plist-get m :expand))
+		(cons ?P (plist-get m :path))
+		(cons ?n (plist-get m :name))
+		(cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
+		(cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
+  (define-key mu4e-main-mode-map "g" 'my-mu4e-reload-main))
 
 (defun message-mode-hook ()
   (setq message-fill-column nil
@@ -612,6 +628,12 @@
 
 (use-package message
   :config (add-hook 'message-mode-hook 'message-mode-hook))
+
+;; (use-package mu4e-conversation
+;;   :config
+;;   (setq mu4e-view-func 'mu4e-conversation))
+
+;; (setq mu4e-view-func 'mu4e~headers-view-handler)
 
 (defvar window-configuration-stack nil)
 
@@ -661,6 +683,10 @@
 
 ;; (use-package projectile :config (projectile-global-mode))
 ;; (projectile-global-mode -1)
+
+;;;;;;;;;;;;;;;; paredit ;;;;;;;;;;;;;;;;
+
+(use-package paredit)
 
 ;;;;;;;;;;;;;;;; lisp ;;;;;;;;;;;;;;;;
 
@@ -739,8 +765,9 @@ currently under the curser"
 
 (defun my-slime-mode-hook ()
   (setq common-lisp-hyperspec-root
-	"file:///opt/cl-doc/HyperSpec/"
+	;; "file:///opt/cl-doc/HyperSpec/"
 	;; "http://www.lispworks.com/reference/HyperSpec/"
+        "file:///app/doc/clhs/HyperSpec/"
 	browse-url-browser-function 'my-url-browser-function)
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
@@ -759,7 +786,7 @@ currently under the curser"
   (interactive)
   (if-bind (sbcl-path (locate-path "sbcl" exec-path))
     (let ((slime-lisp-implementations `((sbcl (,sbcl-path)))))
-      (setenv "SBCL_HOME" (file-name-directory sbcl-path))
+      ;; (setenv "SBCL_HOME" (file-name-directory sbcl-path))
       (slime))
     (message "The sbcl application could not be found")))
 
@@ -801,7 +828,8 @@ currently under the curser"
   (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'my-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'my-common-lisp-mode-hook)
-  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+  (enable-paredit-mode))
 
 (use-package lisp-mode :config (lisp-mode-init))
 
@@ -809,7 +837,8 @@ currently under the curser"
 
 (defun clojure-mode-hook ()
   (auto-revert-mode 1)
-  (outline-minor-mode 1))
+  (outline-minor-mode 1)
+  (enable-paredit-mode))
 
 (defun setup-clojure ()
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
@@ -826,7 +855,7 @@ currently under the curser"
 	      cider-prompt-for-symbol nil
 	      cider-repl-display-help-banner nil
 	      cider-use-overlays nil
-	      cider-repl-use-pretty-printing t)
+	      cider-repl-use-pretty-printing nil)
   :bind (("\C-c\M-o" . cider-repl-clear-buffer))
   :config (setup-cider-repl))
 
@@ -864,6 +893,24 @@ currently under the curser"
         (cider-remove-current-ns)
         (cider-load-buffer))
     (cider-load-buffer)))
+
+;;;;;;;;;;;;;;;; fennel mode ;;;;;;;;;;;;;;;;
+
+(defun run-love ()
+  (interactive)
+  (run-lisp "love ."))
+
+(defun setup-fennel-mode ()
+  (enable-paredit-mode)
+  (setq lisp-indent-function 'fennel-indent-function)
+  (slime-mode -1)
+  (setq fennel-font-lock-keywords
+        (cons (list fennel-defn-pattern 1 font-lock-function-name-face)
+              fennel-font-lock-keywords)))
+
+(use-package fennel-mode
+  :config
+  (add-hook 'fennel-mode-hook 'setup-fennel-mode))
 
 ;;;;;;;;;;;;;;;; c mode ;;;;;;;;;;;;;;;;
 
@@ -943,10 +990,10 @@ currently under the curser"
   (setq indent-tabs-mode nil))
 
 (defun setup-js2-mode ()
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
   (add-hook 'js2-mode-hook 'my-js2-mode-hook))
 
-(use-package js2-mode :config (setup-js2-mode))
+;; (use-package js2-mode :config (setup-js2-mode))
 
 ;;;;;;;;;;;;;;;; python ;;;;;;;;;;;;;;;;
 
@@ -1025,6 +1072,7 @@ currently under the curser"
 
 (defun setup-geiser ()
   ;; (geiser-set-scheme* 'chez)
+  (geiser-set-scheme 'guile)
   )
 
 (use-package geiser
@@ -1037,21 +1085,19 @@ currently under the curser"
 
 ;; (use-package org-sync :config (load "os-github"))
 
-(global-unset-key "\C-z")
+;; (defvar ctlx-ctlj-map (make-sparse-keymap))
+;; (let ((k "\C-x\C-j"))
+;;   (define-prefix-command 'ctlx-ctlj-prefix 'ctlx-ctlj-map k)
+;;   (global-set-key k 'ctlx-ctlj-prefix))
 
-(defvar ctlx-ctlj-map (make-sparse-keymap))
-(let ((k "\C-x\C-j"))
-  (define-prefix-command 'ctlx-ctlj-prefix 'ctlx-ctlj-map k)
-  (global-set-key k 'ctlx-ctlj-prefix))
-
-;; (use-package window-numbering
-;;   :config
-;;   (dotimes (i 10)
-;;     (define-key ctlx-ctlj-map
-;;       (prin1-to-string i)
-;;       (intern (concat "select-window-" (prin1-to-string i)))))
-;;   (window-numbering-mode)
-;;   (window-numbering-update))
+(use-package window-numbering
+  :config
+  ;; (dotimes (i 10)
+  ;;   (define-key ctlx-ctlj-map
+  ;;     (prin1-to-string i)
+  ;;     (intern (concat "select-window-" (prin1-to-string i)))))
+  (window-numbering-mode)
+  (window-numbering-update))
 
 (use-package diminish
   :config
@@ -1072,11 +1118,23 @@ currently under the curser"
 
 (use-package restclient)
 
+;; (unload-feature 'clinic-mode t)
 (use-package clinic-mode
   :load-path "/home/ram/work/omnypay/pantheon/pantheon-clinic/etc"
-  :demand t)
+  :demand t
+  :config
+  (setq comint-buffer-maximum-size 2048))
 
-;; (unload-feature 'clinic-mode t)
+;; (use-package emacs-apt
+;;   :load-path "/home/ram/.emacs.d/el-get/Emacs-apt/apt-mode/")
+
+(use-package disable-mouse
+  :diminish disable-mouse-global-mode
+  :delight disable-mouse-global-mode
+  :config
+  (global-disable-mouse-mode))
+
+(use-package ipinfo)
 
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
@@ -1101,6 +1159,7 @@ currently under the curser"
 (global-set-key [?\C-.] 'tags-search)
 (global-set-key [?\C-,] 'tags-loop-continue)
 (global-set-key "\C-x\C-f" 'x-find-file)
+(global-set-key (kbd "<f7>") 'next-error)
 
 (define-key ctl-x-4-map "k" 'other-window-send-keys)
 
@@ -1127,7 +1186,6 @@ currently under the curser"
 (define-key ctl-semicolon-map "\C-b" 'winner-undo)
 (define-key ctl-semicolon-map "\C-f" 'winner-redo)
 (define-key ctl-semicolon-map "\C-l" 'bury-buffer)
-(define-key ctl-semicolon-map "e" 'switch-to-emms)
 (define-key ctl-semicolon-map "g" 'toggle-debug-on-error)
 (define-key ctl-semicolon-map "j" 'jump-to-register)
 (define-key ctl-semicolon-map "l" 'cider-jack-in)
@@ -1147,8 +1205,12 @@ currently under the curser"
 (define-key ctl-semicolon-map [right] 'buf-move-right)
 (define-key ctl-semicolon-map [down]  'buf-move-down)
 (define-key ctl-semicolon-map [up]    'buf-move-up)
-(define-key ctl-semicolon-map "p" 'emms-pause)
-(define-key ctl-semicolon-map "\C-e" 'emms-play-playlist)
+(define-key ctl-semicolon-map (kbd "SPC") 'emms-pause)
+(define-key ctl-semicolon-map "e" nil)
+(define-key ctl-semicolon-map (kbd "en") 'emms-next)
+(define-key ctl-semicolon-map (kbd "ep") 'emms-previous)
+(define-key ctl-semicolon-map "\C-e" 'switch-to-emms)
+(define-key ctl-semicolon-map "\C-c" 'display-time-world)
 
 ;; (define-key dired-mode-map [C-return] 'dired-open-file)
 
@@ -1172,3 +1234,35 @@ currently under the curser"
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (setq custom-file "~/.emacs.d/custom.el")
+
+;; (global-set-key (kbd "<f2>") 'save-buffer)
+;; (global-set-key (kbd "<f3>") 'find-file)
+;; (global-set-key (kbd "<f4>") 'switch-to-buffer)
+;; (global-set-key (kbd "<f5>") 'ibuffer-other-window)
+;; (global-set-key (kbd "<f6>") 'completion-at-point)
+(global-set-key (kbd "M-i") 'completion-at-point)
+(global-set-key (kbd "M-j") 'jump-to-register)
+(global-set-key (kbd "M-k") 'kill-sentence)
+(global-set-key (kbd "M-l") 'downcase-dwim)
+(global-set-key (kbd "M-a") 'beginning-of-line)
+(global-set-key (kbd "M-e") 'end-of-line)
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "H-SPC") 'backward-delete-char-untabify)
+
+;; (el-get-bundle key-chord)
+;; (use-package key-chord
+;;   :config
+;;   (key-chord-mode 1)
+;;   (setq key-chord-two-keys-delay 0.2)
+;;   (key-chord-define-global ";e" 'eval-last-sexp)
+;;   (key-chord-define-global ";f" 'find-file)
+;;   (key-chord-define-global ";s" 'save-buffer)
+;;   (key-chord-define-global ";o" 'other-window))
+
+
+(eval-after-load "guix"
+  '(progn
+     ;; (defvar orig-guix-config-guile-program guix-config-guile-program)
+     (setq guix-config-guile-program nil
+           ;;  "--no-auto-compile"
+           guix-guile-program '("guile"))))
