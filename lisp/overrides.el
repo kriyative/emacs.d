@@ -123,6 +123,10 @@ detect ACCOUNT from it."
                          (equal 'trash (car x)))
                        mu4e-marks)))
 
+(defun mu4e-maildirs-extension-index-updated-handler ()
+  "Handler for `mu4e-index-updated-hook'."
+  (mu4e-maildirs-extension-force-update '(16)))
+
 (defun geiser-set-scheme* (impl)
   (geiser-impl--set-buffer-implementation impl)
   (geiser-repl--set-up-repl impl)
