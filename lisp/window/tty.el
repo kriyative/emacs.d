@@ -1,6 +1,6 @@
 (defun setup-info-faces ()
-  (set-face-foreground 'Info-title-1-face "black")
-  (set-face-foreground 'Info-title-2-face "black")
+  ;;(set-face-foreground 'Info-title-1-face "black")
+  ;; (set-face-foreground 'Info-title-2-face "black")
   (set-face-foreground 'info-xref nil))
 
 (eval-after-load 'info
