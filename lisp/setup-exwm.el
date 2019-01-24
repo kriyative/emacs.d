@@ -454,3 +454,7 @@
                "starting"))))
 
 (add-hook 'exwm-layout-fullscreen-hooks 'my-exwm-layout-fullscreen-hook)
+
+(when (fboundp 'helm)
+  (el-get-bundle emacs-helm/helm-exwm)
+  (use-package helm-exwm))
