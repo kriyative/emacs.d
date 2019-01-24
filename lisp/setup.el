@@ -239,8 +239,9 @@
   :config (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
 
 (use-package magit-todos
-  :config (setq magit-todos-ignore-case t))
-
+  :config
+  (setq magit-todos-ignore-case t)
+  (add-hook 'magit-mode-hook 'magit-todos-mode))
 
 (defun alt-vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
