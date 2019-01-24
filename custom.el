@@ -9,7 +9,7 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
+    (speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
  '(safe-local-variable-values (quote ((checkdoc-package-keywords-flag))))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
@@ -18,13 +18,13 @@
  '(window-divider-default-bottom-width 0)
  '(window-divider-default-places t)
  '(window-divider-default-right-width 1)
- ;; '(window-divider-mode t)  ;; exwm
  '(window-divider-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(Info-quoted ((t (:inherit nil :weight bold))))
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
  '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
  '(jabber-chat-prompt-foreign ((t (:weight bold))))
