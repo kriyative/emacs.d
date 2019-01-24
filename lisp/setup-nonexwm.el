@@ -31,6 +31,7 @@
     (apply 'start-process program-name program-buffer program args)))
 
 (defun setup-elscreen ()
+  (global-unset-key "\C-z")
   (setq elscreen-display-tab nil))
 
 (use-package elscreen
@@ -64,3 +65,22 @@
   :default-action 'gnome-screenshot)
 
 (global-set-key (kbd "<print>") 'gnome-screenshot-popup)
+
+(defmacro def-elscreen-goto (i)
+  `(defun ,(intern (format "elscreen-goto-%d" i)) ()
+     (interactive)
+     (elscreen-goto ,i)))
+
+(def-elscreen-goto 0)
+(def-elscreen-goto 1)
+(def-elscreen-goto 2)
+(def-elscreen-goto 3)
+(def-elscreen-goto 4)
+(def-elscreen-goto 5)
+(def-elscreen-goto 6)
+(def-elscreen-goto 7)
+(def-elscreen-goto 8)
+
+(dotimes (i 9)
+  (global-set-key (kbd (format "H-%d" i))
+                  (intern (format "elscreen-goto-%d" i))))
