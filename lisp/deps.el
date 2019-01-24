@@ -34,7 +34,7 @@
 	emms
 	;; emms-player-mpv
 	;; floobits
-	;; geiser
+	geiser
 	gnuplot-mode
 	guide-key
 	graphviz-dot-mode
@@ -81,12 +81,27 @@
   (el-get-bundle dxknight/chronos)
   (el-get-bundle dired-hacks)
   (el-get-bundle emacsmirror/auto-dim-other-buffers)
-  (el-get-bundle technomancy/circleci.el))
+  (el-get-bundle technomancy/circleci.el)
+  (el-get-bundle hniksic/emacs-htmlize)
+  (el-get-bundle cgroza/Emacs-apt)
+  (el-get-bundle purcell/disable-mouse)
+  (el-get-bundle fennel-mode
+    :url "https://gitlab.com/technomancy/fennel-mode.git"
+    :features fennel-mode)
+  (el-get-bundle paredit)
+  ;; (el-get-bundle emacs-guix
+  ;;   :url "https://notabug.org/alezost/emacs-guix.git")
+  (el-get-bundle dakra/ipinfo.el)
+  (el-get-bundle tarsius/hl-todo)
+  (el-get-bundle joddie/pcre2el)
+  (el-get-bundle alphapapa/magit-todos))
 
 (defun init-deps ()
   (el-get 'sync el-get-base-pkgs)
   ;; fix cider at known version
   (el-get-bundle cider :checkout "v0.17.0")
+  ;; (el-get-bundle vspinu/sesman)
+  ;; (el-get-bundle cider :checkout "v0.18.0")
   ;; (el-get-bundle cider)
   (el-get-bundle kriyative/emacs-fun :features (efun-base efun-cmds))
   (el-get-bundle cask/cask)
