@@ -116,3 +116,62 @@
 (defun x-caps-lock-control ()
   (interactive)
   (call-process "setxkbmap" nil nil nil "-option" "ctrl:nocaps"))
+
+(defun x-set-inputs-parse-devices ()
+  (let ((dev-re (concat
+                 "^[^A-Za-z]*\\([A-Za-z][-A-Za-z0-9/:,_ ]+"
+                 "[-A-Za-z0-9/:,_]\\)"
+                 "[ \t]*id=\\([0-9]+\\)"
+                 "[ \t]*\\[\\(\\w+\\)"
+                 "[ \t]*\\(\\w+\\)"))
+        devices)
+    (with-temp-buffer
+      (call-process "xinput" nil t)
+      (goto-char (point-min))
+      (while (re-search-forward dev-re nil t)
+        (push (list :name (match-string 1)
+                    :id (match-string 2)
+                    :class (match-string 3)
+                    :type (match-string 4))
+              devices))
+      devices)))
+
+(defun match (item matchers &keys key)
+  (cl-find-if (lambda (matcher)
+                (let ((value (funcall (or key 'identity) item)))
+                  (cond
+                   ((stringp matcher) (string-match matcher value))
+                   ((functionp matcher) (funcall matcher value))
+                   (t (equal matcher value)))))
+              matchers))
+
+(defun x-set-inputs-find-devices (device-patterns)
+  (cl-remove-if-not (lambda (device)
+                      (match device device-patterns
+                             :key (lambda (p) (plist-get p :name))))
+                    (x-set-inputs-parse-devices)))
+
+(defun x-set-inputs-enabled (device-patterns bool)
+  (dolist (device (x-set-inputs-find-devices device-patterns))
+    (call-process "xinput"
+                  nil
+                  nil
+                  nil
+                  (if bool "--enable" "--disable")
+                  (plist-get device :id))))
+
+
+(defvar x-set-inputs-devices
+  '("AT Translated Set 2 keyboard"
+    "ThinkPad Extra Buttons"
+    "SynPS/2 Synaptics TouchPad"
+    "TPPS/2 IBM TrackPoint"))
+
+(defun enable-input-devices ()
+  (interactive)
+  (x-set-inputs-enabled x-set-inputs-devices t))
+
+(defun disable-input-devices ()
+  (interactive)
+  (x-set-inputs-enabled x-set-inputs-devices nil))
+
