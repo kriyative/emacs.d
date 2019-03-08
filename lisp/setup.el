@@ -79,82 +79,79 @@
 
 (add-hook 'emacs-startup-hook 'post-startup-hook)
 
-(use-package
-    ibuffer
-  :config (setq ibuffer-expert t))
+(use-package ibuffer
+  :config
+  (setq ibuffer-expert t))
 
-(use-package
-    vc
-  :config (setq vc-mistrust-permissions t
-                vc-initial-comment t
-                vc-consult-headers nil
-                vc-make-backup-files t
-                vc-display-status nil))
+(use-package vc
+  :config
+  (setq vc-mistrust-permissions t
+        vc-initial-comment t
+        vc-consult-headers nil
+        vc-make-backup-files t
+        vc-display-status nil))
 
-(use-package
-    comint
-  :config (progn
-            (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
-            (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)))
+(use-package comint
+  :config
+  (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
+  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer))
 
-(use-package
-    telnet
-  :config (setq telnet-remote-echoes nil))
+(use-package telnet
+  :config
+  (setq telnet-remote-echoes nil))
 
-(use-package
-    dired-x
-  :demand t
-  :bind (:map dired-mode-map
-              ("k" . dired-kill-subdir)
-              (">" . dired-omit-mode)
-              ([C-return] . dired-open-file))
+(use-package dired-x
   :config
   (set-default 'dired-omit-mode t)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-	dired-listing-switches "-alh"))
+	dired-listing-switches "-alh")
+  :bind (:map dired-mode-map
+              ("k" . dired-kill-subdir)
+              (">" . dired-omit-mode)
+              ([C-return] . dired-open-file)))
 
 (unless (fboundp 'org-at-planning-p)
   (defun org-at-planning-p ()
     nil))
 
-(defun setup-diary ()
+(use-package diary-lib
+  :config
   (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
-  (when (file-exists-p diary-file) (diary 0))
   (add-hook 'diary-hook 'appt-make-list)
   (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
-  (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
+  (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+  (when (file-exists-p diary-file)
+    (diary 0)))
 
-(use-package diary-lib :config (setup-diary))
-
-(defun setup-ansi-color ()
+(use-package ansi-color
+  :config
   (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
   (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
 
-(use-package ansi-color :config (setup-ansi-color))
+(use-package edit-server
+  :config
+  (setq edit-server-default-major-mode 'normal-mode
+        edit-server-new-frame nil))
 
-(use-package
-    edit-server
-  :config (setq edit-server-default-major-mode 'normal-mode
-                edit-server-new-frame nil))
-
-(use-package
-    outline-mode
-  :bind (("\C-c\C-e" . show-entry)
-         ("C-c +"    . show-entry)
-         ("\C-c["    . show-entry)
-         ("\C-c\C-a" . show-all)
-         ("C-c ("    . show-all)
-         ("\C-c{"    . show-all)
-         ("\C-c\C-t" . hide-body)
-         ("\C-c}"    . hide-body)
-         ("C-c )"    . hide-body)
-         ("\C-c\C-c" . hide-entry)
-         ("C-c -"    . hide-entry)
-         ("\C-c]"    . hide-entry))
-  :config (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
+(use-package outline-mode
+  :bind
+  (("\C-c\C-e" . show-entry)
+   ("C-c +"    . show-entry)
+   ("\C-c["    . show-entry)
+   ("\C-c\C-a" . show-all)
+   ("C-c ("    . show-all)
+   ("\C-c{"    . show-all)
+   ("\C-c\C-t" . hide-body)
+   ("\C-c}"    . hide-body)
+   ("C-c )"    . hide-body)
+   ("\C-c\C-c" . hide-entry)
+   ("C-c -"    . hide-entry)
+   ("\C-c]"    . hide-entry))
+  :config
+  (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
 
 ;;;;;;;;;;;;;;;; setup various modes ;;;;;;;;;;;;;;;;
 
@@ -187,19 +184,12 @@
   (local-set-key "\C-x[" 'narrow-backward-page))
 (add-hook 'view-mode-hook 'setup-view-mode)
 
-;;; ascii-doc mode
-;;;
-;; (use-package
-;;  adoc-mode
-;;  :config (add-to-list 'auto-mode-alist '("\\.doc$" . adoc-mode)))
-
-(defun setup-vc ()
+(use-package vc
+  :config
   (setq vc-mistrust-permissions t
         vc-initial-comment t
         vc-consult-headers nil
         vc-make-backup-files t))
-
-(use-package vc :config (setup-vc))
 
 (defun setup-cvs-mode ()
   (font-lock-mode 1))
@@ -210,20 +200,20 @@
 	      (remove-if '(lambda (x) (equal (car x) "diff"))
 			 cvs-buffer-name-alist))))
 
-(defun setup-cvs ()
+(use-package pcvs
+  :config
   (add-hook 'cvs-mode-hook 'turn-on-line-truncation)
   (add-hook 'cvs-mode-hook 'setup-cvs-mode)
   (add-hook 'pcl-cvs-load-hook 'cvs-load-hook)
   (setq log-edit-keep-buffer t)
   (setenv "CVS_RSH" "ssh"))
 
-(use-package pcvs :config (setup-cvs))
-
 (defun magit-setup-hook ()
   (local-unset-key [C-tab])
   (define-key magit-mode-map [C-tab] nil))
 
-(defun setup-magit ()
+(use-package magit
+  :config
   (when (facep 'magit-item-highlight)
     (set-face-attribute 'magit-item-highlight nil
                         :background "lightgrey"
@@ -233,23 +223,26 @@
   (setq magit-last-seen-setup-instructions "1.4.0")
   (add-hook 'magit-mode-hook 'magit-setup-hook))
 
-(use-package magit :config (setup-magit))
-
 (use-package magit-gh-pulls
-  :config (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
+  :disabled t
+  :config
+  (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
 
 (use-package magit-todos
   :config
   (setq magit-todos-ignore-case t)
   (add-hook 'magit-mode-hook 'magit-todos-mode))
 
+;; (use-package forge
+;;   :disabled t)
+
 (defun alt-vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
 
-(use-package
-    vc-git
-  :config (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
+(use-package vc-git
+  :config
+  (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
 
 (defun add-el-get-info-dirs ()
   (require 'find-lisp)
@@ -273,14 +266,14 @@
   (add-to-list 'Info-directory-list "/app/sbcl/share/info")
   (add-to-list 'Info-directory-list "/usr/local/share/info"))
 
-(defun setup-info ()
+(use-package info
+  :config
   (set-face-attribute 'info-header-node nil :foreground "black")
   (set-face-attribute 'info-node nil :foreground "black")
   (add-el-get-info-dirs))
 
-(use-package info :config (setup-info))
-
-(defun setup-man ()
+(use-package man
+  :config
   (setenv "MANPATH"
           (join ":"
                 '("/usr/local/share/man/"
@@ -288,45 +281,43 @@
   (setenv "MANWIDTH" "80")
   (setq Man-fontify-manpage nil))
 
-(use-package man :config (setup-man))
-
-(defun setup-guide-key ()
-  (guide-key-mode 1)
+(use-package guide-key
+  :disabled t
+  :config
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-z"
                                        "C-c" "C-c C-d" "C-c C-x"
                                        "C-c p")
-        guide-key/popup-window-position 'bottom))
-
-;; (use-package guide-key :config (setup-guide-key))
+        guide-key/popup-window-position 'bottom)
+  (guide-key-mode 1))
 
 (defun setup-html-mode ()
   (visual-line-mode -1)
   (setq truncate-lines t
         truncate-partial-width-windows t))
 
-(use-package
-    sgml-mode
-  :config (add-hook 'html-mode-hook 'setup-html-mode))
+(use-package sgml-mode
+  :config
+  (add-hook 'html-mode-hook 'setup-html-mode))
 
-(defun setup-erc ()
+(use-package erc
+  :config
   (add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
   (setq erc-max-buffer-size 30000
-        erc-hide-list nil ;; '("JOIN" "NICK" "PART" "QUIT")
+        erc-hide-list nil           ;; '("JOIN" "NICK" "PART" "QUIT")
         erc-track-exclude-types nil ;; '("JOIN" "NICK" "PART" "QUIT" "MODE")
         erc-fill-function 'erc-fill-static
         erc-fill-static-center 20))
 
-(use-package erc :config (setup-erc))
+(use-package efun-cmds
+  :bind
+  (("\C-x\C-f" . x-find-file)))
 
-(use-package
-    efun-cmds
-  :bind (("\C-x\C-f" . x-find-file)))
-
-(use-package
-    dictionary
-  :bind (("\C-cs" . dictionary-search)
-         ("\C-cm" . dictionary-match-words))
-  :config (load-library "dictionary-init"))
+(use-package dictionary
+  :bind
+  (("\C-cs" . dictionary-search)
+   ("\C-cm" . dictionary-match-words))
+  :config
+  (load-library "dictionary-init"))
 
 (defun iso-calendar ()
   (interactive)
@@ -351,7 +342,8 @@
     (when (fboundp 'calendar-update-mode-line)
       (calendar-update-mode-line)))))
 
-(defun setup-calendar ()
+(use-package calendar
+  :config
   (iso-calendar)
   (add-hook 'diary-display-hook 'fancy-diary-display)
   ;; (add-hook 'calendar-load-hook 'mark-diary-entries)
@@ -371,22 +363,20 @@
                                   ("Pacific/Auckland" "Auckland"))
         display-time-world-time-format "%a %d %b %R %Z"))
 
-(use-package calendar :config (setup-calendar))
-
-(defun setup-bbdb ()
+(use-package bbdb
+  :disabled t
+  :config
   (bbdb-insinuate-message)
   (bbdb-initialize 'message 'mu4e)
   (setq bbdb-mail-user-agent 'message-user-agent
         bbdb-mua-pop-up nil))
 
-;; (use-package bbdb :config (setup-bbdb))
-
-(defun setup-epa-file ()
+(use-package epa-file
+  :config
   (epa-file-enable))
 
-(use-package epa-file :config (setup-epa-file))
-
-(defun setup-emms ()
+(use-package emms
+  :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
@@ -397,11 +387,8 @@
   ;; (add-to-list 'emms-info-functions 'emms-info-mpd)
   ;; (setq emms-player-mpd-server-name "localhost"
   ;;       emms-player-mpd-server-port "6600")
-  (setq emms-playlist-default-major-mode 'emms-playlist-mode))
-
-(add-hook 'emms-info-functions 'emms-info-track-description)
-
-(use-package emms :config (setup-emms))
+  (setq emms-playlist-default-major-mode 'emms-playlist-mode)
+  (add-hook 'emms-info-functions 'emms-info-track-description))
 
 ;;;;;;;;;;;;;;;; org ;;;;;;;;;;;;;;;;
 
@@ -409,7 +396,8 @@
   "Date format string for journal headings.")
 
 (defun org-journal-entry ()
-  "Create a new diary entry for today or append to an existing one."
+  "Create a new diary entry for today or append to an existing
+one."
   (interactive)
   (switch-to-buffer (find-file org-journal-file))
   (widen)
@@ -425,13 +413,15 @@
 
 (defun my-org-time-stamp-inactive ()
   (interactive)
-  (org-time-stamp-inactive (format-time-string "%Y-%m-%d %H:%M:%S")))
+  (org-time-stamp-inactive
+   (format-time-string "%Y-%m-%d %H:%M:%S")))
 
 (defun my-org-mode-hook ()
   (visual-line-mode)
   (org-display-inline-images))
 
-(defun setup-org ()
+(use-package org
+  :config
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-hook 'org-mode-hook 'turn-on-font-lock)
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -455,8 +445,6 @@
    '((ditaa . t)
      (shell . t))))
 
-(use-package org :config (setup-org))
-
 (use-package org-agenda
   :config
   (setq org-agenda-include-diary t
@@ -466,15 +454,12 @@
                                                (eq (car x) 'agenda))
                                              org-agenda-prefix-format))))
 
-(defun setup-org-passwords ()
+(use-package org-passwords
+  :if (memq 'org-passwords enable-features)
+  :config
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
-(use-package org-passwords
-  :if (memq 'org-passwords enable-features)
-  :config (setup-org-passwords))
-
-(require 'org)
 (use-package org-gcal
   :if (memq 'org-gcal enable-features)
   :config
@@ -522,7 +507,8 @@
   (let ((browse-url-browser-function 'browse-url-default-browser))
     (mu4e-action-view-in-browser msg)))
 
-(defun setup-mu4e ()
+(use-package mu4e
+  :config
   (require 'org-mu4e)
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
         mu4e-get-mail-command "mbsync-all -u"
@@ -559,19 +545,17 @@
         mu4e-index-lazy-check nil
         ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
         org-export-with-toc nil)
-  (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-system-browser))
+  (add-to-list 'mu4e-view-actions
+               '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-compose-mode-hook)
   (add-to-list 'mu4e-bookmarks
-	       '("flag:flagged AND NOT flag:trashed" "Flagged messages" 102))
+	       '("flag:flagged AND NOT flag:trashed"
+                 "Flagged messages" 102))
   (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
-
-(use-package mu4e
-  :demand t
-  :config (setup-mu4e))
 
 ;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
 (eval-after-load "enriched"
@@ -579,19 +563,19 @@
      (list start end)))
 
 (use-package mu4e-multi
-  :demand t
-  :bind (("C-x m" . mu4e-multi-compose-new))
-  :config (progn
-            (when (fboundp 'setup-mu4e-multi-account)
-              (setup-mu4e-multi-account))
-            (setq mu4e-user-mail-address-list
-                  (mapcar (lambda (p)
-                            (cdr (assoc 'user-mail-address (cdr p))))
-                          mu4e-multi-account-alist))
-            (mu4e-multi-enable)
-            (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
-            (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
-            (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account)))
+  :bind
+  (("C-x m" . mu4e-multi-compose-new))
+  :config
+  (when (fboundp 'setup-mu4e-multi-account)
+    (setup-mu4e-multi-account))
+  (setq mu4e-user-mail-address-list
+        (mapcar (lambda (p)
+                  (cdr (assoc 'user-mail-address (cdr p))))
+                mu4e-multi-account-alist))
+  (mu4e-multi-enable)
+  (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
+  (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
+  (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account))
 
 (defun my-mu4e-reload-main ()
   (interactive)
@@ -628,57 +612,14 @@
         ))
 
 (use-package message
-  :config (add-hook 'message-mode-hook 'message-mode-hook))
+  :config
+  (add-hook 'message-mode-hook 'message-mode-hook))
 
-;; (use-package mu4e-conversation
-;;   :config
-;;   (setq mu4e-view-func 'mu4e-conversation))
-
-;; (setq mu4e-view-func 'mu4e~headers-view-handler)
-
-(defvar window-configuration-stack nil)
-
-(defun push-window-configuration ()
-  (push (current-window-configuration) window-configuration-stack))
-
-(defun pop-window-configuration ()
-  (pop window-configuration-stack))
-
-(defun switch-to-mu4e ()
-  (interactive)
-  (push-window-configuration)
-  (delete-other-windows)
-  (switch-to-buffer "*scratch*")
-  (mu4e))
-
-(defun switch-back ()
-  (interactive)
-  (let ((window-conf (pop-window-configuration)))
-    (when window-conf
-      (set-window-configuration window-conf))))
-
-(defvar *switch-to-apps* nil)
-
-(defun switch-to-app (app)
-  (interactive
-   (list
-    (completing-read "Switch to: "
-                     (sort (mapcar 'car *switch-to-apps*) 'string-lessp))))
-  (message app)
-  (push-window-configuration)
-  (delete-other-windows)
-  (let* ((app (intern app))
-         (handler (cdr (assq app *switch-to-apps*))))
-    (funcall handler)))
-
-(defun switch-to-emms ()
-  (interactive)
-  (push-window-configuration)
-  (delete-other-windows)
-  (emms-playlist-mode-go))
-
-(add-to-list '*switch-to-apps* '(mu4e . mu4e))
-(add-to-list '*switch-to-apps* '(emms . emms-playlist-mode-go))
+(use-package mu4e-conversation
+  :disabled t
+  :config
+  ;; (setq mu4e-view-func 'mu4e~headers-view-handler)
+  (setq mu4e-view-func 'mu4e-conversation))
 
 ;;;;;;;;;;;;;;;; projectile ;;;;;;;;;;;;;;;;
 
@@ -776,12 +717,11 @@ currently under the curser"
   (unless (boundp 'last-command-char)
     (defvar last-command-char nil)))
 
-(defun slime-mode-init ()
+(use-package slime
+  :config
   (slime-setup '(slime-repl))
   (setq slime-protocol-version 'ignore)
   (add-hook 'slime-mode-hook 'my-slime-mode-hook))
-
-(use-package slime :config (slime-mode-init))
 
 (defun sbcl ()
   (interactive)
@@ -825,14 +765,13 @@ currently under the curser"
   (auto-complete-mode -1)
   (eldoc-mode 1))
 
-(defun lisp-mode-init ()
+(use-package lisp-mode
+  :config
   (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'my-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'my-common-lisp-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
   (enable-paredit-mode))
-
-(use-package lisp-mode :config (lisp-mode-init))
 
 ;;;;;;;;;;;;;;;; clojure ;;;;;;;;;;;;;;;;
 
@@ -841,24 +780,23 @@ currently under the curser"
   (outline-minor-mode 1)
   (enable-paredit-mode))
 
-(defun setup-clojure ()
+(use-package clojure-mode
+  :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-mode)))
 
-(use-package clojure-mode :config (setup-clojure))
-
-(defun setup-cider-repl ()
+(use-package cider-repl
+  :init
+  (setq cider-completion-use-context nil
+	cider-prompt-for-symbol nil
+	cider-repl-display-help-banner nil
+	cider-use-overlays nil
+	cider-repl-use-pretty-printing nil)
+  :bind
+  (("\C-c\M-o" . cider-repl-clear-buffer))
+  :config
   (cider-repl-add-shortcut "sayoonara" 'cider-quit)
   (setq cider-repl-use-pretty-printing nil))
-
-(use-package cider-repl
-  :init (setq cider-completion-use-context nil
-	      cider-prompt-for-symbol nil
-	      cider-repl-display-help-banner nil
-	      cider-use-overlays nil
-	      cider-repl-use-pretty-printing nil)
-  :bind (("\C-c\M-o" . cider-repl-clear-buffer))
-  :config (setup-cider-repl))
 
 (defun cider-mode-hook ()
   (eldoc-mode)
@@ -869,15 +807,14 @@ currently under the curser"
 
 ;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
 
-(defun setup-cider ()
+;; (unload-feature 'cider t)
+(use-package cider
+  :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-global-options "-Adev:nrepl"
-        cider-clojure-cli-global-options "-Adev:nrepl")
+        cider-clojure-global-options "-Anrepl"
+        cider-clojure-cli-global-options "-Anrepl")
   (add-to-list 'clojure-build-tool-files "deps.edn"))
-
-;; (unload-feature 'cider t)
-(use-package cider :config (setup-cider))
 
 (defun cider-remove-current-ns (&optional buffer)
   (interactive)
@@ -978,12 +915,11 @@ currently under the curser"
           '("^ERROR in (.*) (\\([^:]*\\):\\([0-9]+\\)" 1 2))
          compilation-error-regexp-alist)))
 
-(use-package
-    cc-mode
-  :config (progn
-            (add-hook 'c-mode-hook 'c-mode-hook)
-            (add-hook 'objc-mode-hook 'objc-mode-setup-hook)
-            (java-mode-init)))
+(use-package cc-mode
+  :config
+  (add-hook 'c-mode-hook 'c-mode-hook)
+  (add-hook 'objc-mode-hook 'objc-mode-setup-hook)
+  (java-mode-init))
 
 ;;;;;;;;;;;;;;;; js2-mode ;;;;;;;;;;;;;;;;
 
@@ -1000,11 +936,10 @@ currently under the curser"
 
 (defun setup-python ()
   (setq python-remove-cwd-from-path nil)
-  (setq jedi:setup-keys t)
-  (add-hook 'python-mode-hook 'jedi:setup))
+  (setq jedi:setup-keys t))
 
 ;; (use-package python :config (setup-python))
-(use-package jedi :config (setup-python))
+;; (use-package jedi :config (setup-python))
 
 (defun alert--log-clear-log ()
   (let ((buf (get-buffer "*Alerts*")))
@@ -1019,7 +954,8 @@ currently under the curser"
 ;; (alert "Sending an alert" :title "Test")
 
 (use-package graphviz-dot-mode
-  :config (setq graphviz-dot-view-command "xdot %s"))
+  :config
+  (setq graphviz-dot-view-command "xdot %s"))
 
 (use-package wttrin)
 
@@ -1054,7 +990,8 @@ currently under the curser"
 	     ("r"  . pdf-view-reset-slice)))
 
 (use-package ediff
-  :config (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
+  :config
+  (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
 (defun my-midnight-hook ()
   (org-gcal-multi-fetch)
@@ -1066,19 +1003,28 @@ currently under the curser"
   (add-hook 'midnight-hook 'my-midnight-hook))
 
 (use-package image
-  :bind (:map image-mode-map
-              ("w" . image-transform-fit-to-width)
-              ("h" . image-transform-fit-to-height)
-              ("s" .  image-transform-set-scale)))
-
-(defun setup-geiser ()
-  ;; (geiser-set-scheme* 'chez)
-  (geiser-set-scheme 'guile)
-  )
+  :bind
+  (:map image-mode-map
+        ("w" . image-transform-fit-to-width)
+        ("h" . image-transform-fit-to-height)
+        ("s" .  image-transform-set-scale)))
 
 (use-package geiser
   :if (memq 'geiser enable-features)
-  :config (add-hook 'geiser-mode-hook 'setup-geiser))
+  :config
+  (add-hook 'geiser-mode-hook 'setup-geiser))
+
+(defun run-chez ()
+  (interactive)
+  (run-geiser 'chez))
+
+(defun run-guile ()
+  (interactive)
+  (run-geiser 'guile))
+
+(defun run-racket ()
+  (interactive)
+  (run-geiser 'racket))
 
 (use-package csv-mode
   :config
@@ -1261,9 +1207,9 @@ currently under the curser"
 ;;   (key-chord-define-global ";o" 'other-window))
 
 
-(eval-after-load "guix"
-  '(progn
-     ;; (defvar orig-guix-config-guile-program guix-config-guile-program)
-     (setq guix-config-guile-program nil
-           ;;  "--no-auto-compile"
-           guix-guile-program '("guile"))))
+;; (eval-after-load "guix"
+;;   '(progn
+;;      ;; (defvar orig-guix-config-guile-program guix-config-guile-program)
+;;      (setq guix-config-guile-program nil
+;;            ;;  "--no-auto-compile"
+;;            guix-guile-program '("guile"))))
