@@ -19,4 +19,14 @@
     (define-key mode-map
       (kbd "C-M-i")
       'complete-symbol))
-  (helm-mode 1))
+  (helm-mode 1)
+  :bind
+  (("\C-xb" . helm-mini)))
+
+(el-get-bundle helm-ag)
+(use-package helm-ag
+  :bind
+  (("\C-cg" . helm-ag-project-root)))
+
+(el-get-bundle helm-cider)
+(use-package helm-cider)
