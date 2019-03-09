@@ -165,7 +165,8 @@
   '("AT Translated Set 2 keyboard"
     "ThinkPad Extra Buttons"
     "SynPS/2 Synaptics TouchPad"
-    "TPPS/2 IBM TrackPoint"))
+    ;; "TPPS/2 IBM TrackPoint"
+    ))
 
 (defun enable-input-devices ()
   (interactive)
