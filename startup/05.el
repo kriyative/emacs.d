@@ -114,8 +114,6 @@
   (org-agenda-list nil nil 'day))
 
 (use-package midnight
-  ;; fixme: should be enabled
-  :disabled t
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
   (add-hook 'midnight-hook 'my-midnight-hook))
