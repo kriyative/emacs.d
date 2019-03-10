@@ -18,7 +18,57 @@
  slime
  window-numbering)
 
+;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
+
+(defun user-commands-prefix-help ()
+  (interactive)
+  (message "Welcome to the User Commands Prefix map"))
+
+(defvar user-commands-prefix-map (make-sparse-keymap))
+
+(defun set-user-commands-prefix-key (k)
+  (global-unset-key k)
+  (define-prefix-command 'user-commands-prefix
+    'user-commands-prefix-map
+    k)
+  (define-key global-map k 'user-commands-prefix))
+;; (set-user-commands-prefix-key (kbd "C-;"))
+(set-user-commands-prefix-key (kbd "\C-\\"))
+
+(define-keys user-commands-prefix-map
+  '(("\C-\\" compile)
+    ("." find-tag)
+    ("2" 2col-view)
+    ("3" 3col-view)
+    ("4" 4col-view)
+    ("9" fill-vertical-panes)
+    ("<" pop-tag-mark)
+    ("\C-l" bury-buffer)
+    ("g" toggle-debug-on-error)
+    ("j" jump-to-register)
+    ("l" cider-jack-in)
+    ("m" switch-to-mu4e)
+    ("o" browse-url-default-browser)
+    ("q" switch-back)
+    ("r" cider-switch-to-current-repl-buffer)
+    ("t" toggle-truncate-lines)
+    ("u" browse-url)
+    ("v" magit-status)
+    ("w" window-configuration-to-register)
+    ("W" visual-line-mode)
+    ("z" switch-to-app)
+    ("\C-z" switch-to-app)
+    ("|" toggle-window-split)
+    ("\C-c" display-time-world)))
+
 ;;;;;;;;;;;;;;;;
+
+(use-package buffer-move
+  :bind (:map user-commands-prefix-map
+	      ("<left>"  . buf-move-left)
+	      ("<right>" . buf-move-right)
+	      ("<down>"  . buf-move-down)
+	      ("<up>"    . buf-move-up)))
 
 (use-package diary-lib
   :config
@@ -141,60 +191,14 @@
   :config
   (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
 
-;;;;;;;;;;;;;;;; ctrl-; keymap ;;;;;;;;;;;;;;;;
-
-(defun ctl-semicolon-help ()
-  (interactive)
-  (message "Welcome to Ctl-;"))
-
-(defvar ctl-semicolon-map (make-sparse-keymap))
-
-(let ((k (kbd "C-;")))
-  (global-unset-key k)
-  (define-prefix-command 'ctl-semicolon-prefix 'ctl-semicolon-map k)
-  (define-key global-map k 'ctl-semicolon-prefix))
-
-(define-key ctl-semicolon-map "." 'find-tag)
-(define-key ctl-semicolon-map "0" 'go-home)
-(define-key ctl-semicolon-map "2" '2col-view)
-(define-key ctl-semicolon-map "3" '3col-view)
-(define-key ctl-semicolon-map "4" '4col-view)
-(define-key ctl-semicolon-map "9" 'fill-vertical-panes)
-(define-key ctl-semicolon-map "<" 'pop-tag-mark)
-(define-key ctl-semicolon-map "\C-b" 'winner-undo)
-(define-key ctl-semicolon-map "\C-f" 'winner-redo)
-(define-key ctl-semicolon-map "\C-l" 'bury-buffer)
-(define-key ctl-semicolon-map "g" 'toggle-debug-on-error)
-(define-key ctl-semicolon-map "j" 'jump-to-register)
-(define-key ctl-semicolon-map "l" 'cider-jack-in)
-(define-key ctl-semicolon-map "m" 'switch-to-mu4e)
-(define-key ctl-semicolon-map "o" 'browse-url-default-browser)
-(define-key ctl-semicolon-map "q" 'switch-back)
-(define-key ctl-semicolon-map "r" 'cider-switch-to-current-repl-buffer)
-(define-key ctl-semicolon-map "t" 'toggle-truncate-lines)
-(define-key ctl-semicolon-map "u" 'browse-url)
-(define-key ctl-semicolon-map "v" 'magit-status)
-(define-key ctl-semicolon-map "w" 'window-configuration-to-register)
-(define-key ctl-semicolon-map "W" 'visual-line-mode)
-(define-key ctl-semicolon-map "z" 'switch-to-app)
-(define-key ctl-semicolon-map "\C-z" 'switch-to-app)
-(define-key ctl-semicolon-map "|" 'toggle-window-split)
-(define-key ctl-semicolon-map [left]  'buf-move-left)
-(define-key ctl-semicolon-map [right] 'buf-move-right)
-(define-key ctl-semicolon-map [down]  'buf-move-down)
-(define-key ctl-semicolon-map [up]    'buf-move-up)
-(define-key ctl-semicolon-map (kbd "SPC") 'emms-pause)
-(define-key ctl-semicolon-map "e" nil)
-(define-key ctl-semicolon-map (kbd "en") 'emms-next)
-(define-key ctl-semicolon-map (kbd "ep") 'emms-previous)
-(define-key ctl-semicolon-map "\C-e" 'switch-to-emms)
-(define-key ctl-semicolon-map "\C-c" 'display-time-world)
-
-;; (define-key dired-mode-map [C-return] 'dired-open-file)
+(use-package winner
+  :bind (:map user-commands-prefix-map
+	      ("\C-b" . winner-undo)
+	      ("\C-f" . winner-redo))
+  :config
+  (winner-mode 1))
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
-
-(winner-mode 1)
 
 (defun toggle-frame-width ()
   "Toggle between narrow and wide frame layouts"

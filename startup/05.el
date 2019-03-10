@@ -88,6 +88,11 @@
   (edit-server-start))
 
 (use-package emms
+  :bind
+  (:map user-commands-prefix-map
+	("en" . emms-next)
+	("ep" . emms-previous)
+	("SPC" . emms-pause))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
