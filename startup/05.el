@@ -22,10 +22,6 @@
   :config
   (load-library "dictionary-init"))
 
-(use-package efun-cmds
-  :bind
-  (("\C-x\C-f" . x-find-file)))
-
 (use-package elscreen
   :bind
   (:map elscreen-map

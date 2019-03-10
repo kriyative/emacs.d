@@ -44,6 +44,8 @@
               (">" . dired-omit-mode)
               ([C-return] . dired-open-file)))
 
+(use-package efun-cmds)
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (setq inhibit-startup-message t
