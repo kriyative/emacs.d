@@ -1,4 +1,7 @@
-(el-get-bundle helm)
+(my-el-get-bundles
+ helm
+ helm-ag
+ helm-cider)
 
 (use-package helm-config
   :config
@@ -11,22 +14,17 @@
   (global-set-key (kbd "C-x C-h") #'helm-command-prefix)
   (dolist (mode-map (list lisp-interaction-mode-map
                           emacs-lisp-mode-map))
-    (define-key mode-map
-      (kbd "C-M-i")
-      'helm-lisp-completion-at-point))
+    (define-key mode-map (kbd "C-M-i") 'helm-lisp-completion-at-point))
   (dolist (mode-map (list clojure-mode-map
                           cider-mode-map))
-    (define-key mode-map
-      (kbd "C-M-i")
-      'complete-symbol))
+    (define-key mode-map (kbd "C-M-i") 'complete-symbol))
   (helm-mode 1)
   :bind
   (("\C-xb" . helm-mini)))
 
-(el-get-bundle helm-ag)
 (use-package helm-ag
   :bind
-  (("\C-cg" . helm-ag-project-root)))
+  (("\C-cg" . helm-ag-project-root)
+   ("\C-cG" . helm-ag)))
 
-(el-get-bundle helm-cider)
 (use-package helm-cider)

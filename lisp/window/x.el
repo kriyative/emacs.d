@@ -63,7 +63,7 @@
 ;; (x-set-font "Liberation Mono" 11)
 ;; (x-set-font "Consolas" 9)
 ;; (x-set-font "Noto Mono")
-;; (x-set-font "DejaVu Sans Mono Book")
+;; (x-set-font "DejaVu Sans Mono Book" 11)
 ;; (x-set-font "Andale Mono")
 ;; (x-set-font "Bitstream Vera Sans Mono")
 ;; (x-set-font "FreeMono")

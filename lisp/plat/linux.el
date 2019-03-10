@@ -1,19 +1,3 @@
-(defun setup-ss ()
-  (define-key ctl-z-map "%" 'ss/info))
-
-;; (eval-after-load 'ss '(setup-ss))
-;; (try-require 'ss)
-
-(global-set-key '[C-z space] 'emms-pause)
-
-;; (require 'emms-setup)
-;; (emms-all)
-;; (emms-default-players)
-
-(use-package password-mode)
-(use-package org)
-(use-package org-passwords)
-
 (defun dired-open-file ()
   "In dired, open the file named on this line."
   (interactive)
