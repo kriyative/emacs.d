@@ -141,6 +141,10 @@
       (require feature)
     (error (message "Error loading feature %s" feature))))
 
+(defun force-require (feature)
+  (setq features (remove feature features))
+  (require feature))
+
 (defun compilation-mode-colorize-buffer ()
   (toggle-read-only)
   (ansi-color-apply-on-region (point-min) (point-max))

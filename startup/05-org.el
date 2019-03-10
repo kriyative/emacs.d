@@ -35,10 +35,7 @@ one."
 
 (use-package org
   :config
-  ;; fixme: built-in org is getting loaded somewhere, this forces
-  ;; loading of el-get/org
-  (setq features (remove 'org features))
-  (require 'org)
+  (force-require 'org)
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -80,6 +77,7 @@ one."
 
 (use-package org-gcal
   :config
+  (force-require 'org-macs)
   ;; (setq org-gcal-client-id my-org-gcal-client-id
   ;;       org-gcal-client-secret my-org-gcal-client-secret
   ;;       org-gcal-file-alist my-org-gcal-file-alist)
