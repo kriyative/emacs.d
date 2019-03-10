@@ -63,7 +63,7 @@
 ;; (x-set-font "Liberation Mono" 11)
 ;; (x-set-font "Consolas" 9)
 ;; (x-set-font "Noto Mono")
-;; (x-set-font "DejaVu Sans Mono Book")
+;; (x-set-font "DejaVu Sans Mono Book" 11)
 ;; (x-set-font "Andale Mono")
 ;; (x-set-font "Bitstream Vera Sans Mono")
 ;; (x-set-font "FreeMono")
@@ -165,7 +165,8 @@
   '("AT Translated Set 2 keyboard"
     "ThinkPad Extra Buttons"
     "SynPS/2 Synaptics TouchPad"
-    "TPPS/2 IBM TrackPoint"))
+    ;; "TPPS/2 IBM TrackPoint"
+    ))
 
 (defun enable-input-devices ()
   (interactive)

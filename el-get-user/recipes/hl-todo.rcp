@@ -1,0 +1,4 @@
+(:name hl-todo
+       :description "Highlight todos"
+       :type github
+       :pkgname "tarsius/hl-todo")

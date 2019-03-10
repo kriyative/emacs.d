@@ -131,7 +131,8 @@
 	    desktop-clear-preserve-buffers))))
 
 (defun load-file-if-exists (path &rest load-args)
-  (let ((path (expand-file-name path)))
+  (let ((path (and (stringp path)
+		   (expand-file-name path))))
     (when (file-exists-p path)
       (apply 'load path load-args))))
 
@@ -195,3 +196,75 @@ a comma."
           (pop-up-windows t))
       (set-window-buffer target-window buf)
       target-window)))
+
+(defun assoc-cdr (key alist)
+  (cdr (assoc key alist)))
+
+(defun exec! (command)
+  (interactive (list (read-shell-command "$ ")))
+  (let* ((program-and-args (if (stringp command)
+                               (split-string command)
+                             command))
+         (program (car program-and-args))
+         (args (cdr program-and-args))
+         (console (get-buffer-create "*Console*"))
+         (pt (with-current-buffer console
+               (goto-char (point-max))
+               (insert "$ "
+                       (mapconcat 'identity program-and-args " ")
+                       "\n")
+               (point)))
+         (ret (apply 'call-process program nil console t args))
+         (out (with-current-buffer console
+                (buffer-substring-no-properties pt (point)))))
+    (if (and (numberp ret) (= 0 ret))
+        out
+      (throw 'exec!-error (list ret out)))))
+
+(defun spawn& (command)
+  (interactive (list (read-shell-command "$ ")))
+  (let* ((program-and-args (if (stringp command)
+                               (split-string command)
+                             command))
+         (program (car program-and-args))
+         (program-name (file-name-nondirectory program))
+         (program-buffer (concat " *" program-name))
+         (args (cdr program-and-args)))
+    (apply 'start-process program-name program-buffer program args)))
+
+(defun define-keys (kmap ks)
+  (dolist (k ks)
+    (let ((key (first k))
+	  (def (second k)))
+      (define-key kmap (kbd key) def))))
+
+(defvar *default-start-level* 3)
+
+(defun startup-emacs (&optional level)
+  (dotimes (i (1+ (or level *default-start-level*)))
+    (dolist (f (directory-files "~/.emacs.d/startup"
+                                t
+                                (format "%02d.*" i)))
+      (load f))))
+
+(require 'url)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+
+(require 'el-get)
+
+(defmacro my-el-get-bundles (&rest rcps)
+  `(progn
+     ,@(mapcar
+        (lambda (rcp)
+          `(el-get-bundle ,@(if (listp rcp) rcp (list rcp))))
+        rcps)))
