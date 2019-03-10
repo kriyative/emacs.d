@@ -232,6 +232,12 @@ a comma."
          (args (cdr program-and-args)))
     (apply 'start-process program-name program-buffer program args)))
 
+(defun define-keys (kmap ks)
+  (dolist (k ks)
+    (let ((key (first k))
+	  (def (second k)))
+      (define-key kmap (kbd key) def))))
+
 (defvar *default-start-level* 3)
 
 (defun startup-emacs (&optional level)
