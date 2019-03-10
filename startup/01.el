@@ -133,13 +133,6 @@
   :config
   (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
 
-(use-package vc
-  :config
-  (setq vc-mistrust-permissions t
-        vc-initial-comment t
-        vc-consult-headers nil
-        vc-make-backup-files t))
-
 (defun alt-vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
