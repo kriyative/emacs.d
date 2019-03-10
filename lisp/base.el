@@ -131,7 +131,8 @@
 	    desktop-clear-preserve-buffers))))
 
 (defun load-file-if-exists (path &rest load-args)
-  (let ((path (expand-file-name path)))
+  (let ((path (and (stringp path)
+		   (expand-file-name path))))
     (when (file-exists-p path)
       (apply 'load path load-args))))
 
