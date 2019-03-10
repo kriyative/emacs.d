@@ -6,5 +6,3 @@
 (startup-emacs 5)
 (load "plat")
 (load "window")
-
-(find-file "~/.emacs.d/init.el")
