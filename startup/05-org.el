@@ -130,3 +130,44 @@ one."
            org-gcal-multi-account-id
            org-gcal-token-plist
            (org-gcal--get-access-token)))
+
+;; from:
+;; https://emacs.stackexchange.com/questions/17283/is-it-possible-to-get-prettified-symbols-in-org-mode-source-blocks
+(defun org-src-font-lock-fontify-block (lang start end)
+  "Fontify code block.
+     This function is called by emacs automatic fontification, as long
+     as `org-src-fontify-natively' is non-nil."
+  (let ((lang-mode (org-src--get-lang-mode lang)))
+    (when (fboundp lang-mode)
+      (let ((string (buffer-substring-no-properties start end))
+            (modified (buffer-modified-p))
+            (org-buffer (current-buffer)) pos next)
+        (remove-text-properties start end '(face nil))
+        (with-current-buffer
+            (get-buffer-create
+             (concat " org-src-fontification:" (symbol-name lang-mode)))
+          (delete-region (point-min) (point-max))
+          (insert string " ") ;; so there's a final property change
+          (unless (eq major-mode lang-mode) (funcall lang-mode))
+          ;; Avoid `font-lock-ensure', which does not display fonts in
+          ;; source block.
+          (font-lock-fontify-buffer)
+          (setq pos (point-min))
+          (while (setq next (next-single-property-change pos 'face))
+            (put-text-property
+             (+ start (1- pos)) (1- (+ start next)) 'face
+             (get-text-property pos 'face) org-buffer)
+            (setq pos next))
+          ;; Addition: also copy 'composition info for prettified symbols
+          (setq pos (point-min))
+          (while (setq next (next-single-property-change pos 'composition))
+            (put-text-property
+             (+ start (1- pos)) (1- (+ start next)) 'composition
+             (get-text-property pos 'composition) org-buffer)
+            (setq pos next))
+          ;; End addition
+          )
+        (add-text-properties
+         start end
+         '(font-lock-fontified t fontified t font-lock-multiline t))
+        (set-buffer-modified-p modified)))))
