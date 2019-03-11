@@ -4,6 +4,7 @@
  alert
  (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
                 :features disable-mouse)
+ dictionary
  edit-server
  emms
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
