@@ -242,6 +242,19 @@ a comma."
 	  (def (second k)))
       (define-key kmap (kbd key) def))))
 
+(defun set-window-width* (width pixelwisep)
+  (let* ((w (selected-window))
+         (delta (- width (window-width w pixelwisep))))
+    (window-resize w delta t nil pixelwisep)))
+
+(defun set-window-width (&optional width)
+  (interactive "nWidth: ")
+  (set-window-width* width nil))
+
+(defun set-window-pixel-width (&optional width)
+  (interactive "nWidth: ")
+  (set-window-width* width t))
+
 (defvar *default-start-level* 3)
 
 (defun startup-emacs (&optional level)
