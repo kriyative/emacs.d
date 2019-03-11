@@ -173,3 +173,43 @@ maildir)."
   ;; (setq mu4e-view-func 'mu4e~headers-view-handler)
   (setq mu4e-view-func 'mu4e-conversation))
 
+;;;;;;;;;;;;;;;; overrides ;;;;;;;;;;;;;;;;
+
+;;; slight fix to prevent accidentally clobbering compose settings
+(defun mu4e-multi-compose-set-account (&optional account)
+  "Set the ACCOUNT for composing.
+With Optional Argument ACCOUNT, set all variables for that given
+identifier, else it tries to retrieve the message in context and
+detect ACCOUNT from it."
+  (interactive)
+  (let* ((msg (or mu4e-compose-parent-message
+                  (ignore-errors (mu4e-message-at-point))))
+         (account (or account
+                      (mu4e-multi-get-msg-account msg)))
+         (account-vars (cdr (assoc account mu4e-multi-account-alist))))
+    (when account-vars
+      (mapc #'(lambda (var)
+                (set (make-local-variable (car var)) (cdr var)))
+            account-vars)
+      (when (memq major-mode '(mu4e-compose-mode message-mode))
+        (message-remove-header "from")
+        (message-add-header (format "From: %s\n" (message-make-from)))
+        (message "Using account %s" account)))))
+
+;;; modify mark-for-trash in mu4e to not set the +T flag which
+;;; confuses Gmail into retaining messages in the Trash folder forever
+(setq mu4e-marks
+      (cons `(trash
+              :char ("d" . "▼")
+              :prompt "dtrash"
+              :dyn-target ,(lambda (target msg) (mu4e-get-trash-folder msg))
+              :action ,(lambda (docid msg target)
+                         (mu4e~proc-move docid
+                                         (mu4e~mark-check-target target) "-N")))
+            (remove-if (lambda (x)
+                         (equal 'trash (car x)))
+                       mu4e-marks)))
+
+(defun mu4e-maildirs-extension-index-updated-handler ()
+  "Handler for `mu4e-index-updated-hook'."
+  (mu4e-maildirs-extension-force-update '(16)))
