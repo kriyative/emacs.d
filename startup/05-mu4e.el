@@ -60,6 +60,7 @@ maildir)."
     (mu4e-action-view-in-browser msg)))
 
 (use-package mu4e
+  :demand t
   :config
   (require 'org-mu4e)
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
@@ -115,6 +116,7 @@ maildir)."
      (list start end)))
 
 (use-package mu4e-multi
+  :demand t
   :bind
   (("C-x m" . mu4e-multi-compose-new))
   :config
