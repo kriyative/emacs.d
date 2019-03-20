@@ -6,7 +6,6 @@
                 :features disable-mouse)
  dictionary
  edit-server
- emms
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo)
  (password-mode
@@ -87,26 +86,6 @@
   (setq edit-server-default-major-mode 'normal-mode
         edit-server-new-frame nil)
   (edit-server-start))
-
-(use-package emms
-  :bind
-  (:map user-commands-prefix-map
-	("en" . emms-next)
-	("ep" . emms-previous)
-	("SPC" . emms-pause))
-  :config
-  (add-to-list 'emms-player-base-format-list "opus")
-  (emms-all)
-  (emms-default-players)
-  (setq emms-source-file-default-directory "~/Music/"
-	emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
-  ;; (require 'emms-player-mpd)
-  ;; (add-to-list 'emms-player-list 'emms-player-mpd)
-  ;; (add-to-list 'emms-info-functions 'emms-info-mpd)
-  ;; (setq emms-player-mpd-server-name "localhost"
-  ;;       emms-player-mpd-server-port "6600")
-  (setq emms-playlist-default-major-mode 'emms-playlist-mode)
-  (add-hook 'emms-info-functions 'emms-info-track-description))
 
 (use-package ipinfo)
 
