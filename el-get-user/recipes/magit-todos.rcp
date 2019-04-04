@@ -1,5 +1,5 @@
 (:name magit-todos
        :description "Magit Todos"
        :type github
-       :depends (magit hl-todo pcre2el)
+       :depends (emacs-async magit hl-todo pcre2el)
        :pkgname "alphapapa/magit-todos")
