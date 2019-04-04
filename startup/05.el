@@ -13,7 +13,8 @@
   :url "https://github.com/juergenhoetzel/password-mode.git"
   :features password-mode)
  magit-popup
- pdf-tools)
+ pdf-tools
+ forge)
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -130,6 +131,8 @@
 	     ("r"  . pdf-view-reset-slice)))
 
 (use-package magit-popup)
+
+(use-package forge :after magit)
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
