@@ -197,6 +197,10 @@
   :config
   (winner-mode 1))
 
+(use-package projectile
+  :config
+  (setq projectile-keymap-prefix (kbd "C-c C-p")))
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (defun toggle-frame-width ()
