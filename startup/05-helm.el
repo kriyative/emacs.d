@@ -10,15 +10,15 @@
   (global-set-key (kbd "M-x") #'helm-M-x)
   (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
   (global-set-key (kbd "C-x C-f") #'helm-find-files)
-  (setq helm-command-prefix-key "C-x C-h")
-  (global-set-key (kbd "C-x C-h") #'helm-command-prefix)
-  (dolist (mode-map (list lisp-interaction-mode-map
-                          emacs-lisp-mode-map))
+  (setq helm-command-prefix-key "\C-c\C-h")
+  (global-set-key (kbd "C-c C-h") #'helm-command-prefix)
+  (dolist (mode-map (list lisp-interaction-mode-map emacs-lisp-mode-map))
     (define-key mode-map (kbd "C-M-i") 'helm-lisp-completion-at-point))
-  (dolist (mode-map (list clojure-mode-map
-                          cider-mode-map))
+  (dolist (mode-map (list clojure-mode-map cider-mode-map))
     (define-key mode-map (kbd "C-M-i") 'complete-symbol))
   (helm-mode 1)
+  (when (boundp 'projectile-completion-system)
+    (setq projectile-completion-system 'helm))
   :bind
   (("\C-xb" . helm-mini)))
 
@@ -28,3 +28,8 @@
    ("\C-cG" . helm-ag)))
 
 (use-package helm-cider)
+
+(use-package helm-projectile
+  :bind
+  (:map user-commands-prefix-map
+	("\C-x\C-f" . helm-projectile-find-file)))
