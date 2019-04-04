@@ -40,7 +40,8 @@ maildir)."
 	mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
-  (when (and mu4e~view-msg
+  (when (and (boundp 'mu4e~view-msg)
+	     mu4e~view-msg
              (mu4e-message-field mu4e~view-msg :body-html))
     (setq truncate-lines t))
   (setq fill-column 85
