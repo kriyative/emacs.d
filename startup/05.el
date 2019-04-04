@@ -5,12 +5,14 @@
  (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
                 :features disable-mouse)
  dictionary
+ elscreen
  edit-server
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo)
  (password-mode
   :url "https://github.com/juergenhoetzel/password-mode.git"
   :features password-mode)
+ magit-popup
  pdf-tools)
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
@@ -23,6 +25,7 @@
   (load-library "dictionary-init"))
 
 (use-package elscreen
+  :demand t
   :bind
   (:map elscreen-map
         ("z" . elscreen-toggle)
@@ -96,7 +99,8 @@
 (use-package midnight
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
-  (add-hook 'midnight-hook 'my-midnight-hook))
+  ;; (add-hook 'midnight-hook 'my-midnight-hook)
+  )
 
 (use-package password-mode)
 
@@ -124,6 +128,8 @@
 	     ("s"  . pdf-occur)
 	     ("b"  . pdf-view-set-slice-from-bounding-box)
 	     ("r"  . pdf-view-reset-slice)))
+
+(use-package magit-popup)
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
