@@ -9,8 +9,7 @@
  guide-key
  magit
  magit-gh-pulls
- (magit-todos :url "https://github.com/alphapapa/magit-todos.git"
-              :features magit-todos)
+ magit-todos
  markdown-mode
  paredit
  plantuml-mode
