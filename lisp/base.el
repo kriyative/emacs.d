@@ -261,7 +261,7 @@ a comma."
   (dotimes (i (1+ (or level *default-start-level*)))
     (dolist (f (directory-files "~/.emacs.d/startup"
                                 t
-                                (format "%02d.*" i)))
+                                (format "%02d.*\\.el$" i)))
       (load f))))
 
 (require 'url)
