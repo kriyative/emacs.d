@@ -1,10 +1,7 @@
 (my-el-get-bundles
  mu4e
- (mu4e-multi :url "https://github.com/kriyative/mu4e-multi.git"
-             :features mu4e-multi)
- (mu4e-maildirs-extension
-  :url "https://github.com/agpchil/mu4e-maildirs-extension.git"
-  :features mu4e-maildirs-extension))
+ mu4e-multi
+ mu4e-maildirs-extension)
 
 ;;;;;;;;;;;;;;;; mu4e
 
