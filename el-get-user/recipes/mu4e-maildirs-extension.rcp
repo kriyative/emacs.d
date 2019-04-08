@@ -1,0 +1,6 @@
+(:name mu4e-maildirs-extension
+       :website "https://github.com/agpchil/mu4e-maildirs-extension"
+       :description "Maildirs extension for mu4e."
+       :type github
+       :pkgname "agpchil/mu4e-maildirs-extension"
+       :depends (mu4e))
