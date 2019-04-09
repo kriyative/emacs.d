@@ -201,6 +201,60 @@
   :config
   (setq projectile-keymap-prefix (kbd "C-c C-p")))
 
+(defun my-slime-list-connections ()
+  (interactive)
+  (slime-list-connections)
+  (pop-to-buffer "*SLIME Connections*"))
+
+(defun my-url-browser-function (&rest args)
+  (apply (if current-prefix-arg
+	     'browse-url-default-browser
+	   'w3m-browse-url-other-window)
+	 args))
+
+(defun my-slime-mode-hook ()
+  (setq browse-url-browser-function 'my-url-browser-function)
+  ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
+  (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
+  (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections)
+  (unless (boundp 'last-command-char)
+    (defvar last-command-char nil)))
+
+(use-package slime
+  :config
+  (slime-setup '(slime-repl))
+  (setq slime-protocol-version 'ignore)
+  (add-hook 'slime-mode-hook 'my-slime-mode-hook))
+
+(defun sbcl ()
+  (interactive)
+  (if-bind (sbcl-path (locate-path "sbcl" exec-path))
+    (let ((slime-lisp-implementations `((sbcl (,sbcl-path)))))
+      ;; (setenv "SBCL_HOME" (file-name-directory sbcl-path))
+      (slime))
+    (error "The sbcl application could not be found")))
+
+(defun ccl ()
+  (interactive)
+  (if-bind (ccl-path (locate-path "ccl64" exec-path))
+    (let ((slime-lisp-implementations `((ccl (,ccl-path)))))
+      (slime))
+    (error "The ccl application could not be found")))
+
+(defun clisp ()
+  (interactive)
+  (if-bind (clisp-path (locate-path "clisp" exec-path))
+    (let ((slime-lisp-implementations `((clisp (,clisp-path " -K full")))))
+      (slime))
+    (error "The clisp application could not be found")))
+
+(defun ecl ()
+  (interactive)
+  (if-bind (ecl-path (locate-path "ecl.sh" exec-path))
+    (let ((slime-lisp-implementations `((ecl (,ecl-path)))))
+      (slime))
+    (error "The ecl application could not be found")))
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (defun toggle-frame-width ()
