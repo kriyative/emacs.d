@@ -95,7 +95,9 @@ maildir)."
         ;; mu4e-index-cleanup nil      ;; don't do a full cleanup check
         mu4e-index-lazy-check nil
         ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
-        org-export-with-toc nil)
+        org-export-with-toc nil
+	mu4e-view-use-gnus t
+	gnus-inhibit-images t)
   (add-to-list 'mu4e-view-actions
                '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
