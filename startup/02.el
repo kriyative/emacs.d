@@ -45,8 +45,7 @@
         cider-clojure-cli-global-options "-Anrepl")
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
-(defun cider-remove-current-ns (&optional buffer)
-  (interactive)
+(defun cider--remove-current-ns (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
     (cider-tooling-eval
      (format "(remove-ns '%s)" (cider-current-ns))
@@ -57,7 +56,7 @@
   (if (< 1 arg)
       (progn
         (message "Removing namespace: %s" (cider-current-ns))
-        (cider-remove-current-ns)
+        (cider--remove-current-ns)
         (cider-load-buffer))
     (cider-load-buffer)))
 
