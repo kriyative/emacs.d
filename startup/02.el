@@ -60,6 +60,28 @@
         (cider-load-buffer))
     (cider-load-buffer)))
 
+(defun cider--remove-sym (sym)
+  (with-current-buffer (current-buffer)
+    (cider-tooling-eval
+     (format "(ns-unmap *ns* '%s)" sym)
+     (cider-interactive-eval-handler (current-buffer)))))
+
+(defun cider-force-eval-defun-at-point (&optional arg)
+  (interactive "p")
+  (when (< 1 arg)
+    (save-excursion
+      (beginning-of-defun)
+      (forward-char)
+      (forward-sexp 2)
+      (backward-sexp)
+      (when (string-match "^\\^" (cider-sexp-at-point))
+	(forward-sexp 2)
+	(backward-sexp))
+      (let ((sym (cider-symbol-at-point)))
+	(message "Removing sym: %s" sym)
+	(cider--remove-sym sym))))
+  (cider-eval-defun-at-point nil))
+
 (use-package csv-mode
   :config
   (setq csv-align-style 'auto))
