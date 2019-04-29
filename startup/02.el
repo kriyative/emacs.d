@@ -35,9 +35,9 @@
 (use-package cider
   :bind*
   (:map cider-mode-map
-	("\C-c\C-k" . cider-load-buffer-ext)
-	("\C-c," . cider-test-run-loaded-tests)
-	("\C-c\M-," . cider-test-run-test)
+	("C-c C-k" . cider-load-buffer-ext)
+	("C-c ," . cider-test-run-loaded-tests)
+	("C-c M-," . cider-test-run-test)
 	("C-M-x" . cider-force-eval-defun-at-point))
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
