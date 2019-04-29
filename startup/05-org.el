@@ -36,6 +36,7 @@ one."
 (use-package org
   :config
   (force-require 'org)
+  (force-require 'org-compat)
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
