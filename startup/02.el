@@ -15,15 +15,14 @@
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-mode)))
 
 (use-package cider-repl
-  :init
+  :config
+  (cider-repl-add-shortcut "sayoonara" 'cider-quit)
   (setq cider-completion-use-context nil
 	cider-prompt-for-symbol nil
 	cider-repl-display-help-banner nil
 	cider-use-overlays nil
-	cider-repl-use-pretty-printing nil)
-  :config
-  (cider-repl-add-shortcut "sayoonara" 'cider-quit)
-  (setq cider-repl-use-pretty-printing nil))
+	cider-repl-use-pretty-printing nil
+	cider-redirect-server-output-to-repl nil))
 
 (defun cider-mode-hook ()
   (eldoc-mode)
