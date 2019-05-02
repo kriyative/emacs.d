@@ -108,3 +108,9 @@
 (use-package graphviz-dot-mode
   :config
   (setq graphviz-dot-view-command "xdot %s"))
+
+(use-package sql
+  :config
+  (dolist (pv '((:prompt-regexp "^[-[:alnum:]_]*=[#>] ")
+		(:prompt-cont-regexp "^[-[:alnum:]_]*[-(][#>] ")))
+    (apply 'sql-set-product-feature 'postgres pv)))
