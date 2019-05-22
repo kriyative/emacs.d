@@ -177,5 +177,7 @@
 (def-elscreen-goto 8)
 (dotimes (i 9)
   (global-set-key (kbd (format "H-%d" i))
+                  (intern (format "elscreen-goto-%d" i)))
+  (global-set-key (kbd (format "C-z C-%d" i))
                   (intern (format "elscreen-goto-%d" i))))
 (elscreen-start)
