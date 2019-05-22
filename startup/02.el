@@ -12,7 +12,6 @@
 (use-package clojure-mode
   :bind
   (:map clojure-mode-map
-	("C-c C-k" . cider-load-buffer-ext)
 	("C-c ," . cider-test-run-loaded-tests)
 	("C-c M-," . cider-test-run-test)
 	("C-M-x" . cider-force-eval-defun-at-point))  :config
@@ -37,6 +36,9 @@
 ;; (unload-feature 'cider t)
 
 (use-package cider
+  :bind
+  (:map cider-mode-map
+	("C-c C-k" . cider-load-buffer-ext))
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
