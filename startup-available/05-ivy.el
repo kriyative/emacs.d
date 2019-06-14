@@ -1,6 +1,5 @@
 (my-el-get-bundles
- swiper
- counsel)
+ swiper)
 
 (defun ivy-display-function-popup-window (text)
   (let ((buf (get-buffer-create "*ivy-completions*")))
@@ -66,4 +65,5 @@
 
 (use-package counsel
   :config
-  (setq counsel-find-file-ignore-regexp (sequence->regexp completion-ignored-extensions)))
+  (setq counsel-find-file-ignore-regexp
+        (sequence->regexp completion-ignored-extensions)))
