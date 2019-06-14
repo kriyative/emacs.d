@@ -128,6 +128,42 @@
   ;; (auto-complete-mode -1)
   (eldoc-mode 1))
 
+(defun setup-lisp-indent-function (&optional indent-function)
+  (let ((indent-function (or indent-function 'lisp-indent-function))
+        (lisp-indent-alist '((awhen . 1)
+                             (when-let . 1)
+                             (aif . if)
+                             (if-let . if)
+                             (awhile . 1)
+                             (while-let . 1)
+                             (bind . 1)
+                             (callback . lambda)
+                             (c-fficall . with-slots)
+                             (with-cwd . 1)
+                             (save-values . 1))))
+    (dolist (x lisp-indent-alist)
+      (put (car x)
+           indent-function
+           (if (numberp (cdr x))
+               (cdr x)
+             (get (cdr x) indent-function))))))
+
+(defun set-common-lisp-block-comment-syntax ()
+  (modify-syntax-entry ?# "<1" font-lock-syntax-table)
+  (modify-syntax-entry ?| ">2" font-lock-syntax-table)
+  (modify-syntax-entry ?| "<3" font-lock-syntax-table)
+  (modify-syntax-entry ?# ">4" font-lock-syntax-table))
+
+(defun my-common-lisp-mode-hook ()
+  (font-lock-mode)
+  (font-lock-add-keywords 'lisp-mode
+			  '(("defclass\*" . font-lock-keyword-face)))
+  (modify-syntax-entry ?\[ "(]" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\] ")[" lisp-mode-syntax-table)
+  (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
+  (setup-lisp-indent-function 'common-lisp-indent-function)
+  (setq indent-tabs-mode nil))
+
 (use-package lisp-mode
   :config
   (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
