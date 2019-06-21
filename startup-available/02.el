@@ -42,8 +42,8 @@
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-global-options "-Anrepl"
-        cider-clojure-cli-global-options "-Anrepl")
+        cider-clojure-global-options "-Anrepl:dev"
+        cider-clojure-cli-global-options "-Anrepl:dev")
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 (defun cider--remove-current-ns (&optional buffer)
