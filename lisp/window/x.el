@@ -2,7 +2,8 @@
 
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
-(global-set-key '[C-tab] 'other-window)
+(global-set-key '[C-tab] 'my-next-window)
+(global-set-key '[C-iso-lefttab] 'my-previous-window)
 
 ;;........1.........2.........3.........4.........5.........6.........7.........8.........9
 ;;23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -97,6 +98,7 @@
   (when (eq window-system 'x)
     (update-default-font)))
 
+
 (add-hook 'window-configuration-change-hook 'window-configuration-change-hook)
 ;; (remove-hook 'window-configuration-change-hook 'window-configuration-change-hook)
 
@@ -165,7 +167,7 @@
 (setq x-set-inputs-devices
       '("AT Translated Set 2 keyboard"
 	"ThinkPad Extra Buttons"
-	"SynPS/2 Synaptics TouchPad"
+        ;; "SynPS/2 Synaptics TouchPad"
 	"TPPS/2 IBM TrackPoint"
 	))
 
@@ -177,3 +179,7 @@
   (interactive)
   (x-set-inputs-enabled x-set-inputs-devices nil))
 
+(defun x-init-roller-mouse ()
+  (interactive)
+  (call-process "xset" nil nil nil "mouse" "0" "0")
+  (call-process "xinput" nil nil nil "--set-prop" "20" "289" "0"))
