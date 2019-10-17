@@ -46,6 +46,18 @@
 
 (use-package efun-cmds)
 
+(defun fortune-computers ()
+  (interactive)
+  (fortune (concat fortune-dir "/computers")))
+
+(use-package fortune
+  :bind (:map user-commands-prefix-map
+	      ("ff" . fortune)
+              ("fc" . fortune-computers))
+  :config
+  (setq fortune-dir "/usr/share/games/fortunes"
+        fortune-file "/usr/share/games/fortunes/fortunes"))
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (setq inhibit-startup-message t
@@ -130,6 +142,9 @@
 (global-set-key [?\C-,] 'tags-loop-continue)
 (global-set-key "\C-x\C-f" 'x-find-file)
 (global-set-key (kbd "<f7>") 'next-error)
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 (define-key ctl-x-4-map "k" 'other-window-send-keys)
 
