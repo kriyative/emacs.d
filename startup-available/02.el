@@ -14,9 +14,14 @@
   (:map clojure-mode-map
 	("C-c ," . cider-test-run-loaded-tests)
 	("C-c M-," . cider-test-run-test)
-	("C-M-x" . cider-force-eval-defun-at-point))  :config
+	("C-M-x" . cider-force-eval-defun-at-point))
+  :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
-  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-mode)))
+  (setq auto-mode-alist
+        (remove-if (lambda (x)
+                     (equal (car x) "\\.cljc\\'"))
+                   auto-mode-alist))
+  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
 
 (use-package cider-repl
   :config
@@ -90,6 +95,9 @@
 (use-package ediff
   :config
   (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
+
+(defun setup-geiser ()
+  )
 
 (use-package geiser
   :config
