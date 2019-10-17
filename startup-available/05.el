@@ -9,6 +9,7 @@
  edit-server
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo)
+ libvterm
  (password-mode
   :url "https://github.com/juergenhoetzel/password-mode.git"
   :features password-mode)
@@ -94,7 +95,7 @@
 (use-package ipinfo)
 
 (defun my-midnight-hook ()
-  ;; (org-gcal-multi-fetch)
+  (org-gcal-multi-fetch)
   (org-agenda-list nil nil 'day))
 
 (use-package midnight
@@ -133,6 +134,8 @@
 (use-package magit-popup)
 
 (use-package forge :after magit)
+
+(use-package vterm)
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
