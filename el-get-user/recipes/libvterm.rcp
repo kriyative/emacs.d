@@ -1,0 +1,6 @@
+(:name libvterm
+       :description "Emacs libvterm integration"
+       :type github
+       :pkgname "akermu/emacs-libvterm"
+       :build `(("cmake" ".")
+                ("make")))
