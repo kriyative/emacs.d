@@ -17,7 +17,6 @@
   :init
   (ivy-mode 1)
   :bind (("C-M-s" . swiper)
-         ("\C-c\C-r" . ivy-resume)
          ("M-x"      . counsel-M-x)
          ("\C-hf"    . counsel-describe-function)
          ("\C-hv"    . counsel-describe-variable)
@@ -28,10 +27,11 @@
          ("\C-cj"    . counsel-git-grep)
          ("\C-ck"    . counsel-ag)
          ("\C-xl"    . counsel-locate)
-         ("C-S-o"    . counsel-rhythmbox)
          ("\C-x\C-y" . counsel-yank-pop))
   :bind (:map read-expression-map
               ("\C-r" . counsel-expression-history))
+  :bind (:map user-commands-prefix-map
+              ("\C-r" . ivy-resume))
   :config
   (setq ivy-use-virtual-buffers t
         ivy-count-format "%-4d "
