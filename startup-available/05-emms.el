@@ -5,13 +5,20 @@
   (delete-other-windows)
   (emms-playlist-mode-go))
 
+(defun rk-emms-mode-line-playlist-current-name ()
+  "Format the currently playing song."
+  (format emms-mode-line-format
+          (file-name-nondirectory
+           (emms-track-name
+	    (emms-playlist-current-selected-track)))))
+
 (use-package emms
   :bind
   (:map user-commands-prefix-map
 	("ee" . rk-emms-browser)
 	("en" . emms-next)
 	("ep" . emms-previous)
-	("SPC" . emms-pause))
+	(" " . emms-pause))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
@@ -24,4 +31,5 @@
   ;; (setq emms-player-mpd-server-name "localhost"
   ;;       emms-player-mpd-server-port "6600")
   (setq emms-playlist-default-major-mode 'emms-playlist-mode)
-  (add-hook 'emms-info-functions 'emms-info-track-description))
+  (add-hook 'emms-info-functions 'emms-info-track-description)
+  (setq emms-mode-line-mode-line-function 'rk-emms-mode-line-playlist-current-name))
