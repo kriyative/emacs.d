@@ -285,3 +285,7 @@ a comma."
         (lambda (rcp)
           `(el-get-bundle ,@(if (listp rcp) rcp (list rcp))))
         rcps)))
+
+(defun x-set-mode-line-color (color)
+  (interactive (list (read-color "Mode-line color: ")))
+  (set-face-background 'mode-line color))
