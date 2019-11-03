@@ -1,5 +1,4 @@
 (my-el-get-bundles
- org-mode
  org-gcal
  org-passwords)
 
@@ -61,20 +60,6 @@ one."
    'org-babel-load-languages
    '((ditaa . t)
      (shell . t))))
-
-(use-package org-tempo
-  :config
-  (setq org-structure-template-alist
-        '(("a" . "export ascii")
-          ("c" . "center")
-          ("C" . "comment")
-          ("e" . "example")
-          ("E" . "export")
-          ("h" . "export html")
-          ("l" . "export latex")
-          ("q" . "quote")
-          ("s" . "src")
-          ("v" . "verse"))))
 
 (use-package org-agenda
   :config
