@@ -96,7 +96,7 @@ maildir)."
         mu4e-index-lazy-check nil
         ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
         org-export-with-toc nil
-	mu4e-view-use-gnus t
+	mu4e-view-use-gnus nil          ;; don't use gnus to render
 	gnus-inhibit-images t)
   (add-to-list 'mu4e-view-actions
                '("view in browser" . mu4e-action-view-in-system-browser))
