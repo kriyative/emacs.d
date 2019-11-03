@@ -1,0 +1,4 @@
+(:name queue
+       :type http
+       :url "https://elpa.gnu.org/packages/queue-0.2.el"
+       :localname "queue.el")
