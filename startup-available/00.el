@@ -1,7 +1,6 @@
 ;;;;;;;;;;;;;;;; el-get initialization ;;;;;;;;;;;;;;;;
 
 (my-el-get-bundles
- adaptive-wrap
  alert
  buffer-move
  (emacs-fun :url "https://github.com/kriyative/emacs-fun.git"
