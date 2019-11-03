@@ -21,7 +21,8 @@
         vc-initial-comment t
         vc-consult-headers nil
         vc-make-backup-files t
-        vc-display-status nil))
+        vc-display-status nil
+        vc-follow-symlinks t))
 
 (use-package comint
   :config
