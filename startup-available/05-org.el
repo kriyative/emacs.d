@@ -1,5 +1,6 @@
 (my-el-get-bundles
  org-gcal
+ org-mime
  org-passwords)
 
 ;;;;;;;;;;;;;;;; org
@@ -172,3 +173,5 @@ one."
          start end
          '(font-lock-fontified t fontified t font-lock-multiline t))
         (set-buffer-modified-p modified)))))
+
+(use-package org-mime)

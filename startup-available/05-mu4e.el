@@ -80,7 +80,7 @@ maildir)."
         mu4e-sent-messages-behavior 'delete
         mu4e-view-show-addresses t
         ;; mu4e-view-mode-hook '(bbdb-mua-auto-update)
-        org-mu4e-convert-to-html t
+        org-mu4e-convert-to-html nil
         message-sendmail-f-is-evil t
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
@@ -102,7 +102,7 @@ maildir)."
                '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
-  (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
+  ;; (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-compose-mode-hook)
   (add-to-list 'mu4e-bookmarks
