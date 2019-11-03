@@ -1,5 +1,4 @@
 (my-el-get-bundles
- csv-mode
  diminish
  dired-hacks
  emacs-w3m
