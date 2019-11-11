@@ -101,8 +101,7 @@
 (use-package midnight
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
-  ;; (add-hook 'midnight-hook 'my-midnight-hook)
-  )
+  (add-hook 'midnight-hook 'my-midnight-hook))
 
 (use-package password-mode)
 
