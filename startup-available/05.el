@@ -132,7 +132,22 @@
 
 (use-package magit-popup)
 
-(use-package forge :after magit)
+(defvar *my-forge-toggle-topic-settings* '((25 . 0) (100 . 25)))
+
+(defun my-forge-toggle-closed-topics ()
+  (interactive)
+  (setq forge-topic-list-limit
+        (if (equal (car *my-forge-toggle-topic-settings*)
+                   forge-topic-list-limit)
+            (cadr *my-forge-toggle-topic-settings*)
+          (car *my-forge-toggle-topic-settings*)))
+  (magit-refresh))
+
+(use-package forge
+  :after magit
+  :config
+  (setq forge-topic-list-limit (car *my-forge-toggle-topic-settings*))
+  (define-key magit-mode-map "\M-c" 'my-forge-toggle-closed-topics))
 
 (use-package vterm)
 

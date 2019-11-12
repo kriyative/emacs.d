@@ -117,11 +117,6 @@
   (setq magit-last-seen-setup-instructions "1.4.0")
   (add-hook 'magit-mode-hook 'magit-setup-hook))
 
-(use-package magit-gh-pulls
-  :disabled t
-  :config
-  (add-hook 'magit-mode-hook 'magit-gh-pulls-mode))
-
 (use-package magit-todos
   :config
   (setq magit-todos-ignore-case t)
