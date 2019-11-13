@@ -20,9 +20,9 @@
 
 (defun locate-path (file path-list)
   (when-bind (path (find-if (lambda (path)
-			      (let ((file-path (concat-path path file)))
-				(and (file-exists-p file-path) file-path)))
-			    path-list))
+                              (let ((file-path (concat-path path file)))
+                                (and (file-exists-p file-path) file-path)))
+                            path-list))
     (concat-path path file)))
 
 (defvar base-exec-path exec-path)
@@ -40,9 +40,9 @@
 
 (defun term-at-point-or-read (&optional label)
   (let* ((word-at-point (word-at-point))
-	 (symbol-at-point (symbol-at-point))
-	 (default (or word-at-point
-		      (and symbol-at-point (symbol-name symbol-at-point)))))
+         (symbol-at-point (symbol-at-point))
+         (default (or word-at-point
+                      (and symbol-at-point (symbol-name symbol-at-point)))))
     (read-from-minibuffer (or label "Term: ") default)))
 
 (defun n-col-view (n)
@@ -128,11 +128,11 @@
   (when-bind (buf (find-file-if-exists f))
     (when (featurep 'desktop)
       (push (buffer-name buf)
-	    desktop-clear-preserve-buffers))))
+            desktop-clear-preserve-buffers))))
 
 (defun load-file-if-exists (path &rest load-args)
   (let ((path (and (stringp path)
-		   (expand-file-name path))))
+                   (expand-file-name path))))
     (when (file-exists-p path)
       (apply 'load path load-args))))
 
@@ -161,14 +161,14 @@
   (destructuring-bind (sec min hour day month year dow dst zone)
       (parse-time-string time-str)
     (destructuring-bind (sec1 min1 hour1 day1 month1 year1 dow1 dst1 zone1)
-	(decode-time)
+        (decode-time)
       (encode-time (or sec sec1)
-		   (or min min1)
-		   (or hour hour1)
-		   (or day day1)
-		   (or month month1)
-		   (or year year1)
-		   (or zone zone1)))))
+                   (or min min1)
+                   (or hour hour1)
+                   (or day day1)
+                   (or month month1)
+                   (or year year1)
+                   (or zone zone1)))))
 
 ;; (time-less-p (parse-relative-time "9 am") (current-time))
 
@@ -236,10 +236,19 @@ a comma."
          (args (cdr program-and-args)))
     (apply 'start-process program-name program-buffer program args)))
 
+(defun open-file-in-app (file)
+  (interactive "file: ")
+  (let ((opener (pcase system-type
+                 ('darwin "open")
+                 ('gnu/linux "xdg-open"))))
+    (if opener
+      (call-process opener nil 0 nil (expand-file-name file))
+      (message "Don't know how to open a file on %S" system-type))))
+
 (defun define-keys (kmap ks)
   (dolist (k ks)
     (let ((key (first k))
-	  (def (second k)))
+          (def (second k)))
       (define-key kmap (kbd key) def))))
 
 (defun set-window-width* (width pixelwisep)

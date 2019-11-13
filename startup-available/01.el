@@ -433,7 +433,7 @@
   (let ((file (dired-get-filename nil t)))
     (unless (file-directory-p file)
       (message "Opening %s..." file)
-      (call-process "xdg-open" nil 0 nil file))))
+      (open-file-in-app file))))
 
 (defun next-page ()
   (interactive)
