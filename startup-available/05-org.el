@@ -1,7 +1,9 @@
 (my-el-get-bundles
  org-gcal
  org-mime
- org-passwords)
+ org-passwords
+ xcezx/blockdiag-mode
+ corpix/ob-blockdiag.el)
 
 ;;;;;;;;;;;;;;;; org
 
@@ -60,9 +62,11 @@ one."
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ditaa . t)
-     (shell . t))))
+     (shell . t)
+     (blockdiag . t))))
 
 (use-package org-agenda
+  :after org
   :config
   (setq org-agenda-include-diary t
         org-agenda-prefix-format (cons
@@ -72,13 +76,14 @@ one."
                                              org-agenda-prefix-format))))
 
 (use-package org-passwords
+  :after org
   :config
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
 (use-package org-gcal
+  :after org
   :config
-  (force-require 'org-macs)
   ;; (setq org-gcal-client-id my-org-gcal-client-id
   ;;       org-gcal-client-secret my-org-gcal-client-secret
   ;;       org-gcal-file-alist my-org-gcal-file-alist)
@@ -174,4 +179,7 @@ one."
          '(font-lock-fontified t fontified t font-lock-multiline t))
         (set-buffer-modified-p modified)))))
 
-(use-package org-mime)
+(use-package org-mime :after org)
+(use-package blockdiag-mode)
+(use-package ob-blockdiag
+  :after (org blockdiag-mode))
