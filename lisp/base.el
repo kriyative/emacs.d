@@ -236,6 +236,15 @@ a comma."
          (args (cdr program-and-args)))
     (apply 'start-process program-name program-buffer program args)))
 
+(defun open-file-in-app (file)
+  (interactive "file: ")
+  (let ((opener (pcase system-type
+		 ('darwin "open")
+		 ('gnu/linux "xdg-open"))))
+    (if opener
+      (call-process opener nil 0 nil (expand-file-name file))
+      (message "Don't know how to open a file on %S" system-type))))
+
 (defun define-keys (kmap ks)
   (dolist (k ks)
     (let ((key (first k))
