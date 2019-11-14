@@ -63,10 +63,10 @@
 
 (use-package buffer-move
   :bind (:map user-commands-prefix-map
-	      ("<left>"  . buf-move-left)
-	      ("<right>" . buf-move-right)
-	      ("<down>"  . buf-move-down)
-	      ("<up>"    . buf-move-up)))
+              ("<left>"  . buf-move-left)
+              ("<right>" . buf-move-right)
+              ("<down>"  . buf-move-down)
+              ("<up>"    . buf-move-up)))
 
 (use-package diary-lib
   :config
@@ -90,9 +90,9 @@
 
 (defun cvs-load-hook ()
   (setq cvs-buffer-name-alist
-	(cons `("diff" ,cvs-diff-buffer-name nil)
-	      (remove-if '(lambda (x) (equal (car x) "diff"))
-			 cvs-buffer-name-alist))))
+        (cons `("diff" ,cvs-diff-buffer-name nil)
+              (remove-if '(lambda (x) (equal (car x) "diff"))
+                         cvs-buffer-name-alist))))
 
 (use-package pcvs
   :config
@@ -129,16 +129,16 @@
       (mkdir local-info-directory))
     (with-cwd local-info-directory
       (dolist (f (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
-	(let ((d (file-name-directory f)))
-	  (when (directory-files d nil "\\.info$")
-	    (call-process "install-info"
-			  nil
-			  '(" *info-setup*" t)
-			  nil
-			  "--debug"
-			  f
-			  "dir")
-	    (add-to-list 'Info-additional-directory-list d)))))
+        (let ((d (file-name-directory f)))
+          (when (directory-files d nil "\\.info$")
+            (call-process "install-info"
+                          nil
+                          '(" *info-setup*" t)
+                          nil
+                          "--debug"
+                          f
+                          "dir")
+            (add-to-list 'Info-additional-directory-list d)))))
     (add-to-list 'Info-directory-list local-info-directory))
   (add-to-list 'Info-directory-list "/app/stumpwm/share/info")
   (add-to-list 'Info-directory-list "/app/sbcl/share/info")
@@ -186,8 +186,8 @@
 
 (use-package winner
   :bind (:map user-commands-prefix-map
-	      ("\C-b" . winner-undo)
-	      ("\C-f" . winner-redo))
+              ("\C-b" . winner-undo)
+              ("\C-f" . winner-redo))
   :config
   (winner-mode 1))
 
@@ -210,9 +210,9 @@
 
 (defun my-url-browser-function (&rest args)
   (apply (if current-prefix-arg
-	     'browse-url-default-browser
-	   'w3m-browse-url-other-window)
-	 args))
+             'browse-url-default-browser
+           'w3m-browse-url-other-window)
+         args))
 
 (defun w3m-mode-hook ()
   (define-key w3m-mode-map "\M-t" 'w3m-copy-buffer))
@@ -272,33 +272,33 @@
   (interactive)
   (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
     (if (< (frame-width) z-wid)
-	(set-frame-width (selected-frame) z-wid)
+        (set-frame-width (selected-frame) z-wid)
       (set-frame-width (selected-frame) 81))))
 
 (defun toggle-window-split ()
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
-	     (next-win-buffer (window-buffer (next-window)))
-	     (this-win-edges (window-edges (selected-window)))
-	     (next-win-edges (window-edges (next-window)))
-	     (this-win-2nd (not (and (<= (car this-win-edges)
-					 (car next-win-edges))
-				     (<= (cadr this-win-edges)
-					 (cadr next-win-edges)))))
-	     (splitter
-	      (if (= (car this-win-edges)
-		     (car (window-edges (next-window))))
-		  'split-window-horizontally
-		'split-window-vertically)))
-	(delete-other-windows)
-	(let ((first-win (selected-window)))
-	  (funcall splitter)
-	  (if this-win-2nd (other-window 1))
-	  (set-window-buffer (selected-window) this-win-buffer)
-	  (set-window-buffer (next-window) next-win-buffer)
-	  (select-window first-win)
-	  (if this-win-2nd (other-window 1))))))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
 
 (defun my-previous-window ()
   "Switch to previous window"
@@ -321,7 +321,7 @@
   (dolist (buffer (buffer-list))
     (let ((file-name (buffer-file-name buffer)))
       (if (and file-name (string-match pattern file-name))
-	  (kill-buffer buffer)))))
+          (kill-buffer buffer)))))
 
 (defun narrow-forward-page (arg)
   (interactive "p")
@@ -418,7 +418,7 @@
   (interactive)
   (browse-url
    (concat "http://en.wikipedia.org/w/index.php?search="
-	   (query-string-encode
+           (query-string-encode
             (capitalize (or (region) (read-string "Wikipedia: ")))))))
 
 (defun emacswiki (q)

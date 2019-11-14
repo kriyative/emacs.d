@@ -38,7 +38,7 @@
   :config
   (set-default 'dired-omit-mode t)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-	dired-listing-switches "-alh")
+        dired-listing-switches "-alh")
   :bind (:map dired-mode-map
               ("k" . dired-kill-subdir)
               (">" . dired-omit-mode)
@@ -52,7 +52,7 @@
 
 (use-package fortune
   :bind (:map user-commands-prefix-map
-	      ("ff" . fortune)
+              ("ff" . fortune)
               ("fc" . fortune-computers))
   :config
   (setq fortune-dir "/usr/share/games/fortunes"

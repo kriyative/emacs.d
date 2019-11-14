@@ -10,18 +10,18 @@
   (interactive)
   (do-applescript
    (concat "tell application \"System Events\"\n"
-	   "set visible of process \"Emacs\" to false\n"
-	   "end tell\n")))
+           "set visible of process \"Emacs\" to false\n"
+           "end tell\n")))
 
 (defun mac-control-itunes (command)
   (interactive
    (list (completing-read "Command: "
-			  '("activate"
-			    "deactivate"
-			    "next track"
-			    "pause"
-			    "play"
-			    "previous track"))))
+                          '("activate"
+                            "deactivate"
+                            "next track"
+                            "pause"
+                            "play"
+                            "previous track"))))
   (do-applescript
    (format "tell application \"iTunes\" to %s\n" command)))
 
@@ -83,20 +83,20 @@
     (let ((script (with-output-to-string (dolist (expr code) (emit expr)))))
       (message script)
       (do-applescript script))))
-		  
+
 (defun mac-dictionary-search ()
   (interactive)
   (let ((term (term-at-point-or-read)))
     (message "looking up %s" term)
     (if term
-	(applescript
-	 `(tell (application "Dictionary") (activate))
-	 `(tell (application "System Events")
-		(tell (process "Dictionary")
-		      (set frontmost to true)
-		      (keystroke "F" using (list{ "command down" "option down"))
-		      (keystroke ,term)
-		      (keystroke return))))
+        (applescript
+         `(tell (application "Dictionary") (activate))
+         `(tell (application "System Events")
+                (tell (process "Dictionary")
+                      (set frontmost to true)
+                      (keystroke "F" using (list{ "command down" "option down"))
+                      (keystroke ,term)
+                      (keystroke return))))
       (message "lookup what?"))))
 
 (unless (fboundp 'mac-toggle-max-window)

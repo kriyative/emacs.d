@@ -166,10 +166,10 @@
 (defvar x-set-inputs-devices nil)
 (setq x-set-inputs-devices
       '("AT Translated Set 2 keyboard"
-	"ThinkPad Extra Buttons"
+        "ThinkPad Extra Buttons"
         ;; "SynPS/2 Synaptics TouchPad"
-	"TPPS/2 IBM TrackPoint"
-	))
+        "TPPS/2 IBM TrackPoint"
+        ))
 
 (defun enable-input-devices ()
   (interactive)

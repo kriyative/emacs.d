@@ -10,21 +10,21 @@
   (format emms-mode-line-format
           (file-name-nondirectory
            (emms-track-name
-	    (emms-playlist-current-selected-track)))))
+            (emms-playlist-current-selected-track)))))
 
 (use-package emms
   :bind
   (:map user-commands-prefix-map
-	("ee" . rk-emms-browser)
-	("en" . emms-next)
-	("ep" . emms-previous)
-	(" " . emms-pause))
+        ("ee" . rk-emms-browser)
+        ("en" . emms-next)
+        ("ep" . emms-previous)
+        (" " . emms-pause))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
   (setq emms-source-file-default-directory "~/Music/"
-	emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
+        emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
   ;; (require 'emms-player-mpd)
   ;; (add-to-list 'emms-player-list 'emms-player-mpd)
   ;; (add-to-list 'emms-info-functions 'emms-info-mpd)

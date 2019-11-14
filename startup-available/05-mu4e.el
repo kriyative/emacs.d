@@ -34,16 +34,16 @@ maildir)."
 
 (defun mu4e-headers-mode-hook ()
   (setq mu4e-split-view (if (< 128 (frame-width)) 'vertical 'horizontal)
-	mu4e-headers-visible-columns (/ (frame-width) 3)))
+        mu4e-headers-visible-columns (/ (frame-width) 3)))
 
 (defun mu4e-view-mode-hook ()
   (when (and (boundp 'mu4e~view-msg)
-	     mu4e~view-msg
+             mu4e~view-msg
              (mu4e-message-field mu4e~view-msg :body-html))
     (setq truncate-lines t))
   (setq fill-column 85
-	browse-url-browser-function 'browse-url-default-browser
-	shr-width nil)
+        browse-url-browser-function 'browse-url-default-browser
+        shr-width nil)
   (visual-line-mode))
 
 (defun mu4e-compose-mode-hook ()
@@ -51,7 +51,7 @@ maildir)."
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-keep-self-cc nil
         mu4e-compose-complete-addresses t
-	use-hard-newlines t))
+        use-hard-newlines t))
 
 (defun mu4e-action-view-in-system-browser (msg)
   (let ((browse-url-browser-function 'browse-url-default-browser))
@@ -96,8 +96,8 @@ maildir)."
         mu4e-index-lazy-check nil
         ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
         org-export-with-toc nil
-	mu4e-view-use-gnus nil          ;; don't use gnus to render
-	gnus-inhibit-images t)
+        mu4e-view-use-gnus nil          ;; don't use gnus to render
+        gnus-inhibit-images t)
   (add-to-list 'mu4e-view-actions
                '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
@@ -106,7 +106,7 @@ maildir)."
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-compose-mode-hook)
   (add-to-list 'mu4e-bookmarks
-	       '("flag:flagged AND NOT flag:trashed"
+               '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
   (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
 
@@ -140,23 +140,23 @@ maildir)."
   (mu4e-maildirs-extension)
   (setq mu4e-maildirs-extension-count-command-format
         (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l")
-	mu4e-maildirs-extension-maildir-format-spec
-	(lambda(m)
-	  (list (cons ?i (plist-get m :indent))
-		(cons ?p (plist-get m :prefix))
-		(cons ?l (plist-get m :level))
-		(cons ?e (plist-get m :expand))
-		(cons ?P (plist-get m :path))
-		(cons ?n (plist-get m :name))
-		(cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
-		(cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
+        mu4e-maildirs-extension-maildir-format-spec
+        (lambda(m)
+          (list (cons ?i (plist-get m :indent))
+                (cons ?p (plist-get m :prefix))
+                (cons ?l (plist-get m :level))
+                (cons ?e (plist-get m :expand))
+                (cons ?P (plist-get m :path))
+                (cons ?n (plist-get m :name))
+                (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
+                (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
   (define-key mu4e-main-mode-map "g" 'my-mu4e-reload-main))
 
 (defun message-mode-hook ()
   (setq message-fill-column nil
-	message-from-style 'angles
-	message-citation-line-function 'message-insert-citation-line
-	message-cite-style 'message-cite-style-gmail
+        message-from-style 'angles
+        message-citation-line-function 'message-insert-citation-line
+        message-cite-style 'message-cite-style-gmail
         message-yank-prefix "> "
         message-yank-cited-prefix "> "
         message-yank-empty-prefix "> "

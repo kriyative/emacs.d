@@ -33,7 +33,7 @@
 (use-package helm-projectile
   :bind
   (:map user-commands-prefix-map
-	("\C-x\C-f" . helm-projectile-find-file)))
+        ("\C-x\C-f" . helm-projectile-find-file)))
 
 (defun helm-copy-selection (arg)
   (interactive "P")
@@ -41,8 +41,8 @@
     (helm-run-after-exit
      (lambda (sel)
        (let ((fpath (concat helm-ff-default-directory sel)))
-	 (kill-new fpath)
-	 (prog1 nil
-	   (message "Saved to clipboard: %s" fpath)
-	   (sit-for 1))))
+         (kill-new fpath)
+         (prog1 nil
+           (message "Saved to clipboard: %s" fpath)
+           (sit-for 1))))
      (format "%s" (helm-get-selection nil t)))))
