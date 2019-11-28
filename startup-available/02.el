@@ -178,5 +178,4 @@
   (add-hook 'lisp-interaction-mode-hook 'my-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'my-common-lisp-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
-  (enable-paredit-mode)
-  (advice-add 'find-function-do-it :around #'find-function-do-it-around))
+  (enable-paredit-mode))
