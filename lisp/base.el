@@ -298,3 +298,10 @@ a comma."
 (defun x-set-mode-line-color (color)
   (interactive (list (read-color "Mode-line color: ")))
   (set-face-background 'mode-line color))
+
+(defun rk-find-or-insert (expr insertion)
+  (goto-char (point-min))
+  (or (re-search-forward expr nil t)
+      (progn
+        (goto-char (point-max))
+        (insert insertion))))
