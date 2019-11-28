@@ -2,9 +2,22 @@
  sshaw/git-link
  window-numbering)
 
+(defun rk-ensure-gpg-loopback-pinentry ()
+  (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf")))
+    (with-current-buffer (find-file-noselect fname)
+      (dolist (cfg '("allow-emacs-pinentry"
+                     "allow-loopback-pinentry"))
+        (rk-find-or-insert (format "^[\s ]*%s[\s ]*$" cfg)
+                           (format "\n%s" cfg)))
+      (save-buffer))))
+
+;; (rk-ensure-gpg-loopback-pinentry)
+
 (use-package epa-file
   :config
-  (epa-file-enable))
+  (setq epa-pinentry-mode 'loopback)
+  (epa-file-enable)
+  (rk-ensure-gpg-loopback-pinentry))
 
 (use-package git-link)
 
