@@ -94,15 +94,6 @@
 
 (use-package ipinfo)
 
-(defun my-midnight-hook ()
-  (org-gcal-multi-fetch)
-  (org-agenda-list nil nil 'day))
-
-(use-package midnight
-  :config
-  (midnight-delay-set 'midnight-delay "9:00am")
-  (add-hook 'midnight-hook 'my-midnight-hook))
-
 (use-package password-mode)
 
 (use-package pdf-tools
@@ -152,9 +143,6 @@
 (use-package vterm)
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
-
-(setq server-use-tcp t)
-(server-start)
 
 (defun gnome-screenshot (args)
   (interactive (list (gnome-screenshot-arguments)))

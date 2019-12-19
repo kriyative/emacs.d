@@ -73,9 +73,7 @@
   (add-hook 'list-diary-entries-hook 'include-other-diary-files t)
   (add-hook 'diary-hook 'appt-make-list)
   (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
-  (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
-  (when (file-exists-p diary-file)
-    (diary 0)))
+  (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
 
 (use-package ansi-color
   :config
