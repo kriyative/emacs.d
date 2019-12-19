@@ -10,7 +10,11 @@
  '(package-selected-packages
    (quote
     (speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
- '(safe-local-variable-values (quote ((checkdoc-package-keywords-flag))))
+ '(safe-local-variable-values
+   (quote
+    ((cider-shadow-cljs-default-options . "browser")
+     (cider-default-cljs-repl . shadow)
+     (checkdoc-package-keywords-flag))))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
