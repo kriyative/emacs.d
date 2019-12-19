@@ -4,7 +4,8 @@
  org-passwords
  xcezx/blockdiag-mode
  corpix/ob-blockdiag.el
- org-sync)
+ org-sync
+ org-present)
 
 ;;;;;;;;;;;;;;;; org
 
@@ -184,3 +185,5 @@ one."
 (use-package blockdiag-mode)
 (use-package ob-blockdiag
   :after (org blockdiag-mode))
+
+(use-package org-present)
