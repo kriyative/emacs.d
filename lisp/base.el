@@ -130,12 +130,6 @@
       (push (buffer-name buf)
             desktop-clear-preserve-buffers))))
 
-(defun load-file-if-exists (path &rest load-args)
-  (let ((path (and (stringp path)
-                   (expand-file-name path))))
-    (when (file-exists-p path)
-      (apply 'load path load-args))))
-
 (defun try-require (feature)
   (condition-case nil
       (require feature)
