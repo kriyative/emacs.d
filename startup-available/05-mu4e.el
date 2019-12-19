@@ -1,7 +1,8 @@
 (my-el-get-bundles
  mu4e
  mu4e-multi
- mu4e-maildirs-extension)
+ mu4e-maildirs-extension
+ legoscia/messages-are-flowing)
 
 ;;;;;;;;;;;;;;;; mu4e
 
@@ -51,16 +52,19 @@ maildir)."
         mu4e-compose-dont-reply-to-self t
         mu4e-compose-keep-self-cc nil
         mu4e-compose-complete-addresses t
-        use-hard-newlines t))
+        use-hard-newlines nil))
 
 (defun mu4e-action-view-in-system-browser (msg)
   (let ((browse-url-browser-function 'browse-url-default-browser))
     (mu4e-action-view-in-browser msg)))
 
+(defun mu4e-message-mode-hook ()
+  (local-set-key "\C-c\M-o" 'org-mime-htmlize))
+
 (use-package mu4e
+  :after (org org-mime)
   :demand t
   :config
-  (require 'org-mu4e)
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
         mu4e-get-mail-command "mbsync-all -u"
         ;; mu4e-get-mail-command "/bin/true"
@@ -104,6 +108,7 @@ maildir)."
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
   (add-hook 'mu4e-view-mode-hook 'mu4e-view-mode-hook)
   ;; (add-hook 'mu4e-compose-mode-hook 'org-mu4e-compose-org-mode)
+  (add-hook 'message-mode-hook 'mu4e-message-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'message-mode-hook)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-compose-mode-hook)
   (add-to-list 'mu4e-bookmarks
@@ -216,3 +221,7 @@ detect ACCOUNT from it."
 (defun mu4e-maildirs-extension-index-updated-handler ()
   "Handler for `mu4e-index-updated-hook'."
   (mu4e-maildirs-extension-force-update '(16)))
+
+(use-package messages-are-flowing
+  :config
+  (add-hook 'message-mode-hook 'messages-are-flowing-use-and-mark-hard-newlines))
