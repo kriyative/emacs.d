@@ -140,7 +140,9 @@
   (setq forge-topic-list-limit (car *my-forge-toggle-topic-settings*))
   (define-key magit-mode-map "\M-c" 'my-forge-toggle-closed-topics))
 
-(use-package vterm)
+(use-package vterm
+  :config
+  (define-key vterm-mode-map (kbd "C-c C-z") #'vterm--self-insert))
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
