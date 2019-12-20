@@ -34,12 +34,15 @@
   :config
   (setq telnet-remote-echoes nil))
 
+(use-package dired
+  :config
+  (setq dired-listing-switches "-alh"))
+
 (use-package dired-x
   :after dired
   :config
   (set-default 'dired-omit-mode t)
-  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")
-        dired-listing-switches "-alh")
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
   :bind (:map dired-mode-map
               ("k" . dired-kill-subdir)
               (">" . dired-omit-mode)
