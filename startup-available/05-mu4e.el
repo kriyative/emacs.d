@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  mu4e
  mu4e-multi
  mu4e-maildirs-extension
@@ -137,7 +137,7 @@ maildir)."
   (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
   (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account))
 
-(defun my-mu4e-reload-main ()
+(defun rk-mu4e-reload-main ()
   (interactive)
   (mu4e-maildirs-extension-force-update '(16)))
 
@@ -156,7 +156,7 @@ maildir)."
                 (cons ?n (plist-get m :name))
                 (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
                 (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
-  (define-key mu4e-main-mode-map "g" 'my-mu4e-reload-main))
+  (define-key mu4e-main-mode-map "g" 'rk-mu4e-reload-main))
 
 (defun message-mode-hook ()
   (setq message-fill-column nil

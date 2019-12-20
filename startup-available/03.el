@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  sshaw/git-link
  window-numbering)
 

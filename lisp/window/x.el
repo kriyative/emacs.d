@@ -2,8 +2,8 @@
 
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
-(global-set-key '[C-tab] 'my-next-window)
-(global-set-key '[C-iso-lefttab] 'my-previous-window)
+(global-set-key '[C-tab] 'rk-next-window)
+(global-set-key '[C-iso-lefttab] 'rk-previous-window)
 
 ;;........1.........2.........3.........4.........5.........6.........7.........8.........9
 ;;23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890

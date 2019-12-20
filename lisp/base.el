@@ -282,7 +282,7 @@ a comma."
 
 (require 'el-get)
 
-(defmacro my-el-get-bundles (&rest rcps)
+(defmacro rk-el-get-bundles (&rest rcps)
   `(progn
      ,@(mapcar
         (lambda (rcp)

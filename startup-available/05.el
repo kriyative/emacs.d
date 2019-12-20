@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;; dependencies ;;;;;;;;;;;;;;;;
 
-(my-el-get-bundles
+(rk-el-get-bundles
  alert
  (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
                 :features disable-mouse)
@@ -123,22 +123,22 @@
 
 (use-package magit-popup)
 
-(defvar *my-forge-toggle-topic-settings* '((25 . 0) (100 . 25)))
+(defvar *rk-forge-toggle-topic-settings* '((25 . 0) (100 . 25)))
 
-(defun my-forge-toggle-closed-topics ()
+(defun rk-forge-toggle-closed-topics ()
   (interactive)
   (setq forge-topic-list-limit
-        (if (equal (car *my-forge-toggle-topic-settings*)
+        (if (equal (car *rk-forge-toggle-topic-settings*)
                    forge-topic-list-limit)
-            (cadr *my-forge-toggle-topic-settings*)
-          (car *my-forge-toggle-topic-settings*)))
+            (cadr *rk-forge-toggle-topic-settings*)
+          (car *rk-forge-toggle-topic-settings*)))
   (magit-refresh))
 
 (use-package forge
   :after magit
   :config
-  (setq forge-topic-list-limit (car *my-forge-toggle-topic-settings*))
-  (define-key magit-mode-map "\M-c" 'my-forge-toggle-closed-topics))
+  (setq forge-topic-list-limit (car *rk-forge-toggle-topic-settings*))
+  (define-key magit-mode-map "\M-c" 'rk-forge-toggle-closed-topics))
 
 (use-package vterm
   :config

@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  org-gcal
  org-mime
  org-passwords
@@ -28,12 +28,12 @@ one."
     (unless (= 2 (current-column))
       (insert "  "))))
 
-(defun my-org-time-stamp-inactive ()
+(defun rk-org-time-stamp-inactive ()
   (interactive)
   (org-time-stamp-inactive
    (format-time-string "%Y-%m-%d %H:%M:%S")))
 
-(defun my-org-mode-hook ()
+(defun rk-org-mode-hook ()
   (visual-line-mode)
   (org-display-inline-images))
 
@@ -46,12 +46,12 @@ one."
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-hook 'org-mode-hook 'turn-on-font-lock)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'my-org-mode-hook)
+  (add-hook 'org-mode-hook 'rk-org-mode-hook)
 
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
   (global-set-key (kbd "C-c j") 'org-journal-entry)
-  (define-key org-mode-map "\C-c!" 'my-org-time-stamp-inactive)
+  (define-key org-mode-map "\C-c!" 'rk-org-time-stamp-inactive)
   (define-key org-mode-map (kbd "C-c (") 'show-all)
   (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
   (define-key org-mode-map '[C-tab] nil)
@@ -86,9 +86,9 @@ one."
 (use-package org-gcal
   :after org
   :config
-  ;; (setq org-gcal-client-id my-org-gcal-client-id
-  ;;       org-gcal-client-secret my-org-gcal-client-secret
-  ;;       org-gcal-file-alist my-org-gcal-file-alist)
+  ;; (setq org-gcal-client-id rk-org-gcal-client-id
+  ;;       org-gcal-client-secret rk-org-gcal-client-secret
+  ;;       org-gcal-file-alist rk-org-gcal-file-alist)
   (setq org-agenda-mode-hook nil
         org-gcal-auto-archive nil)
   ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))

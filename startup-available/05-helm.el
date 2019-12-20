@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  helm
  helm-ag
  helm-cider)

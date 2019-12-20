@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  diminish
  dired-hacks
  emacs-w3m
@@ -193,7 +193,7 @@
   :config
   (setq projectile-keymap-prefix (kbd "C-c C-p")))
 
-(defun my-slime-list-connections ()
+(defun rk-slime-list-connections ()
   (interactive)
   (slime-list-connections)
   (pop-to-buffer "*SLIME Connections*"))
@@ -206,7 +206,7 @@
     (let ((w3m-use-tab nil))
       (w3m-browse-url url new-session))))
 
-(defun my-url-browser-function (&rest args)
+(defun rk-url-browser-function (&rest args)
   (apply (if current-prefix-arg
              'browse-url-default-browser
            'w3m-browse-url-other-window)
@@ -220,11 +220,11 @@
   (add-hook 'w3m-mode-hook 'w3m-mode-hook)
   (setq browse-url-browser-function 'w3m-browse-url-other-window))
 
-(defun my-slime-mode-hook ()
-  (setq browse-url-browser-function 'my-url-browser-function)
+(defun rk-slime-mode-hook ()
+  (setq browse-url-browser-function 'rk-url-browser-function)
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
-  (define-key slime-mode-map "\C-c\C-xc" 'my-slime-list-connections)
+  (define-key slime-mode-map "\C-c\C-xc" 'rk-slime-list-connections)
   (unless (boundp 'last-command-char)
     (defvar last-command-char nil)))
 
@@ -232,7 +232,7 @@
   :config
   (slime-setup '(slime-repl))
   (setq slime-protocol-version 'ignore)
-  (add-hook 'slime-mode-hook 'my-slime-mode-hook))
+  (add-hook 'slime-mode-hook 'rk-slime-mode-hook))
 
 (defun sbcl ()
   (interactive)
@@ -298,17 +298,17 @@
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 
-(defun my-previous-window ()
+(defun rk-previous-window ()
   "Switch to previous window"
   (interactive)
   (other-window -1))
 
-(defun my-next-window ()
+(defun rk-next-window ()
   "Switch to next window"
   (interactive)
   (other-window 1))
 
-(defun my-other-buffer ()
+(defun rk-other-buffer ()
   "Replacement for bury-buffer"
   (interactive)
   (switch-to-buffer (other-buffer)))

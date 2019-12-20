@@ -1,4 +1,4 @@
-(my-el-get-bundles emms)
+(rk-el-get-bundles emms)
 
 (defun rk-emms-browser ()
   (interactive)

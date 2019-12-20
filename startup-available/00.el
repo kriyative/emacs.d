@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;; el-get initialization ;;;;;;;;;;;;;;;;
 
-(my-el-get-bundles
+(rk-el-get-bundles
  alert
  buffer-move
  (emacs-fun :url "https://github.com/kriyative/emacs-fun.git"
@@ -128,14 +128,14 @@
 (global-unset-key "\M-g")
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\r" 'newline-and-indent)
-(global-set-key "\C-xn" 'my-next-window)
-(global-set-key "\C-xp" 'my-previous-window)
+(global-set-key "\C-xn" 'rk-next-window)
+(global-set-key "\C-xp" 'rk-previous-window)
 (define-key minibuffer-local-completion-map '[tab] 'minibuffer-complete)
 (define-key minibuffer-local-completion-map '[spc] 'minibuffer-complete-word)
 (define-key minibuffer-local-must-match-map '[tab] 'minibuffer-complete)
 (define-key minibuffer-local-must-match-map '[spc] 'minibuffer-complete-word)
 (global-set-key "\C-ct" 'transpose-lines)
-(global-set-key "\C-\M-l" 'my-other-buffer)
+(global-set-key "\C-\M-l" 'rk-other-buffer)
 (global-unset-key "\C-\\")
 (global-set-key "\C-\\" 'compile)
 ;; (global-set-key "\C-xb" 'iswitchb-buffer)

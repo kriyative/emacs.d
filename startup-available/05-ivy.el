@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  swiper)
 
 (defun ivy-display-function-popup-window (text)

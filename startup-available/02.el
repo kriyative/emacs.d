@@ -1,4 +1,4 @@
-(my-el-get-bundles
+(rk-el-get-bundles
  (cider :checkout "v0.17.0")
  csv-mode)
 
@@ -125,7 +125,7 @@
                 (:prompt-cont-regexp "^[-[:alnum:]_]*[-(][#>] ")))
     (apply 'sql-set-product-feature 'postgres pv)))
 
-(defun my-emacs-lisp-mode-hook ()
+(defun rk-emacs-lisp-mode-hook ()
   ;; (local-set-key " " 'lisp-complete-symbol)
   (outline-minor-mode 1)
   (setq outline-regexp "^[(;]"
@@ -162,7 +162,7 @@
   (modify-syntax-entry ?| "<3" font-lock-syntax-table)
   (modify-syntax-entry ?# ">4" font-lock-syntax-table))
 
-(defun my-common-lisp-mode-hook ()
+(defun rk-common-lisp-mode-hook ()
   (font-lock-mode)
   (font-lock-add-keywords 'lisp-mode
                           '(("defclass\*" . font-lock-keyword-face)))
@@ -174,8 +174,8 @@
 
 (use-package lisp-mode
   :config
-  (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
-  (add-hook 'lisp-interaction-mode-hook 'my-emacs-lisp-mode-hook)
-  (add-hook 'lisp-mode-hook 'my-common-lisp-mode-hook)
+  (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
+  (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
+  (add-hook 'lisp-mode-hook 'rk-common-lisp-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
   (enable-paredit-mode))
