@@ -299,3 +299,7 @@ a comma."
       (progn
         (goto-char (point-max))
         (insert insertion))))
+
+(defun rk-jitsi (&optional url)
+  (interactive "sURL: ")
+  (browse-url (concat url "#config.startWithVideoMuted=true")))
