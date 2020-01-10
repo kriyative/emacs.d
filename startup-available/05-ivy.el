@@ -23,10 +23,10 @@
          ("\C-hl"    . counsel-find-library)
          ("<f2>i"    . counsel-info-lookup-symbol)
          ("<f2>u"    . counsel-unicode-char)
-         ("\C-cg"    . counsel-git)
-         ("\C-cj"    . counsel-git-grep)
-         ("\C-ck"    . counsel-ag)
-         ("\C-xl"    . counsel-locate)
+         ("\C-cg"    . counsel-ag)
+         ("\C-cG"    . counsel-git-grep)
+         ("\C-cl"    . counsel-locate)
+         ("\C-cr"    . ivy-resume)
          ("\C-x\C-y" . counsel-yank-pop))
   :bind (:map read-expression-map
               ("\C-r" . counsel-expression-history))
@@ -38,8 +38,7 @@
         ivy-height 10
         enable-recursive-minibuffers t
         ;; ivy-display-function  'ivy-display-function-popup-window
-        *x-find-file-fallback* 'counsel-find-file
-        ))
+        *x-find-file-fallback* 'counsel-find-file))
 
 ;; (global-unset-key (kbd "\C-c\C-f"))
 ;; (global-set-key (kbd "\C-c\C-f") 'find-file)
