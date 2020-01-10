@@ -19,11 +19,11 @@
   (load "window")
   (load custom-file 'noerror))
 
-(defun rk-start-emacs ()
-  (interactive)
-  (rk-start 6))
-
 (defun rk-start-9emacs ()
-  (interactive)
   (rk-start 5)
   (x-set-mode-line-color "DarkBlue"))
+
+(cl-case (intern (getenv "EMACS_PROFILE"))
+  (full (rk-start 6))
+  (9emacs (rk-start-9emacs))
+  (t (rk-start 5)))
