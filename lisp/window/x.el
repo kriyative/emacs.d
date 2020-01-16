@@ -58,6 +58,9 @@
 ;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
   (x-set-font "DejaVu Sans Mono Book"))
+;; (x-set-font "Menlo")
+;; (x-set-font "Iosevka SS04 Book" 12)
+;; (x-set-font "JetBrains Mono")
 ;; (x-set-font "Hack" 10)
 ;; (x-set-font "Consolas" 12)
 ;; (x-set-font "Inconsolata")
@@ -68,7 +71,7 @@
 ;; (x-set-font "Andale Mono")
 ;; (x-set-font "Bitstream Vera Sans Mono")
 ;; (x-set-font "FreeMono")
-;; (x-set-font "Ubuntu Mono" 14)
+;; (x-set-font "Ubuntu Mono" 13)
 ;; (x-set-font "Liberation Mono" 9)
 ;; (x-set-font "Droid Sans Mono" 10)
 ;; (x-set-font "Inconsolata" 10)
