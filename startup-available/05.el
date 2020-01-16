@@ -9,7 +9,7 @@
  edit-server
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo)
- libvterm
+ ;; libvterm ;; -- needs newer cmake to build in 18.04
  (password-mode
   :url "https://github.com/juergenhoetzel/password-mode.git"
   :features password-mode)
@@ -140,9 +140,10 @@
   (setq forge-topic-list-limit (car *rk-forge-toggle-topic-settings*))
   (define-key magit-mode-map "\M-c" 'rk-forge-toggle-closed-topics))
 
-(use-package vterm
-  :config
-  (define-key vterm-mode-map (kbd "C-c C-z") #'vterm--self-insert))
+(when (boundp 'vterm)
+  (use-package vterm
+    :config
+    (define-key vterm-mode-map (kbd "C-c C-z") #'vterm--self-insert)))
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
