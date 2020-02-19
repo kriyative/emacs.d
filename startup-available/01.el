@@ -1,4 +1,5 @@
 (rk-el-get-bundles
+ ag
  diminish
  dired-hacks
  geiser
@@ -59,6 +60,8 @@
     ("\C-c" display-time-world)))
 
 ;;;;;;;;;;;;;;;;
+
+(use-package ag)
 
 (use-package buffer-move
   :bind (:map user-commands-prefix-map
