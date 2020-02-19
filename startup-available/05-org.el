@@ -111,23 +111,6 @@ one."
     (message "org-gcal-multi-do: %S..." org-gcal-multi-account-id)
     (org-gcal-fetch)))
 
-(defun org-gcal-multi-fetch-loop ()
-  (deferred:$
-    (deferred:next
-      (lambda ()
-        (message "org-gcal-multi-fetch starting ...")
-        (org-gcal-multi-do-acct (first org-gcal-accounts))))
-    (deferred:nextc it
-      (lambda (accounts)
-        (message "here: %S" accounts)
-        (when accounts
-          ;; (org-gcal-multi-do-acct (first org-gcal-accounts))
-          (deferred:nextc (deferred:wait 0) self)
-          (cdr accounts))))
-    (deferred:nextc it
-      (lambda (x)
-        (message "org-gcal-multi-fetch done")))))
-
 (defun org-gcal-multi-fetch ()
   (interactive)
   (deferred:$
