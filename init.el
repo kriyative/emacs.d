@@ -23,7 +23,7 @@
   (rk-start 5)
   (x-set-mode-line-color "DarkBlue"))
 
-(cl-case (intern (getenv "EMACS_PROFILE"))
+(cl-case (intern (or (getenv "EMACS_PROFILE") "default"))
   (full (rk-start 6))
   (9emacs (rk-start-9emacs))
   (t (rk-start 5)))
