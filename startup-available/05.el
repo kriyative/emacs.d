@@ -5,7 +5,6 @@
  (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
                 :features disable-mouse)
  dictionary
- elscreen
  edit-server
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo)
@@ -14,7 +13,6 @@
   :url "https://github.com/juergenhoetzel/password-mode.git"
   :features password-mode)
  magit-popup
- pdf-tools
  forge)
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
@@ -25,16 +23,6 @@
    ("\C-cm" . dictionary-match-words))
   :config
   (load-library "dictionary-init"))
-
-(use-package elscreen
-  :demand t
-  :bind
-  (:map elscreen-map
-        ("z" . elscreen-toggle)
-        ("\C-z" . elscreen-toggle))
-  :config
-  (global-unset-key "\C-z")
-  (setq elscreen-display-tab nil))
 
 (defun iso-calendar ()
   (interactive)
@@ -96,31 +84,6 @@
 
 (use-package password-mode)
 
-(use-package pdf-tools
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page)
-  (bind-keys :map pdf-view-mode-map
-             ("<s-spc>" .  pdf-view-scroll-down-or-previous-page)
-             ("g"  . pdf-view-first-page)
-             ("G"  . pdf-view-last-page)
-             ("l"  . image-forward-hscroll)
-             ("h"  . image-backward-hscroll)
-             ("j"  . pdf-view-next-page)
-             ("k"  . pdf-view-previous-page)
-             ("e"  . pdf-view-goto-page)
-             ("u"  . pdf-view-revert-buffer)
-             ("al" . pdf-annot-list-annotations)
-             ("ad" . pdf-annot-delete)
-             ("aa" . pdf-annot-attachment-dired)
-             ("am" . pdf-annot-add-markup-annotation)
-             ("at" . pdf-annot-add-text-annotation)
-             ("y"  . pdf-view-kill-ring-save)
-             ("i"  . pdf-misc-display-metadata)
-             ("s"  . pdf-occur)
-             ("b"  . pdf-view-set-slice-from-bounding-box)
-             ("r"  . pdf-view-reset-slice)))
-
 (use-package magit-popup)
 
 (defvar *rk-forge-toggle-topic-settings* '((25 . 0) (100 . 25)))
@@ -168,26 +131,3 @@
   :default-action 'gnome-screenshot)
 
 (global-set-key (kbd "<print>") 'gnome-screenshot-popup)
-
-(defmacro def-elscreen-goto (i)
-  `(defun ,(intern (format "elscreen-goto-%d" i)) ()
-     (interactive)
-     (elscreen-goto ,i)))
-
-(def-elscreen-goto 0)
-(def-elscreen-goto 1)
-(def-elscreen-goto 2)
-(def-elscreen-goto 3)
-(def-elscreen-goto 4)
-(def-elscreen-goto 5)
-(def-elscreen-goto 6)
-(def-elscreen-goto 7)
-(def-elscreen-goto 8)
-
-(elscreen-start)
-
-(dotimes (i 9)
-  (global-set-key (kbd (format "H-%d" i))
-                  (intern (format "elscreen-goto-%d" i)))
-  (global-set-key (kbd (format "C-z C-%d" i))
-                  (intern (format "elscreen-goto-%d" i))))
