@@ -12,7 +12,19 @@
     (speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
  '(safe-local-variable-values
    (quote
-    ((cider-shadow-cljs-default-options . "browser")
+    ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
+	   (add-hook
+	    (quote write-contents-functions)
+	    (lambda nil
+	      (delete-trailing-whitespace)
+	      nil))
+	   (require
+	    (quote whitespace))
+	   "Sometimes the mode needs to be toggled off and on."
+	   (whitespace-mode 0)
+	   (whitespace-mode 1))
+     (whitespace-style face tabs trailing lines-tail)
+     (cider-shadow-cljs-default-options . "browser")
      (cider-default-cljs-repl . shadow)
      (checkdoc-package-keywords-flag))))
  '(send-mail-function (quote smtpmail-send-it))
