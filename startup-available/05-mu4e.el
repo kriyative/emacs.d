@@ -1,8 +1,7 @@
 (rk-el-get-bundles
  mu4e
  mu4e-multi
- mu4e-maildirs-extension
- legoscia/messages-are-flowing)
+ mu4e-maildirs-extension)
 
 ;;;;;;;;;;;;;;;; mu4e
 
@@ -11,22 +10,29 @@
                    (string-match "INBOX$" x))
                  (mu4e-get-maildirs)))
 
-(defun mu4e-ask-inbox (prompt)
+(defun rk-mu4e-ask-inbox (prompt)
   "Ask the user for a shortcut (using PROMPT) as defined in
 `mu4e-maildir-shortcuts', then return the corresponding folder
 name. If the special shortcut 'o' (for _o_ther) is used, or if
 `mu4e-maildir-shortcuts' is not defined, let user choose from all
 maildirs under `mu4e-maildir'."
   (let ((prompt (mu4e-format "%s" prompt)))
-    (funcall mu4e-completing-read-function
+    (format
+     "/%s/INBOX"
+     (funcall mu4e-completing-read-function
              prompt
-             (mu4e-get-inbox-maildirs))))
+             (mapcar (lambda (maildir)
+                       (cons (progn
+                               (string-match "\/\\(.*\\)\/" maildir)
+                               (match-string 1 maildir))
+                             maildir))
+                    (mu4e-get-inbox-maildirs))))))
 
 (defun mu4e~headers-jump-to-inbox (maildir)
   "Show the messages in maildir (user is prompted to ask what
 maildir)."
   (interactive
-   (let ((maildir (mu4e-ask-inbox "Jump to maildir: ")))
+   (let ((maildir (rk-mu4e-ask-inbox "Jump to INBOX: ")))
      (list maildir)))
   (when maildir
     (mu4e-mark-handle-when-leaving)
@@ -221,7 +227,3 @@ detect ACCOUNT from it."
 (defun mu4e-maildirs-extension-index-updated-handler ()
   "Handler for `mu4e-index-updated-hook'."
   (mu4e-maildirs-extension-force-update '(16)))
-
-(use-package messages-are-flowing
-  :config
-  (add-hook 'message-mode-hook 'messages-are-flowing-use-and-mark-hard-newlines))
