@@ -61,7 +61,12 @@
 
 ;;;;;;;;;;;;;;;;
 
-(use-package ag)
+(use-package ag
+  :config
+  (setq ag-reuse-buffers t)
+  :bind (("C-c g g" . ag)
+         ("C-c g d" . ag-dired)
+         ("C-c g p" . ag-project)))
 
 (use-package buffer-move
   :bind (:map user-commands-prefix-map
