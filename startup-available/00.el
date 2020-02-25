@@ -76,9 +76,10 @@
       shell-file-name "bash"
       max-mini-window-height 0.25
       ;; completion-styles '(basic partial-completion)
+      completion-styles '(basic partial-completion substring)
+      completion-ignore-case t
       completion-cycle-threshold nil
-      read-buffer-completion-ignore-case nil
-      completion-ignore-case nil
+      read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t
       completion-ignored-extensions (nconc completion-ignored-extensions
                                            '(".fasl"
