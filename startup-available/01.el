@@ -7,8 +7,6 @@
  graphviz-dot-mode
  guide-key
  magit
- magit-gh-pulls
- magit-todos
  markdown-mode
  paredit
  plantuml-mode
@@ -121,11 +119,6 @@
     (set-face-attribute 'magit-tag nil :foreground "black"))
   (setq magit-last-seen-setup-instructions "1.4.0")
   (add-hook 'magit-mode-hook 'magit-setup-hook))
-
-(use-package magit-todos
-  :config
-  (setq magit-todos-ignore-case t)
-  (add-hook 'magit-mode-hook 'magit-todos-mode))
 
 (defun add-el-get-info-dirs ()
   (require 'find-lisp)
