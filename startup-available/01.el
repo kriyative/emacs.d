@@ -241,6 +241,24 @@
       (slime))
     (error "The ecl application could not be found")))
 
+(use-package minibuffer
+  :config
+  (setq completion-cycle-threshold 3
+        completion-flex-nospace nil
+        completion-pcm-complete-word-inserts-delimiters t
+        completion-pcm-word-delimiters "-_./:| "
+        completion-show-help nil
+        ;; completions-format 'vertical    ; *Completions* buffer
+        completions-format 'horizontal
+        enable-recursive-minibuffers t
+        read-answer-short t
+        read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t
+        resize-mini-windows 'grow-only)
+  (file-name-shadow-mode 1)
+  (minibuffer-depth-indicate-mode 1)
+  (minibuffer-electric-default-mode 1))
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (defun toggle-frame-width ()
