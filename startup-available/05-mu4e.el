@@ -67,7 +67,9 @@ maildir)."
     (mu4e-action-view-in-browser msg)))
 
 (defun mu4e-message-mode-hook ()
-  (local-set-key "\C-c\M-o" 'org-mime-htmlize))
+  (local-set-key "\C-c\M-o" 'org-mime-htmlize)
+  (auto-fill-mode -1)
+  (visual-line-mode 1))
 
 (use-package mu4e
   :after (org org-mime)
