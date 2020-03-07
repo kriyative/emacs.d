@@ -39,8 +39,6 @@ one."
 
 (use-package org
   :config
-  (force-require 'org)
-  (force-require 'org-compat)
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -55,8 +53,8 @@ one."
   (define-key org-mode-map (kbd "C-c (") 'show-all)
   (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
   (define-key org-mode-map '[C-tab] nil)
-  (define-key org-mode-map "\M-n" 'next-page)
-  (define-key org-mode-map "\M-p" 'prev-page)
+  (define-key org-mode-map "\M-n" rk-'next-page)
+  (define-key org-mode-map "\M-p" 'rk-prev-page)
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-export-html-postamble nil
         org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
@@ -86,30 +84,26 @@ one."
 (use-package org-gcal
   :after org
   :config
-  ;; (setq org-gcal-client-id rk-org-gcal-client-id
-  ;;       org-gcal-client-secret rk-org-gcal-client-secret
-  ;;       org-gcal-file-alist rk-org-gcal-file-alist)
   (setq org-agenda-mode-hook nil
-        org-gcal-auto-archive nil)
-  ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync)))
-  ;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
-  )
+        org-gcal-auto-archive nil))
 
 (defvar org-gcal-multi-account-id nil)
 (defvar org-gcal-multi-accounts-fun nil)
 (defvar org-gcal-multi-accounts-cursor nil)
 
 (defun org-gcal-multi-do-acct (spec)
-  (let* ((acct (cdr spec)))
-    (setq org-gcal-multi-account-id (car spec)
-          org-gcal-client-id (assoc-cdr 'org-gcal-client-id acct)
-          org-gcal-client-secret (assoc-cdr 'org-gcal-client-secret acct)
-          org-gcal-file-alist (assoc-cdr 'org-gcal-file-alist acct)
-          org-gcal-token-file (assoc-cdr 'org-gcal-token-file acct)
-          org-gcal-token-plist nil
-          browse-url-browser-function 'browse-url-default-browser)
-    (message "org-gcal-multi-do: %S..." org-gcal-multi-account-id)
-    (org-gcal-fetch)))
+  (cl-labels
+      ((assoc-cdr (x alist) (cdr (assoc x alist))))
+    (let* ((acct (cdr spec)))
+      (setq org-gcal-multi-account-id (car spec)
+            org-gcal-client-id (assoc-cdr 'org-gcal-client-id acct)
+            org-gcal-client-secret (assoc-cdr 'org-gcal-client-secret acct)
+            org-gcal-file-alist (assoc-cdr 'org-gcal-file-alist acct)
+            org-gcal-token-file (assoc-cdr 'org-gcal-token-file acct)
+            org-gcal-token-plist nil
+            browse-url-browser-function 'browse-url-default-browser)
+      (message "org-gcal-multi-do: %S..." org-gcal-multi-account-id)
+      (org-gcal-fetch))))
 
 (defun org-gcal-multi-fetch ()
   (interactive)

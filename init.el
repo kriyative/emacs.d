@@ -1,29 +1,34 @@
-
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(defun rk-start (&optional run-level)
-  (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-  (load "base")
+(defvar *rk--default-start-level* 3)
+
+(defun rk--start-emacs-level (&optional level)
+  (dotimes (i (1+ (or level *rk--default-start-level*)))
+    (dolist (f (directory-files "~/.emacs.d/startup"
+                                t
+                                (format "%02d.*\\.el$" i)))
+      (load f))))
+
+(defun rk--start-emacs (&optional run-level)
   (load "~/.personal.el" 'noerror)
-  (startup-emacs (or run-level
-                     (cond
-                      ((and window-system
-	                    (string-equal "luna" system-name))
-                       5)
-                      (window-system 4))))
-  (load "plat")
-  (load "window")
-  (load custom-file 'noerror))
+  (rk--start-emacs-level (or run-level
+                             (if window-system 5 3)))
+  (load custom-file 'noerror)
+  (setq *rk--inited-p* t))
+
+(defun rk-start-emacs-6 ()
+  (rk--start-emacs 6))
 
 (defun rk-start-9emacs ()
-  (rk-start 5)
-  (x-set-mode-line-color "DarkBlue"))
+  (rk--start-emacs 5)
+  (rk-set-mode-line-color "DarkBlue"))
 
-(cl-case (intern (or (getenv "EMACS_PROFILE") "default"))
-  (full (rk-start 6))
-  (9emacs (rk-start-9emacs))
-  (t (rk-start 5)))
+(unless (cl-member-if (lambda (s)
+                        (string-match "rk-start" s))
+                      command-line-args)
+  (message "No startup function specified in command line")
+  (rk--start-emacs))

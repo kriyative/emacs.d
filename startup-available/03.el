@@ -2,6 +2,13 @@
  sshaw/git-link
  window-numbering)
 
+(defun rk-find-or-insert (expr insertion)
+  (goto-char (point-min))
+  (or (re-search-forward expr nil t)
+      (progn
+        (goto-char (point-max))
+        (insert insertion))))
+
 (defun rk-ensure-gpg-loopback-pinentry ()
   (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf")))
     (with-current-buffer (find-file-noselect fname)

@@ -31,16 +31,22 @@
 ;; (set-user-commands-prefix-key (kbd "C-;"))
 (set-user-commands-prefix-key (kbd "\C-\\"))
 
-(define-keys user-commands-prefix-map
+(defun rk--define-keys (kmap ks)
+  (dolist (k ks)
+    (let ((key (first k))
+          (def (second k)))
+      (define-key kmap (kbd key) def))))
+
+(rk--define-keys user-commands-prefix-map
   '(("\C-\\" compile)
     ("." find-tag)
-    ("2" 2col-view)
-    ("3" 3col-view)
-    ("4" 4col-view)
-    ("9" fill-vertical-panes)
+    ("2" rk-2col-view)
+    ("3" rk-3col-view)
+    ("4" rk-4col-view)
+    ("9" rk-fill-vertical-panes)
     ("<" pop-tag-mark)
     ("\C-l" bury-buffer)
-    ("g" toggle-debug-on-error)
+    ("g" rk-toggle-debug-on-error)
     ("j" jump-to-register)
     ("l" cider-jack-in)
     ("m" switch-to-mu4e)
@@ -54,7 +60,7 @@
     ("W" visual-line-mode)
     ("z" switch-to-app)
     ("\C-z" switch-to-app)
-    ("|" toggle-window-split)
+    ("|" rk-toggle-window-split)
     ("\C-c" display-time-world)))
 
 ;;;;;;;;;;;;;;;;
@@ -80,18 +86,28 @@
   (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
   (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
 
+(defun rk--compilation-mode-colorize-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+
+(defun rk-ansi-colorize-region (&optional start end)
+  "ANSI colorize a region"
+  (interactive (list (mark) (point)))
+  (ansi-color-apply-on-region start end))
+
 (use-package ansi-color
   :config
   (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
-  (add-hook 'compilation-filter-hook 'compilation-mode-colorize-buffer)
+  (add-hook 'compilation-filter-hook 'rk--compilation-mode-colorize-buffer)
   (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
 
-(defun setup-cvs-mode ()
+(defun rk--setup-cvs-mode ()
   (font-lock-mode 1))
 
-(defun cvs-load-hook ()
+(defun rk--cvs-load-hook ()
   (setq cvs-buffer-name-alist
         (cons `("diff" ,cvs-diff-buffer-name nil)
               (remove-if '(lambda (x) (equal (car x) "diff"))
@@ -99,13 +115,13 @@
 
 (use-package pcvs
   :config
-  (add-hook 'cvs-mode-hook 'turn-on-line-truncation)
-  (add-hook 'cvs-mode-hook 'setup-cvs-mode)
-  (add-hook 'pcl-cvs-load-hook 'cvs-load-hook)
+  (add-hook 'cvs-mode-hook 'toggle-truncate-lines)
+  (add-hook 'cvs-mode-hook 'rk--setup-cvs-mode)
+  (add-hook 'pcl-cvs-load-hook 'rk--cvs-load-hook)
   (setq log-edit-keep-buffer t)
   (setenv "CVS_RSH" "ssh"))
 
-(defun magit-setup-hook ()
+(defun rk--magit-setup-hook ()
   (local-unset-key [C-tab])
   (define-key magit-mode-map [C-tab] nil))
 
@@ -118,35 +134,34 @@
   (when (facep 'magit-tag)
     (set-face-attribute 'magit-tag nil :foreground "black"))
   (setq magit-last-seen-setup-instructions "1.4.0")
-  (add-hook 'magit-mode-hook 'magit-setup-hook))
+  (add-hook 'magit-mode-hook 'rk--magit-setup-hook))
 
-(defun add-el-get-info-dirs ()
+(defun rk--add-el-get-info-dirs ()
   (require 'find-lisp)
   (let ((local-info-directory (expand-file-name "~/.emacs.d/info")))
     (unless (file-directory-p local-info-directory)
       (mkdir local-info-directory))
-    (with-cwd local-info-directory
-      (dolist (f (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
-        (let ((d (file-name-directory f)))
-          (when (directory-files d nil "\\.info$")
-            (call-process "install-info"
-                          nil
-                          '(" *info-setup*" t)
-                          nil
-                          "--debug"
-                          f
-                          "dir")
-            (add-to-list 'Info-additional-directory-list d)))))
+    (with-cwd
+     local-info-directory
+     (dolist (f (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
+       (let ((d (file-name-directory f)))
+         (when (directory-files d nil "\\.info$")
+           (call-process "install-info"
+                         nil
+                         '(" *info-setup*" t)
+                         nil
+                         "--debug"
+                         f
+                         "dir")
+           (add-to-list 'Info-additional-directory-list d)))))
     (add-to-list 'Info-directory-list local-info-directory))
-  (add-to-list 'Info-directory-list "/app/stumpwm/share/info")
-  (add-to-list 'Info-directory-list "/app/sbcl/share/info")
   (add-to-list 'Info-directory-list "/usr/local/share/info"))
 
 (use-package info
   :config
   (set-face-attribute 'info-header-node nil :foreground "black")
   (set-face-attribute 'info-node nil :foreground "black")
-  (add-el-get-info-dirs))
+  (rk--add-el-get-info-dirs))
 
 (use-package man
   :config
@@ -174,13 +189,13 @@
   :config
   (add-hook 'outline-minor-mode-hook 'setup-outline-minor-mode))
 
-(defun alt-vc-git-annotate-command (file buf &optional rev)
+(defun rk--vc-git-annotate-command (file buf &optional rev)
   (let ((name (file-relative-name file)))
     (vc-git-command buf 0 name "blame" (if rev (concat  rev)))))
 
 (use-package vc-git
   :config
-  (fset 'vc-git-annotate-command 'alt-vc-git-annotate-command))
+  (fset 'vc-git-annotate-command 'rk--vc-git-annotate-command))
 
 (use-package winner
   :bind (:map user-commands-prefix-map
@@ -212,7 +227,7 @@
   (setq slime-protocol-version 'ignore)
   (add-hook 'slime-mode-hook 'rk-slime-mode-hook))
 
-(defun sbcl ()
+(defun rk-sbcl ()
   (interactive)
   (if-bind (sbcl-path (locate-path "sbcl" exec-path))
     (let ((slime-lisp-implementations `((sbcl (,sbcl-path)))))
@@ -220,30 +235,9 @@
       (slime))
     (error "The sbcl application could not be found")))
 
-(defun ccl ()
-  (interactive)
-  (if-bind (ccl-path (locate-path "ccl64" exec-path))
-    (let ((slime-lisp-implementations `((ccl (,ccl-path)))))
-      (slime))
-    (error "The ccl application could not be found")))
-
-(defun clisp ()
-  (interactive)
-  (if-bind (clisp-path (locate-path "clisp" exec-path))
-    (let ((slime-lisp-implementations `((clisp (,clisp-path " -K full")))))
-      (slime))
-    (error "The clisp application could not be found")))
-
-(defun ecl ()
-  (interactive)
-  (if-bind (ecl-path (locate-path "ecl.sh" exec-path))
-    (let ((slime-lisp-implementations `((ecl (,ecl-path)))))
-      (slime))
-    (error "The ecl application could not be found")))
-
 (use-package minibuffer
   :config
-  (setq completion-cycle-threshold 3
+  (setq completion-cycle-threshold nil
         completion-flex-nospace nil
         completion-pcm-complete-word-inserts-delimiters t
         completion-pcm-word-delimiters "-_./:| "
@@ -261,7 +255,7 @@
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
-(defun toggle-frame-width ()
+(defun rk-toggle-frame-width ()
   "Toggle between narrow and wide frame layouts"
   (interactive)
   (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
@@ -269,7 +263,7 @@
         (set-frame-width (selected-frame) z-wid)
       (set-frame-width (selected-frame) 81))))
 
-(defun toggle-window-split ()
+(defun rk-toggle-window-split ()
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
@@ -309,7 +303,7 @@
   (interactive)
   (switch-to-buffer (other-buffer)))
 
-(defun kill-files-matching (pattern)
+(defun rk-kill-files-matching (pattern)
   "Kill all buffers whose filenames match specified regexp"
   (interactive "sRegexp: ")
   (dolist (buffer (buffer-list))
@@ -317,45 +311,50 @@
       (if (and file-name (string-match pattern file-name))
           (kill-buffer buffer)))))
 
-(defun narrow-forward-page (arg)
+(defun rk-narrow-forward-page (arg)
   (interactive "p")
   (widen)
   (forward-page arg)
   (narrow-to-page))
 
-(defun narrow-backward-page (arg)
+(defun rk-narrow-backward-page (arg)
   (interactive "p")
   (widen)
   (backward-page (1+ (or arg 1)))
   (narrow-to-page))
 
-(defun toggle-debug-on-error ()
+(defun rk-toggle-debug-on-error ()
   (interactive)
   (setq debug-on-error (not debug-on-error))
   (message "debug-on-error set to `%s'" debug-on-error))
 
-(defun 4col-view ()
-  (interactive)
-  (n-col-view 4))
+(defun rk--n-col-view (n)
+  "Split the current frame into N vertical windows"
+  (let ((cur (selected-window)))
+    (save-excursion
+      (delete-other-windows)
+      (let* ((frame-width-cols (/ (frame-pixel-width) (frame-char-width)))
+             (pane-width (round (/ (- frame-width-cols n 1) n))))
+        (dotimes (i (1- n))
+          (split-window-horizontally pane-width)
+          (other-window 1)
+          (bury-buffer))
+        (balance-windows)))
+    (select-window cur)))
 
-(defun 3col-view ()
+(defun rk-4col-view ()
   (interactive)
-  (n-col-view 3))
+  (rk--n-col-view 4))
 
-(defun 2col-view ()
+(defun rk-3col-view ()
   (interactive)
-  (n-col-view 2))
+  (rk--n-col-view 3))
 
-(defun dev-split-view ()
+(defun rk-2col-view ()
   (interactive)
-  (delete-other-windows)
-  (split-window-horizontally 85)
-  (save-excursion
-    (other-window 1)
-    (split-window-vertically)
-    (split-window-horizontally (/ (window-width) 2))))
+  (rk--n-col-view 2))
 
-(defun fill-vertical-panes ()
+(defun rk-fill-vertical-panes ()
   (interactive)
   (delete-other-windows)
   (let ((pane-width 80)
@@ -369,11 +368,7 @@
       (balance-windows))
     (select-window cur)))
 
-(defun turn-on-line-truncation ()
-  (interactive)
-  (set-all-line-truncation t))
-
-(defun other-window-send-keys (keys)
+(defun rk-other-window-send-keys (keys)
   (interactive (list (read-key-sequence "Keysequence: ")))
   (let ((window (selected-window)))
     (unwind-protect
@@ -383,89 +378,36 @@
             (call-last-kbd-macro)))
       (select-window window))))
 
-(defun get-region-or-read-terms (prompt)
+(defun rk--get-region-or-read-terms (prompt)
   (replace-regexp-in-string "[ ]+"
                             "+"
-                            (or (region) (read-string prompt))))
+                            (or (region-string) (read-string prompt))))
 
-(defun query-string-encode (s)
+(defun rk--query-string-encode (s)
   (replace-regexp-in-string "[ ]+" "+" s))
 
-(defun google (q)
+(defun rk-google (q)
   (interactive
-   (list (query-string-encode (or (region) (read-string "Google: ")))))
+   (list (rk--query-string-encode (or (region-string)
+                                      (read-string "Google: ")))))
   (browse-url
    (concat "https://www.google.com/search?q=" q)))
 
-(defun ddg ()
+(defun rk-ddg ()
   (interactive)
   (browse-url
    (concat "https://duckduckgo.com/?q="
-           (query-string-encode (or (region) (read-string "DuckDuckGo: "))))))
+           (rk--query-string-encode (or (region-string)
+                                        (read-string "DuckDuckGo: "))))))
 
-(defun mdn (q)
-  (interactive
-   (list (query-string-encode (or (region) (read-string "MDN: ")))))
-  (google (concat "site:developer.mozilla.org " q)))
-
-(defun wikipedia ()
-  (interactive)
-  (browse-url
-   (concat "http://en.wikipedia.org/w/index.php?search="
-           (query-string-encode
-            (capitalize (or (region) (read-string "Wikipedia: ")))))))
-
-(defun emacswiki (q)
-  (interactive (list (get-region-or-read-terms "emacswiki: ")))
-  (browse-url
-   (concat "http://www.emacswiki.org/emacs/Search?action=index&match="
-           (query-string-encode q))))
-
-(defun dired-open-file ()
-  "In Dired, open a file using its default application."
-  (interactive)
-  (let ((file (dired-get-filename nil t)))
-    (unless (file-directory-p file)
-      (message "Opening %s..." file)
-      (open-file-in-app file))))
-
-(defun next-page ()
+(defun rk-next-page ()
   (interactive)
   (widen)
   (forward-page)
   (narrow-to-page))
 
-(defun prev-page ()
+(defun rk-prev-page ()
   (interactive)
   (widen)
   (backward-page 2)
   (narrow-to-page))
-
-(defun rmail-mime-buffer ()
-  "MIME decode the contents of the current buffer."
-  (interactive)
-  (let* ((data (buffer-string))
-         (buf (get-buffer-create "*RMAIL*"))
-         (rmail-mime-mbox-buffer rmail-view-buffer)
-         (rmail-mime-view-buffer buf))
-    (set-buffer buf)
-    (setq buffer-undo-list t)
-    (let ((inhibit-read-only t))
-      ;; Decoding the message in fundamental mode for speed, only
-      ;; switching to rmail-mime-mode at the end for display.  Eg
-      ;; quoted-printable-decode-region gets very slow otherwise (Bug#4993).
-      (fundamental-mode)
-      (erase-buffer)
-      (insert data)
-      (rmail-mime-show t)
-      (rmail-mime-mode)
-      (set-buffer-modified-p nil))
-    (view-buffer buf)))
-
-(require 'ansi-color)
-(defun ansi-colorize-region (&optional start end)
-  "ANSI colorize a region"
-  (interactive (list (mark) (point)))
-  (ansi-color-apply-on-region start end))
-
-
