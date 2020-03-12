@@ -1,10 +1,15 @@
+(cond
+ ((string-match "24\\.3\\." emacs-version)
+  (rk-el-get-bundles
+   (subr-x
+    :type http
+    :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/emacs-lisp/subr-x.el")
+   (clojure-mode :checkout "5.5.2")))
+ (t
+  (rk-el-get-bundles clojure-mode)))
+
 (rk-el-get-bundles
  (cider :checkout "v0.17.0"))
-
-(if (string-match "24.*" emacs-version)
-    (rk-el-get-bundles
-     (clojure-mode :checkout "5.5.2"))
-  (rk-el-get-bundles clojure-mode))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
