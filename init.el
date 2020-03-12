@@ -4,6 +4,8 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(require 'cl)
+
 (defvar *rk--default-start-level* 3)
 
 (defun rk--start-emacs-level (&optional level)
