@@ -1,6 +1,12 @@
 (rk-el-get-bundles
  sshaw/git-link
- window-numbering)
+ window-numbering
+ graphviz-dot-mode
+ markdown-mode
+ plantuml-mode
+ projectile
+ csv-mode
+ geiser)
 
 (defun rk-find-or-insert (expr insertion)
   (goto-char (point-min))
@@ -43,3 +49,34 @@
   ;;     (intern (concat "select-window-" (prin1-to-string i)))))
   (window-numbering-mode)
   (window-numbering-update))
+
+(use-package projectile
+  :config
+  (setq projectile-keymap-prefix (kbd "C-c C-p")))
+
+(use-package csv-mode
+  :config
+  (setq csv-align-style 'auto))
+
+(defun setup-geiser ()
+  )
+
+(use-package geiser
+  :config
+  (add-hook 'geiser-mode-hook 'setup-geiser))
+
+(defun run-chez ()
+  (interactive)
+  (run-geiser 'chez))
+
+(defun run-guile ()
+  (interactive)
+  (run-geiser 'guile))
+
+(defun run-racket ()
+  (interactive)
+  (run-geiser 'racket))
+
+(use-package graphviz-dot-mode
+  :config
+  (setq graphviz-dot-view-command "xdot %s"))

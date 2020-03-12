@@ -1,18 +1,9 @@
 (rk-el-get-bundles
  ag
  diminish
- dired-hacks
- geiser
- gh
- graphviz-dot-mode
- guide-key
  magit
- markdown-mode
  paredit
- plantuml-mode
- projectile
- slime
- window-numbering)
+ slime)
 
 ;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
 
@@ -203,10 +194,6 @@
               ("\C-f" . winner-redo))
   :config
   (winner-mode 1))
-
-(use-package projectile
-  :config
-  (setq projectile-keymap-prefix (kbd "C-c C-p")))
 
 (defun rk-slime-list-connections ()
   (interactive)
