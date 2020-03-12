@@ -136,12 +136,12 @@ maildir)."
   :bind
   (("C-x m" . mu4e-multi-compose-new))
   :config
-  (when (fboundp 'setup-mu4e-multi-account)
-    (setup-mu4e-multi-account))
-  (setq mu4e-user-mail-address-list
-        (mapcar (lambda (p)
-                  (cdr (assoc 'user-mail-address (cdr p))))
-                mu4e-multi-account-alist))
+  (when (fboundp 'rk--setup-mu4e-multi-account)
+    (rk--setup-mu4e-multi-account)
+    (setq mu4e-user-mail-address-list
+          (mapcar (lambda (p)
+                    (cdr (assoc 'user-mail-address (cdr p))))
+                  mu4e-multi-account-alist)))
   (mu4e-multi-enable)
   (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)

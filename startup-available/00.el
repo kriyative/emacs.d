@@ -1,5 +1,29 @@
 ;;;;;;;;;;;;;;;; el-get initialization ;;;;;;;;;;;;;;;;
 
+(require 'url)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+
+(require 'el-get)
+
+(defmacro rk-el-get-bundles (&rest rcps)
+  `(progn
+     ,@(mapcar
+        (lambda (rcp)
+          `(el-get-bundle ,@(if (listp rcp) rcp (list rcp))))
+        rcps)))
+
+;;;;;;;;;;;;;;;; regular startup ;;;;;;;;;;;;;;;;
+
 (rk-el-get-bundles
  alert
  buffer-move
@@ -7,6 +31,16 @@
             :features (efun-base efun-cmds))
  popup
  use-package)
+
+(defun rk--set-all-line-truncation (v)
+  (make-local-variable 'truncate-lines)
+  (setq truncate-lines v)
+  (make-local-variable 'truncate-partial-width-windows)
+  (setq truncate-partial-width-windows v))
+
+(defun error-not-implemented-for-system (fname)
+  (error
+   (format "No implementation for '%s' on %S" fname system-type)))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -36,31 +70,33 @@
 
 (use-package dired
   :config
-  (setq dired-listing-switches "-alh"))
+  (setq dired-listing-switches "-alh"
+        dired-recursive-copies 'always))
+
+(defun rk--dired-open-file ()
+  "In dired, open the file named on this line."
+  (interactive)
+  (let* ((file (dired-get-filename nil t)))
+    (cl-case system-type
+      (gnu/linux (call-process "xdg-open" nil 0 nil file))
+      (t
+       (error-not-implemented-for-system 'rk--dired-open-file)))))
+
+(defun rk--setup-dired-x ()
+  (define-key dired-mode-map (kbd "C-c o") 'rk--dired-open-file))
 
 (use-package dired-x
   :after dired
   :config
   (set-default 'dired-omit-mode t)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+  (rk--setup-dired-x)
   :bind (:map dired-mode-map
               ("k" . dired-kill-subdir)
               (">" . dired-omit-mode)
-              ([C-return] . dired-open-file)))
+              ([C-return] . rk--dired-open-file)))
 
 (use-package efun-cmds)
-
-(defun fortune-computers ()
-  (interactive)
-  (fortune (concat fortune-dir "/computers")))
-
-(use-package fortune
-  :bind (:map user-commands-prefix-map
-              ("ff" . fortune)
-              ("fc" . fortune-computers))
-  :config
-  (setq fortune-dir "/usr/share/games/fortunes"
-        fortune-file "/usr/share/games/fortunes/fortunes"))
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
@@ -92,9 +128,6 @@
       ispell-program-name (locate-path "aspell" exec-path)
       auto-window-vscroll nil)
 
-(add-to-list 'display-buffer-alist
-             '("\\*Completions\\*" vertical-display-completions))
-
 ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
 
 (prefer-coding-system       'utf-8)
@@ -112,16 +145,16 @@
 
 ;;;;;;;;;;;;;;;; hooks ;;;;;;;;;;;;;;;;
 
-(defun confirm-exit ()
+(defun rk--confirm-exit ()
   (y-or-n-p "Exit Emacs, Are you sure? "))
 
-(add-to-list 'kill-emacs-query-functions 'confirm-exit)
+(add-to-list 'kill-emacs-query-functions 'rk--confirm-exit)
 
-(defun post-startup-hook ()
+(defun rk--post-startup-hook ()
   (when (fboundp 'global-auto-complete-mode)
     (global-auto-complete-mode -1)))
 
-(add-hook 'emacs-startup-hook 'post-startup-hook)
+(add-hook 'emacs-startup-hook 'rk--post-startup-hook)
 
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 

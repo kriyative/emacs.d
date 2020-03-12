@@ -15,6 +15,16 @@
  magit-popup
  forge)
 
+;;;;;;;;;;;;;;;; commands ;;;;;;;;;;;;;;;;
+
+(defun rk-set-mode-line-color (color)
+  (interactive (list (read-color "Mode-line color: ")))
+  (set-face-background 'mode-line color))
+
+(defun rk-jitsi (&optional url)
+  (interactive "sURL: ")
+  (browse-url (concat url "#config.startWithVideoMuted=true")))
+
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
 (use-package dictionary
@@ -107,6 +117,18 @@
   (use-package vterm
     :config
     (define-key vterm-mode-map (kbd "C-c C-z") #'vterm--self-insert)))
+
+(defun fortune-computers ()
+  (interactive)
+  (fortune (concat fortune-dir "/computers")))
+
+(use-package fortune
+  :bind (:map user-commands-prefix-map
+              ("ff" . fortune)
+              ("fc" . fortune-computers))
+  :config
+  (setq fortune-dir "/usr/share/games/fortunes"
+        fortune-file "/usr/share/games/fortunes/fortunes"))
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
