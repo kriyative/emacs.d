@@ -11,9 +11,10 @@
   (interactive "nWidth: ")
   (rk--set-window-width* width t))
 
-(scroll-bar-mode -1)
+(when window-system
+  (scroll-bar-mode -1)
+  (mouse-avoidance-mode 'none))
 (menu-bar-mode -1)
-(mouse-avoidance-mode 'none)
 (global-set-key '[C-tab] 'rk-next-window)
 (global-set-key '[C-iso-lefttab] 'rk-previous-window)
 
