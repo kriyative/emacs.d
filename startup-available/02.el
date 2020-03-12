@@ -1,6 +1,10 @@
 (rk-el-get-bundles
- (cider :checkout "v0.17.0")
- csv-mode)
+ (cider :checkout "v0.17.0"))
+
+(if (string-match "24.*" emacs-version)
+    (rk-el-get-bundles
+     (clojure-mode :checkout "5.5.2"))
+  (rk-el-get-bundles clojure-mode))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -88,36 +92,9 @@
         (cider--remove-sym sym))))
   (cider-eval-defun-at-point nil))
 
-(use-package csv-mode
-  :config
-  (setq csv-align-style 'auto))
-
 (use-package ediff
   :config
   (set 'ediff-window-setup-function 'ediff-setup-windows-plain))
-
-(defun setup-geiser ()
-  )
-
-(use-package geiser
-  :config
-  (add-hook 'geiser-mode-hook 'setup-geiser))
-
-(defun run-chez ()
-  (interactive)
-  (run-geiser 'chez))
-
-(defun run-guile ()
-  (interactive)
-  (run-geiser 'guile))
-
-(defun run-racket ()
-  (interactive)
-  (run-geiser 'racket))
-
-(use-package graphviz-dot-mode
-  :config
-  (setq graphviz-dot-view-command "xdot %s"))
 
 (use-package sql
   :config
