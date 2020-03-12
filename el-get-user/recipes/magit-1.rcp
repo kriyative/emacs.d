@@ -1,0 +1,14 @@
+;; this is for loading an ancient version of magit on emacs-24.3
+(:name magit-1
+       :website "https://github.com/magit/magit#readme"
+       :description "It's Magit! An Emacs mode for Git."
+       :type github
+       :pkgname "magit/magit"
+       :branch "1.4.2"
+       :depends (dash with-editor git-modes-1)
+       ;; Use the Makefile to produce the info manual, el-get can
+       ;; handle compilation and autoloads on its own.  Create an
+       ;; empty autoloads file because magit.el explicitly checks for
+       ;; a file of that name.
+       :build `(("make" ,(format "EMACSBIN=%s" el-get-emacs) "docs"))
+       :build/berkeley-unix `(("gmake" ,(format "EMACSBIN=%s" el-get-emacs) "docs")))

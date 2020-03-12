@@ -1,0 +1,12 @@
+;; this is for loading an ancient version of magit on emacs-24.3
+(:name git-modes-1
+       :website "https://github.com/magit/git-modes#README.md"
+       :description "Emacs major modes for Git configuration files"
+       :type github
+       :pkgname "magit/git-modes"
+       :branch "1.0.0"
+       ;; Use the Makefile to produce the info manual, el-get can
+       ;; handle compilation and autoloads on its own.  Create an
+       ;; empty autoloads file because magit.el explicitly checks for
+       ;; a file of that name.
+       :build `(("make" ,(format "EMACSBIN=%s" el-get-emacs) "lisp")))

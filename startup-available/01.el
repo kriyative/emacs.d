@@ -1,9 +1,13 @@
 (rk-el-get-bundles
  ag
  diminish
- magit
  paredit
  slime)
+
+(cond
+ ((string-match "24\\.3\\." emacs-version)
+  (rk-el-get-bundles magit-1))
+ (t (rk-el-get-bundles magit)))
 
 ;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
 
