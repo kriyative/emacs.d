@@ -70,7 +70,8 @@
 
 (use-package dired
   :config
-  (setq dired-listing-switches "-alh"))
+  (setq dired-listing-switches "-alh"
+        dired-recursive-copies 'always))
 
 (defun rk--dired-open-file ()
   "In dired, open the file named on this line."
