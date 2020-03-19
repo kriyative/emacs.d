@@ -82,9 +82,9 @@ maildir)."
   :demand t
   :config
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
-        mu4e-get-mail-command "mbsync-all -u"
-        ;; mu4e-get-mail-command "/bin/true"
-        mu4e-update-interval nil
+        ;; mu4e-get-mail-command "mbsync-all -u"
+        mu4e-get-mail-command "/bin/true"
+        mu4e-update-interval 300
         ;; mu4e-update-interval nil
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
@@ -131,7 +131,10 @@ maildir)."
   (add-to-list 'mu4e-bookmarks
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
-  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
+  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox)
+  (when (fboundp 'run)
+    (run "mbsync-all -d" :hide-buffer t)))
+
 (defun mu4e~headers-human-date (msg)
   "Show a 'human' date.
 If the date is today, show the time, otherwise, show the
