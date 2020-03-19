@@ -131,6 +131,23 @@ maildir)."
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
   (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
+(defun mu4e~headers-human-date (msg)
+  "Show a 'human' date.
+If the date is today, show the time, otherwise, show the
+date. The formats used for date and time are
+`mu4e-headers-date-format' and `mu4e-headers-time-format'."
+  (let ((date (mu4e-msg-field msg :date)))
+    (if (equal date '(0 0 0))
+        "None"
+      (let ((day1 (decode-time date))
+            (day2 (decode-time (current-time))))
+        (cond
+	 ((not (eq (nth 5 day1) (nth 5 day2))) ; year
+	  (format-time-string "%d-%b-%Y" date))
+	 ((and (eq (nth 4 day1) (nth 4 day2))
+               (eq (nth 3 day2) (nth 3 day1)))
+	  (format-time-string "%R" date))
+	 (t (format-time-string "%d-%b" date)))))))
 
 ;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
 (eval-after-load "enriched"
