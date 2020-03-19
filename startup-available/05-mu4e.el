@@ -45,15 +45,21 @@ maildir)."
   (setq mu4e-split-view (if (< 128 (frame-width)) 'vertical 'horizontal)
         mu4e-headers-visible-columns (/ (frame-width) 3)))
 
+(defvar rk--mu4e-view-message nil)
+
+(defun rk--mu4e-view-func (msg)
+  (setq rk--mu4e-view-message msg)
+  (mu4e~headers-view-handler msg))
+
 (defun mu4e-view-mode-hook ()
-  (when (and (boundp 'mu4e~view-msg)
-             mu4e~view-msg
-             (mu4e-message-field mu4e~view-msg :body-html))
-    (setq truncate-lines t))
-  (setq fill-column 85
-        browse-url-browser-function 'browse-url-default-browser
-        shr-width nil)
-  (visual-line-mode))
+  (if (and rk--mu4e-view-message
+           (mu4e-message-field rk--mu4e-view-message :body-html))
+      (progn
+        (setq truncate-lines t)
+        (visual-line-mode -1))
+    (visual-line-mode))
+  (setq browse-url-browser-function 'browse-url-default-browser
+        shr-width nil))
 
 (defun mu4e-compose-mode-hook ()
   (setq mu4e-compose-format-flowed t
