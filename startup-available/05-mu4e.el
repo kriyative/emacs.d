@@ -118,7 +118,8 @@ maildir)."
         org-export-with-toc nil
         mu4e-view-use-gnus nil          ;; don't use gnus to render
         gnus-inhibit-images t
-        mu4e-completing-read-function 'completing-read)
+        mu4e-completing-read-function 'completing-read
+        mu4e-view-func 'rk--mu4e-view-func)
   (add-to-list 'mu4e-view-actions
                '("view in browser" . mu4e-action-view-in-system-browser))
   (add-hook 'mu4e-headers-mode-hook 'mu4e-headers-mode-hook)
