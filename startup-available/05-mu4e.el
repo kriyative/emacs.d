@@ -1,7 +1,7 @@
 (rk-el-get-bundles
  mu4e
  mu4e-multi
- mu4e-maildirs-extension)
+ kriyative/mu4e-maildirs-extension)
 
 ;;;;;;;;;;;;;;;; mu4e
 
