@@ -179,6 +179,7 @@ date. The formats used for date and time are
   (mu4e-maildirs-extension-force-update '(16)))
 
 (use-package mu4e-maildirs-extension
+  :after mu4e
   :config
   (mu4e-maildirs-extension)
   (setq mu4e-maildirs-extension-count-command-format
