@@ -53,7 +53,7 @@ one."
   (define-key org-mode-map (kbd "C-c (") 'show-all)
   (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
   (define-key org-mode-map '[C-tab] nil)
-  (define-key org-mode-map "\M-n" rk-'next-page)
+  (define-key org-mode-map "\M-n" 'rk-next-page)
   (define-key org-mode-map "\M-p" 'rk-prev-page)
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-export-html-postamble nil
