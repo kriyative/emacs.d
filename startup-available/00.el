@@ -150,12 +150,6 @@
 
 (add-to-list 'kill-emacs-query-functions 'rk--confirm-exit)
 
-(defun rk--post-startup-hook ()
-  (when (fboundp 'global-auto-complete-mode)
-    (global-auto-complete-mode -1)))
-
-(add-hook 'emacs-startup-hook 'rk--post-startup-hook)
-
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
 (global-unset-key "\C-z")
