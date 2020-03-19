@@ -1,3 +1,5 @@
+(rk-el-get-bundles kriyative/kriyative-emacs-themes)
+
 (defun rk--set-window-width* (width pixelwisep)
   (let* ((w (selected-window))
          (delta (- width (window-width w pixelwisep))))
@@ -149,8 +151,8 @@
 
 (defun rk--x-set-inputs-find-devices (device-patterns)
   (cl-remove-if-not (lambda (device)
-                      (match device device-patterns
-                             :key (lambda (p) (plist-get p :name))))
+                      (rk--match device device-patterns
+                                 :key (lambda (p) (plist-get p :name))))
                     (rk--x-set-inputs-parse-devices)))
 
 (defun rk--x-set-inputs-enabled (device-patterns bool)
@@ -172,11 +174,11 @@
 
 (defun rk-enable-input-devices ()
   (interactive)
-  (rk--x-set-inputs-enabled x-set-inputs-devices t))
+  (rk--x-set-inputs-enabled rk--x-set-inputs-devices t))
 
 (defun rk-disable-input-devices ()
   (interactive)
-  (rk--x-set-inputs-enabled x-set-inputs-devices nil))
+  (rk--x-set-inputs-enabled rk--x-set-inputs-devices nil))
 
 (defun rk-x-init-roller-mouse ()
   (interactive)
@@ -194,16 +196,8 @@
   '(rk--setup-info-faces))
 
 (set-terminal-coding-system 'unix)
-(mapcar (lambda (face)
-          (set-face-background face "white")
-          (set-face-inverse-video-p face nil)
-          (set-face-bold-p face t))
-        '(highlight))
-(set-face-background 'region "cyan")
-(set-face-foreground 'region nil)
 (normal-erase-is-backspace-mode 0)
 (menu-bar-mode -1)
-
 (set-default 'fringes-outside-margins t)
 
 (setq utf-translate-cjk-mode nil) ; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
@@ -226,101 +220,6 @@
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
 (setq initial-frame-alist nil)
 
-(defun rk-light-theme-white ()
-  (interactive)
-  (let ((fgcolor "black")
-        (bgcolor "white"))
-    (when window-system
-      (set-foreground-color fgcolor)
-      (set-background-color bgcolor)
-      (set-face-foreground 'mode-line bgcolor)
-      (set-face-background 'mode-line "grey40")
-      (set-cursor-color "red")
-      (set-face-foreground 'default fgcolor))
-    (set-face-foreground 'region fgcolor)
-    (set-face-background 'region "lightgrey")
-    (set-face-foreground 'minibuffer-prompt fgcolor)
-    (set-face-background 'minibuffer-prompt nil)
-    (unless window-system
-      (set-face-foreground 'mode-line fgcolor)
-      (set-face-background 'mode-line bgcolor)
-      (set-face-foreground 'menu bgcolor))
-    (set-face-background 'isearch "indian red")
-    (set-face-foreground 'isearch "white")
-    (set-face-background 'fringe "grey99")
-    (when (boundp 'font-lock-comment-face)
-      (set-face-foreground 'font-lock-comment-face "DimGrey")
-      (set-face-foreground 'font-lock-builtin-face "gray20")
-      (set-face-foreground 'font-lock-constant-face "DimGrey")
-      (set-face-foreground 'font-lock-function-name-face "blue")
-      (set-face-foreground 'font-lock-keyword-face "gray20")
-      (set-face-foreground 'font-lock-string-face "DimGrey")
-      (set-face-foreground 'font-lock-type-face fgcolor)
-      (set-face-foreground 'font-lock-variable-name-face fgcolor)
-      (set-face-foreground 'font-lock-warning-face "red"))
-    (set-face-attribute 'vertical-border nil :background bgcolor :foreground fgcolor)))
-
-(rk-light-theme-white)
-
-(defun rk--darken (color &optional amount)
-  (let ((values (color-name-to-rgb color))
-        (amount (or amount 0.1)))
-    (apply 'format
-           "#%02x%02x%02x"
-           (mapcar (lambda (v) (* 255 (- 1 amount) v)) values))))
-
-(defun rk--lighten (color &optional amount)
-  (let ((values (color-name-to-rgb color))
-        (amount (or amount 0.1)))
-    (apply 'format
-           "#%02x%02x%02x"
-           (mapcar (lambda (v) (* 255 (1+ amount) v)) values))))
-
-(defun rk--set-theme-colors (fgcolor bgcolor &rest args)
-  (destructuring-bind (&key isearch-fg comment-fg builtin-fg
-                            constant-fg function-fg keyword-fg
-                            warning-fg)
-      args
-    (let ((fg-80% (rk--darken fgcolor 0.2))
-          (fg-120% (rk--lighten fgcolor 0.2)))
-      (when window-system
-        (set-foreground-color fgcolor)
-        (set-background-color bgcolor)
-        (set-face-foreground 'mode-line bgcolor)
-        (set-face-background 'mode-line fgcolor)
-        (set-cursor-color "red")
-        (set-face-foreground 'default fgcolor))
-      (set-face-foreground 'region bgcolor)
-      (set-face-background 'region fgcolor)
-      (unless window-system
-        (set-face-foreground 'mode-line fgcolor)
-        (set-face-foreground 'menu fgcolor))
-      (when (string-match "^2[123]" emacs-version)
-        (set-face-background 'isearch (or isearch-fg "indian red"))
-        (set-face-foreground 'isearch bgcolor))
-      (set-face-foreground 'minibuffer-prompt fgcolor)
-      (set-face-background 'fringe bgcolor)
-      (when (boundp 'font-lock-comment-face)
-        (set-face-foreground 'font-lock-comment-face (or comment-fg fg-80%))
-        (set-face-foreground 'font-lock-builtin-face (or builtin-fg fgcolor))
-        (set-face-foreground 'font-lock-constant-face (or constant-fg fgcolor))
-        (set-face-foreground 'font-lock-function-name-face (or function-fg fg-120%))
-        (set-face-foreground 'font-lock-keyword-face (or keyword-fg fg-120%))
-        (set-face-foreground 'font-lock-string-face fgcolor)
-        (set-face-foreground 'font-lock-type-face fgcolor)
-        (set-face-foreground 'font-lock-variable-name-face fgcolor)
-        (set-face-foreground 'font-lock-warning-face (or warning-fg "red")))
-      (set-face-attribute 'vertical-border nil :background bgcolor :foreground fgcolor)
-      (setq cider-stacktrace-frames-background-color bgcolor))))
-
-(defun rk-dark-theme-green ()
-  (interactive)
-  (rk--set-theme-colors "green3" "black"))
-
-;; (dark-theme-green)
-
-(defun rk-dark-theme-amber ()
-  (interactive)
-  (rk--set-theme-colors "DarkGoldenrod3" "black"))
-
-;; (dark-theme-amber)
+(use-package kriyative-emacs-themes
+  :config
+  (load-theme 'kriyative-light))
