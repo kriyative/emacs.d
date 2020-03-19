@@ -30,5 +30,7 @@
 
 (when (file-exists-p diary-file)
   (diary 0))
-(setq server-use-tcp t)
+
+(setq server-socket-dir "~/.emacs.d/server/"
+      server-use-tcp t)
 (server-start)
