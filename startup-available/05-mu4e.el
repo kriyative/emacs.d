@@ -53,11 +53,12 @@ maildir)."
 
 (defun mu4e-view-mode-hook ()
   (if (and rk--mu4e-view-message
-           (mu4e-message-field rk--mu4e-view-message :body-html))
+           (mu4e-message-field rk--mu4e-view-message :body-html)
+           (not (mu4e-message-field rk--mu4e-view-message :body-txt)))
       (progn
         (setq truncate-lines t)
         (visual-line-mode -1))
-    (visual-line-mode))
+    (visual-line-mode 1))
   (setq browse-url-browser-function 'browse-url-default-browser
         shr-width nil))
 
