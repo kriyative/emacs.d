@@ -54,7 +54,8 @@ maildir)."
 (defun mu4e-view-mode-hook ()
   (if (and rk--mu4e-view-message
            (mu4e-message-field rk--mu4e-view-message :body-html)
-           (not (mu4e-message-field rk--mu4e-view-message :body-txt)))
+           (or (not (mu4e-message-field rk--mu4e-view-message :body-txt))
+               (mu4e~message-use-html-p rk--mu4e-view-message mu4e-view-prefer-html)))
       (progn
         (setq truncate-lines t)
         (visual-line-mode -1))
@@ -79,7 +80,6 @@ maildir)."
   (visual-line-mode 1))
 
 (use-package mu4e
-  :after (org org-mime)
   :demand t
   :config
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
