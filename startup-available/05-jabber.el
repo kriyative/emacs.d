@@ -1,6 +1,6 @@
 (rk-el-get-bundles
  (emacs-jabber
-  :url "git://git.code.sf.net/p/emacs-jabber/git"))
+  :url "git@github.com:kriyative/emacs-jabber.git"))
 
 (use-package jabber
   :config
