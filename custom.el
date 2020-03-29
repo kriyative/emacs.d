@@ -43,6 +43,7 @@
  '(Info-quoted ((t (:inherit nil :weight bold))))
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
  '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
+ '(jabber-activity-personal-face ((t (:foreground "yellow" :weight bold))))
  '(jabber-chat-prompt-foreign ((t (:weight bold))))
  '(jabber-chat-prompt-local ((t (:foreground "blue"))))
  '(jabber-chat-prompt-system ((t (:foreground "red"))))
