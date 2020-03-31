@@ -20,4 +20,4 @@
 (use-package w3m
   :config
   (add-hook 'w3m-mode-hook 'w3m-mode-hook)
-  (setq browse-url-browser-function 'w3m-browse-url-other-window))
+  (setq browse-url-browser-function 'rk-url-browser-function))
