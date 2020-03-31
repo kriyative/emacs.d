@@ -18,4 +18,6 @@
         jabber-show-offline-contacts t
         jabber-chat-local-prompt-format "[%t] %n> "
         jabber-history-size-limit 1024
-        jabber-show-resources nil))
+        jabber-show-resources nil)
+  :bind (:map jabber-chat-mode-map
+              ([C-return] . ffap)))
