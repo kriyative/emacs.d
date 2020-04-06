@@ -5,10 +5,12 @@
 (cl-defstruct rk--text-section type text)
 
 (defun rk--apply-lang-mode-fontify (lang)
-  (let ((mode (intern (concat lang "-mode"))))
-    (when (fboundp mode)
-      (delay-mode-hooks (funcall mode))
-      (font-lock-default-function mode))))
+  (ignore-errors
+    (let ((mode (intern (concat lang "-mode"))))
+      (when (fboundp mode)
+        (delay-mode-hooks (funcall mode))
+        (font-lock-default-function mode)
+        (font-lock-default-fontify-region (point-min) (point-max) nil)))))
 
 (defun rk--split-sections (body)
   (let ((cursor 0) sections slug)
@@ -24,7 +26,6 @@
         (with-temp-buffer
           (insert (substring body slug-start slug-end))
           (rk--apply-lang-mode-fontify lang)
-          (font-lock-default-fontify-region (point-min) (point-max) nil)
           (push (make-rk--text-section :type 'code
                                        :text (buffer-string))
                 sections))
