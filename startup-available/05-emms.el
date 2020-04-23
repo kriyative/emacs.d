@@ -12,19 +12,33 @@
            (emms-track-name
             (emms-playlist-current-selected-track)))))
 
+(defun rk-emms-show ()
+  (interactive)
+  (let ((emms-show-format (if emms-player-paused-p
+                              "emms paused %s"
+                            "emms playing %s")))
+    (emms-show)))
+
+(defun rk--emms-echo-track-info ()
+  (rk-emms-show))
+
 (use-package emms
   :bind
   (:map user-commands-prefix-map
         ("ee" . rk-emms-browser)
         ("en" . emms-next)
         ("ep" . emms-previous)
-        (" " . emms-pause))
+        (" " . emms-pause)
+        ("es" . rk-emms-show))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
   (setq emms-source-file-default-directory "~/Music/"
-        emms-player-mplayer-parameters '("-slave" "-quiet" "-really-quiet" "-vo" "null"))
+        emms-player-mplayer-parameters '("-slave"
+                                         "-quiet"
+                                         "-really-quiet"
+                                         "-vo" "null"))
   ;; (require 'emms-player-mpd)
   ;; (add-to-list 'emms-player-list 'emms-player-mpd)
   ;; (add-to-list 'emms-info-functions 'emms-info-mpd)
@@ -32,4 +46,8 @@
   ;;       emms-player-mpd-server-port "6600")
   (setq emms-playlist-default-major-mode 'emms-playlist-mode)
   (add-hook 'emms-info-functions 'emms-info-track-description)
-  (setq emms-mode-line-mode-line-function 'rk-emms-mode-line-playlist-current-name))
+  (add-hook 'emms-player-started-hook 'rk--emms-echo-track-info)
+  (add-hook 'emms-player-paused-hook 'rk--emms-echo-track-info)
+  (add-hook 'emms-playlist-selection-changed-hook 'rk--emms-echo-track-info)
+  (emms-mode-line -1)
+  (emms-playing-time -1))
