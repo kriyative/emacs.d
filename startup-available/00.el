@@ -87,6 +87,7 @@
 
 (use-package dired-x
   :after dired
+  :demand t
   :config
   (set-default 'dired-omit-mode t)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
