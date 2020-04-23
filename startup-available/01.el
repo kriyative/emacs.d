@@ -120,6 +120,11 @@
   (local-unset-key [C-tab])
   (define-key magit-mode-map [C-tab] nil))
 
+(defun rk-magit-show-refs (&optional transient)
+  (interactive)
+  (let ((magit-buffer-arguments '(("-s" . "-commiterdate"))))
+    (magit-show-refs transient)))
+
 (use-package magit
   :config
   (when (facep 'magit-item-highlight)
@@ -129,7 +134,9 @@
   (when (facep 'magit-tag)
     (set-face-attribute 'magit-tag nil :foreground "black"))
   (setq magit-last-seen-setup-instructions "1.4.0")
-  (add-hook 'magit-mode-hook 'rk--magit-setup-hook))
+  (add-hook 'magit-mode-hook 'rk--magit-setup-hook)
+  :bind
+  (:map magit-status-mode-map ("y" . rk-magit-show-refs)))
 
 (defun rk--add-el-get-info-dirs ()
   (require 'find-lisp)
@@ -205,7 +212,8 @@
   (pop-to-buffer "*SLIME Connections*"))
 
 (defun rk-slime-mode-hook ()
-  (setq browse-url-browser-function 'rk-url-browser-function)
+  (setq browse-url-browser-function 'rk-url-browser-function
+        common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
   (define-key slime-mode-map "\C-c\C-xc" 'rk-slime-list-connections)
