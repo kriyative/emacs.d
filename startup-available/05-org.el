@@ -63,7 +63,9 @@ one."
    'org-babel-load-languages
    '((ditaa . t)
      (shell . t)
-     (blockdiag . t))))
+     (blockdiag . t)))
+  (setq org-src-window-setup 'other-window
+        org-agenda-window-setup 'other-window))
 
 (use-package org-agenda
   :after org
