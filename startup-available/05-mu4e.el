@@ -132,9 +132,7 @@ maildir)."
   (add-to-list 'mu4e-bookmarks
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
-  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox)
-  (when (fboundp 'run)
-    (run "mbsync-all -d" :hide-buffer t)))
+  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
 
 (defun mu4e~headers-human-date (msg)
   "Show a 'human' date.

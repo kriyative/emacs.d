@@ -34,3 +34,6 @@
 (setq server-socket-dir "~/.emacs.d/server/"
       server-use-tcp t)
 (server-start)
+
+(when (fboundp 'run)
+  (run "mbsync-all -d" :hide-buffer t))
