@@ -1,3 +1,8 @@
+(rk-el-get-bundles
+ hagleitn/speed-type
+ ht
+ iqbalansari/emacs-emojify)
+
 (defun rk--file-age (file)
   (float-time
    (time-subtract (current-time)
@@ -27,6 +32,12 @@
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
   (add-hook 'midnight-hook 'rk--midnight-hook))
+
+(use-package ht)
+
+(use-package emojify
+  :config
+  (global-emojify-mode 1))
 
 (when (file-exists-p diary-file)
   (diary 0))

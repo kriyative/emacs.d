@@ -1,0 +1,4 @@
+(:name emacs-emoji
+       :type github
+       :pkgname "iqbalansari/emacs-emojify"
+       :depends (ht))
