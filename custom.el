@@ -8,22 +8,26 @@
  '(fringe-mode 4 nil (fringe))
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
+   (quote
+    (tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
  '(safe-local-variable-values
-   '((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
-           (add-hook 'write-contents-functions
-                     (lambda nil
-                       (delete-trailing-whitespace)
-                       nil))
-           (require 'whitespace)
+   (quote
+    ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
+           (add-hook
+            (quote write-contents-functions)
+            (lambda nil
+              (delete-trailing-whitespace)
+              nil))
+           (require
+            (quote whitespace))
            "Sometimes the mode needs to be toggled off and on."
            (whitespace-mode 0)
            (whitespace-mode 1))
      (whitespace-style face tabs trailing lines-tail)
      (cider-shadow-cljs-default-options . "browser")
      (cider-default-cljs-repl . shadow)
-     (checkdoc-package-keywords-flag)))
- '(send-mail-function 'smtpmail-send-it)
+     (checkdoc-package-keywords-flag))))
+ '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
  '(tool-bar-mode nil)
@@ -37,6 +41,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Info-quoted ((t (:inherit nil :weight bold))))
+ '(compilation-mode-line-exit ((t (:inherit compilation-info :foreground "green"))))
+ '(compilation-mode-line-fail ((t (:foreground "red"))))
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
  '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
  '(jabber-activity-personal-face ((t (:foreground "yellow" :weight bold))))
