@@ -78,12 +78,6 @@
                                   ("Pacific/Auckland" "Auckland"))
         display-time-world-time-format "%a %d %b %R %Z"))
 
-(use-package disable-mouse
-  :diminish disable-mouse-global-mode
-  :delight disable-mouse-global-mode
-  :config
-  (global-disable-mouse-mode))
-
 (use-package edit-server
   :config
   (setq edit-server-default-major-mode 'normal-mode
