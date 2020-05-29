@@ -1,0 +1,12 @@
+(:name org-sync
+       :website "http://orgmode.org/worg/org-contrib/gsoc2012/student-projects/org-sync/"
+       :description "Synchronize Org documents with external services."
+       :type git
+       :url "https://code.orgmode.org/bzg/org-mode.git"
+       :prepare (progn
+                  (autoload 'os "os"
+                    "Sync org-mode files with different online services" t)
+                  (autoload 'os-import "os"
+                    "Import information to sync with org-mode from different online services" t)
+                  (autoload 'os-sync "os"
+                    "Sync current org-mode file with service it is bound to" t)))
