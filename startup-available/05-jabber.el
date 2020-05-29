@@ -76,7 +76,8 @@
         jabber-history-size-limit 1024
         jabber-console-truncate-lines 1000
         jabber-show-resources nil
-        alert-default-style 'notifications)
+        alert-default-style 'notifications
+        fsm-debug nil)
   (add-hook 'jabber-alert-message-hooks 'jabber-message-alert)
   :bind (:map jabber-chat-mode-map
               ([C-return] . ffap))
