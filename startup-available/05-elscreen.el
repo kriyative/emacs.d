@@ -32,3 +32,6 @@
                   (intern (format "elscreen-goto-%d" i)))
   (global-set-key (kbd (format "C-z C-%d" i))
                   (intern (format "elscreen-goto-%d" i))))
+(global-set-key (kbd "H-n") 'elscreen-next)
+(global-set-key (kbd "H-p") 'elscreen-previous)
+(global-set-key (kbd "H-b") 'elscreen-find-and-goto-by-buffer)

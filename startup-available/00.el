@@ -210,5 +210,4 @@
 (global-set-key (kbd "M-a") 'beginning-of-line)
 (global-set-key (kbd "M-e") 'end-of-line)
 (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "H-SPC") 'backward-delete-char-untabify)
 
