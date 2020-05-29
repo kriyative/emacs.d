@@ -15,8 +15,8 @@
 (defun rk-emms-show ()
   (interactive)
   (let ((emms-show-format (if emms-player-paused-p
-                              "emms paused %s"
-                            "emms playing %s")))
+                              "EMMS paused %s"
+                            "EMMS playing %s")))
     (emms-show)))
 
 (defun rk--emms-echo-track-info ()
@@ -29,7 +29,13 @@
         ("en" . emms-next)
         ("ep" . emms-previous)
         (" " . emms-pause)
-        ("es" . rk-emms-show))
+        ("es" . rk-emms-show)
+        ("ed" . emms-play-directory)
+        ("et" . emms-play-directory-tree)
+        ("ef" . emms-play-file))
+  :bind
+  (:map dired-mode-map
+        ("\M-e" . emms-play-dired))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
