@@ -47,4 +47,4 @@
 (server-start)
 
 (when (fboundp 'run)
-  (run "mbsync-all -d" :hide-buffer t))
+  (run "mbsync-all -s" :hide-buffer t))
