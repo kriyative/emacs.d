@@ -4,12 +4,12 @@
    (subr-x
     :type http
     :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/emacs-lisp/subr-x.el")
-   (clojure-mode :checkout "5.5.2")))
+   (clojure-mode :checkout "5.5.2")
+   (cider :checkout "v0.17.0")))
  (t
-  (rk-el-get-bundles clojure-mode)))
-
-(rk-el-get-bundles
- (cider :checkout "v0.17.0"))
+  (rk-el-get-bundles
+   clojure-mode
+   (cider :checkout "v0.24.0"))))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -20,10 +20,18 @@
 
 (use-package clojure-mode
   :bind
+  (:map global-map
+        ("H-l" . cider-jack-in))
+  :bind
   (:map clojure-mode-map
-        ("C-c ," . cider-test-run-loaded-tests)
+        ("C-c ,"   . cider-test-run-loaded-tests)
         ("C-c M-," . cider-test-run-test)
-        ("C-M-x" . cider-force-eval-defun-at-point))
+        ("C-M-x"   . cider-force-eval-defun-at-point)
+        ("H-d"     . cider-doc)
+        ("H-j"     . cider-javadoc)
+        ("H-w"     . cider-grimoire)
+        ("H-r"     . cider-switch-to-repl-buffer)
+        ("H-l"     . cider-jack-in))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (setq auto-mode-alist
@@ -33,6 +41,8 @@
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
 
 (use-package cider-repl
+  :bind
+  (("H-r"   . cider-switch-to-last-clojure-buffer))
   :config
   (cider-repl-add-shortcut "sayoonara" 'cider-quit)
   (setq cider-completion-use-context nil
