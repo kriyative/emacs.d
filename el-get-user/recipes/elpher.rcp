@@ -1,0 +1,4 @@
+(:name elpher
+       :url "git://thelambdalab.xyz/elpher.git"
+       :method git
+       :type git)
