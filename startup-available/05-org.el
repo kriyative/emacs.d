@@ -67,6 +67,18 @@ one."
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window))
 
+(use-package ox-latex
+  :after org
+  :config
+  (add-to-list 'org-latex-classes
+               '("letter"
+                 "\\documentclass{letter}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
 (use-package org-agenda
   :after org
   :config
@@ -166,3 +178,4 @@ one."
   :after (org blockdiag-mode))
 
 (use-package org-present)
+
