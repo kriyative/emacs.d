@@ -146,4 +146,21 @@
   :actions  '((?x "Execute" gnome-screenshot))
   :default-action 'gnome-screenshot)
 
-(global-set-key (kbd "<print>") 'gnome-screenshot-popup)
+(defun scrot-screenshot (args)
+  (interactive (list (scrot-screenshot-arguments)))
+  (exec! (list* "scrot" (append args '("-e" "mv $f ~/Pictures/")))))
+
+(magit-define-popup scrot-screenshot-popup
+  "Show popup menu to invoke `scrot` screenshot options"
+  'exwm-commands
+  :switches '((?b "Include Border" "--border")
+              (?c "Show Count"     "--count")
+              (?s "Select Window"  "--select")
+              (?z "Silent"         "--silent"))
+  :options  '((?t "Create Thumbnail" "--thumb")
+              (?d "Delay"            "--delay=" read-number)
+              (?q "Quality"          "--quality=" read-number))
+  :actions  '((?x "Execute" scrot-screenshot))
+  :default-action 'scrot-screenshot)
+
+(global-set-key (kbd "<print>") 'scrot-screenshot-popup)
