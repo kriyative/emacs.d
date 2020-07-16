@@ -7,7 +7,8 @@
  dictionary
  edit-server
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
-            :features ipinfo)
+            :features ipinfo
+            :depends (request))
  ;; libvterm ;; -- needs newer cmake to build in 18.04
  (password-mode
   :url "https://github.com/juergenhoetzel/password-mode.git"
