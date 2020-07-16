@@ -1,0 +1,6 @@
+(:name org-gcal
+       :website "http://github.com/kriyative/org-gcal.el"
+       :description "Org sync with Google Calendar"
+       :type github
+       :pkgname "kriyative/org-gcal.el"
+       :depends (request alert))
