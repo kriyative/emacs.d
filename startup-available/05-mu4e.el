@@ -60,8 +60,9 @@ maildir)."
         (setq truncate-lines t)
         (visual-line-mode -1))
     (visual-line-mode 1))
-  (setq browse-url-browser-function 'browse-url-default-browser
-        shr-width nil))
+  (set (make-local-variable 'browse-url-browser-function)
+       'browse-url-default-browser)
+  (setq shr-width nil))
 
 (defun mu4e-compose-mode-hook ()
   (setq mu4e-compose-format-flowed t
