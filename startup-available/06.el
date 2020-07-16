@@ -21,12 +21,13 @@
           :initial-value nil))
 
 (defun rk--midnight-hook ()
-  (let ((gcal-file (cdadr
-                    (assoc 'org-gcal-file-alist
-                           (cdr (first org-gcal-accounts))))))
-    (when (< 3600 (rk--file-age gcal-file))
-      (org-gcal-multi-fetch))
-    (org-agenda-list nil nil 'day)))
+  (when (fboundp 'org-gcal-multi-fetch)
+    (let ((gcal-file (cdadr
+                      (assoc 'org-gcal-file-alist
+                             (cdr (first org-gcal-accounts))))))
+      (when (< 3600 (rk--file-age gcal-file))
+        (org-gcal-multi-fetch))
+      (org-agenda-list nil nil 'day))))
 
 (use-package midnight
   :config
