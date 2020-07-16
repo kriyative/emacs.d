@@ -25,6 +25,7 @@
 (use-package emms
   :bind
   (:map user-commands-prefix-map
+        ("eb" . rk-emms-browser)
         ("ee" . rk-emms-browser)
         ("en" . emms-next)
         ("ep" . emms-previous)
