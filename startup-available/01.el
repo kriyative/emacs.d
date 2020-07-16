@@ -213,8 +213,7 @@
   (pop-to-buffer "*SLIME Connections*"))
 
 (defun rk-slime-mode-hook ()
-  (setq browse-url-browser-function 'rk-url-browser-function
-        common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
+  (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
   (define-key slime-mode-map "\C-c\C-xc" 'rk-slime-list-connections)
