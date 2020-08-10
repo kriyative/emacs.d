@@ -50,15 +50,8 @@
 (defun rk--optimum-font-size ()
   (let ((dpi (rk--display-dpi)))
     (cond
-     ((< 170 dpi) 14)
-     ((or (< 1920 (x-display-pixel-width)) (< 150 dpi)) 13)
-     (t 11))))
-
-(defun rk--optimum-font ()
-  (let ((dpi (rk--display-dpi)))
-    (cond
-     ((< 170 dpi) 14)
-     ((or (< 1920 (x-display-pixel-width)) (< 150 dpi)) 13)
+     ((< 170 dpi) 16)
+     ((or (< 1920 (x-display-pixel-width)) (< 150 dpi)) 14)
      (t 11))))
 
 ;; (rk--optimum-font-size)
@@ -72,6 +65,9 @@
 ;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
   (rk--x-set-font "DejaVu Sans Mono Book"))
+
+;; (rk--x-set-font "Iosevka Term Slab")
+;; (rk--x-set-font "Hack")
 
 (defvar *rk--emacs-focused-p* t)
 (defun rk--emacs-focused-p ()
