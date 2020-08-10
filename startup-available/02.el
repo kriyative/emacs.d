@@ -9,7 +9,7 @@
  (t
   (rk-el-get-bundles
    clojure-mode
-   (cider :checkout "v0.24.0"))))
+   (cider :checkout "v0.17.0"))))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
