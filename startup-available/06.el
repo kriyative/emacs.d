@@ -44,7 +44,9 @@
   (diary 0))
 
 (setq server-socket-dir "~/.emacs.d/server/"
+      server-name "server"
       server-use-tcp t)
+(server-force-delete)
 (server-start)
 
 (when (fboundp 'run)
