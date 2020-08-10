@@ -36,7 +36,7 @@
         ("ef" . emms-play-file))
   :bind
   (:map dired-mode-map
-        ("\M-e" . emms-play-dired))
+        ("\C-ce" . emms-play-dired))
   :config
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
