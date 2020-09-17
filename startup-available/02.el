@@ -9,16 +9,21 @@
  (t
   (rk-el-get-bundles
    clojure-mode
-   (cider :checkout "v0.17.0"))))
+   (cider :checkout "v0.22.0"))))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
 (defun clojure-mode-hook ()
   (auto-revert-mode 1)
   (outline-minor-mode 1)
-  (enable-paredit-mode))
+  (enable-paredit-mode)
+  (make-local-variable 'before-save-hook)
+  (add-hook 'before-save-hook
+            '(lambda ()
+               (clojure-indent-region (point-min) (point-max)))))
 
 (use-package clojure-mode
+  :demand t
   :bind
   (:map global-map
         ("H-l" . cider-jack-in))
@@ -160,14 +165,16 @@
                           '(("defclass\*" . font-lock-keyword-face)))
   (modify-syntax-entry ?\[ "(]" lisp-mode-syntax-table)
   (modify-syntax-entry ?\] ")[" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\{ "(}" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\} "){" lisp-mode-syntax-table)
   (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
   (setup-lisp-indent-function 'common-lisp-indent-function)
-  (setq indent-tabs-mode nil))
+  (setq indent-tabs-mode nil)
+  (paredit-mode 1))
 
 (use-package lisp-mode
   :config
   (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'rk-common-lisp-mode-hook)
-  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
-  (enable-paredit-mode))
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
