@@ -17,8 +17,7 @@
 
 (defun rk--start-emacs (&optional run-level)
   (load "~/.personal.el" 'noerror)
-  (rk--start-emacs-level (or run-level
-                             (if window-system 5 3)))
+  (rk--start-emacs-level (or run-level 5))
   (load custom-file 'noerror)
   (setq *rk--inited-p* t))
 
