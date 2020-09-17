@@ -1,7 +1,8 @@
 (rk-el-get-bundles
- mu4e
+ (mu4e :checkout "1.4.7")
  mu4e-multi
- kriyative/mu4e-maildirs-extension)
+ kriyative/mu4e-maildirs-extension
+ kriyative/mbsync.el)
 
 ;;;;;;;;;;;;;;;; mu4e
 
@@ -86,7 +87,7 @@ maildir)."
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
         ;; mu4e-get-mail-command "mbsync-all -u"
         mu4e-get-mail-command "/bin/true"
-        mu4e-update-interval 300
+        mu4e-update-interval nil
         ;; mu4e-update-interval nil
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
@@ -218,6 +219,16 @@ date. The formats used for date and time are
   :config
   ;; (setq mu4e-view-func 'mu4e~headers-view-handler)
   (setq mu4e-view-func 'mu4e-conversation))
+
+(defun rk--mbsync-sync-update (info)
+  (when (cdr info)
+    (message "mu4e update %S" info)
+    (mu4e-update-mail-and-index t)))
+
+(use-package mbsync
+  :config
+  ;; (setq *mbsync-accounts* '("gmail" ("outlook" 600)))
+  (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update))
 
 ;;;;;;;;;;;;;;;; overrides ;;;;;;;;;;;;;;;;
 
