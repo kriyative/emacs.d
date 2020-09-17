@@ -6,7 +6,8 @@
  plantuml-mode
  projectile
  csv-mode
- geiser)
+ geiser
+ restclient)
 
 (defun rk-find-or-insert (expr insertion)
   (goto-char (point-min))
@@ -80,6 +81,9 @@
 (use-package graphviz-dot-mode
   :config
   (setq graphviz-dot-view-command "xdot %s"))
+
+(use-package restclient)
+
 (use-package plantuml-mode
   :config
   ;; why is the default to connect to plantuml.com?
