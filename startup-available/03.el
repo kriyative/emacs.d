@@ -80,3 +80,8 @@
 (use-package graphviz-dot-mode
   :config
   (setq graphviz-dot-view-command "xdot %s"))
+(use-package plantuml-mode
+  :config
+  ;; why is the default to connect to plantuml.com?
+  (setq plantuml-server-url nil
+        plantuml-default-exec-mode 'jar))
