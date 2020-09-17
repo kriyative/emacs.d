@@ -3,6 +3,7 @@
  org-passwords
  xcezx/blockdiag-mode
  corpix/ob-blockdiag.el
+ alf/ob-restclient.el
  org-sync
  org-present)
 
@@ -58,11 +59,8 @@ one."
   (setq org-export-html-postamble nil
         org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
         org-log-done 'time)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((ditaa . t)
-     (shell . t)
-     (blockdiag . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((ditaa . t) (shell . t)))
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window))
 
@@ -97,9 +95,16 @@ one."
 (use-package org-mime :after org)
 (use-package blockdiag-mode)
 (use-package ob-blockdiag
-  :after (org blockdiag-mode))
+  :after (org blockdiag-mode)
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((blockdiag . t))))
 
 (use-package org-present)
+
+(use-package ob-restclient
+  :after restclient
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))
 
 ;; from:
 ;; https://emacs.stackexchange.com/questions/17283/is-it-possible-to-get-prettified-symbols-in-org-mode-source-blocks
