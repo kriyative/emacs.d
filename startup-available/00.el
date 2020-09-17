@@ -214,3 +214,14 @@
 (global-set-key (kbd "M-e") 'end-of-line)
 (global-set-key (kbd "M-o") 'other-window)
 
+(defun message-with-timestamp (old-func fmt-string &rest args)
+  "Prepend current timestamp (with microsecond precision) to a message"
+  (when (and fmt-string (< 0 (length fmt-string)))
+    (apply old-func
+           (concat "[" (format-time-string "%m-%d %T.%3N")
+                   " " (buffer-name (current-buffer))
+                   "] " fmt-string)
+           args)))
+
+(advice-add 'message :around #'message-with-timestamp)
+;; (message "hello")
