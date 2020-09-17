@@ -49,5 +49,5 @@
 (server-force-delete)
 (server-start)
 
-(when (fboundp 'run)
-  (run "bb-mbsync" :hide-buffer t))
+(when (fboundp 'mbsync-sync-accounts)
+  (mbsync-sync-accounts))
