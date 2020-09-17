@@ -12,7 +12,8 @@
     (tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
  '(safe-local-variable-values
    (quote
-    ((cider-shadow-cljs-default-options . "app")
+    ((Minor-mode . paredit)
+     (cider-shadow-cljs-default-options . "app")
      (eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
 	   (add-hook
 	    (quote write-contents-functions)
@@ -59,3 +60,4 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'list-timers 'disabled nil)
