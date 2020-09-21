@@ -9,7 +9,8 @@
  (t
   (rk-el-get-bundles
    clojure-mode
-   (cider :checkout "v0.22.0"))))
+   (cider :checkout "v0.22.0")
+   kriyative/git-code-review)))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -111,6 +112,12 @@
         (message "Removing sym: %s" sym)
         (cider--remove-sym sym))))
   (cider-eval-defun-at-point nil))
+
+(use-package git-code-review
+  :config
+  (add-hook 'clojure-mode-hook 'gcr-mode)
+  (add-hook 'emacs-lisp-mode-hook 'gcr-mode)
+  (add-hook 'common-lisp-mode-hook 'gcr-mode))
 
 (use-package ediff
   :config
