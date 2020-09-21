@@ -122,6 +122,12 @@
                 (:prompt-cont-regexp "^[-[:alnum:]_]*[-(][#>] ")))
     (apply 'sql-set-product-feature 'postgres pv)))
 
+(defun rk-lisp-mode-indent-on-save ()
+  (make-local-variable 'before-save-hook)
+  (add-hook 'before-save-hook
+            '(lambda ()
+               (lisp-indent-region (point-min) (point-max)))))
+
 (defun rk-emacs-lisp-mode-hook ()
   ;; (local-set-key " " 'lisp-complete-symbol)
   (outline-minor-mode 1)
@@ -131,7 +137,9 @@
   (local-set-key "\M-." 'find-function)
   (font-lock-mode 1)
   ;; (auto-complete-mode -1)
-  (eldoc-mode 1))
+  (eldoc-mode 1)
+  (paredit-mode 1)
+  (rk-lisp-mode-indent-on-save))
 
 (defun setup-lisp-indent-function (&optional indent-function)
   (let ((indent-function (or indent-function 'lisp-indent-function))
@@ -170,7 +178,8 @@
   (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
   (setup-lisp-indent-function 'common-lisp-indent-function)
   (setq indent-tabs-mode nil)
-  (paredit-mode 1))
+  (paredit-mode 1)
+  (rk-lisp-mode-indent-on-save))
 
 (use-package lisp-mode
   :config
