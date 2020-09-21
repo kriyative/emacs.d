@@ -228,11 +228,25 @@
 
 (defun rk-sbcl ()
   (interactive)
-  (if-bind (sbcl-path (locate-path "sbcl" exec-path))
-    (let ((slime-lisp-implementations `((sbcl (,sbcl-path)))))
+  (if-bind (lisp-path (locate-path "sbcl" exec-path))
+    (let ((slime-lisp-implementations `((sbcl (,lisp-path)))))
       ;; (setenv "SBCL_HOME" (file-name-directory sbcl-path))
       (slime))
     (error "The sbcl application could not be found")))
+
+(defun rk-cloture ()
+  (interactive)
+  (if-bind (lisp-path "/home/ram/src/cloture/cloture")
+    (let ((inferior-lisp-program cloture-path))
+      (slime))
+    (error "The cloture application could not be found")))
+
+(defun rk-clisp ()
+  (interactive)
+  (if-bind (lisp-path (locate-path "clisp" exec-path))
+    (let ((slime-lisp-implementations `((clisp (,lisp-path)))))
+      (slime))
+    (error "The clisp application could not be found")))
 
 (use-package minibuffer
   :config
