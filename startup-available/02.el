@@ -147,6 +147,10 @@
   (eldoc-mode 1)
   (paredit-mode 1)
   (rk-lisp-mode-indent-on-save))
+  (define-key emacs-lisp-mode-map
+    "\C-c\C-p" 'pp-eval-last-sexp)
+  (define-key lisp-interaction-mode-map
+    "\C-c\C-p" 'pp-eval-last-sexp))
 
 (defun setup-lisp-indent-function (&optional indent-function)
   (let ((indent-function (or indent-function 'lisp-indent-function))
