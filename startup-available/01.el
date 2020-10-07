@@ -7,7 +7,7 @@
 (cond
  ((string-match "24\\.3\\." emacs-version)
   (rk-el-get-bundles magit-1))
- (t (rk-el-get-bundles magit)))
+ (t (rk-el-get-bundles magit f magit-todos)))
 
 ;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
 
@@ -138,6 +138,11 @@
   (add-hook 'magit-mode-hook 'rk--magit-setup-hook)
   :bind
   (:map magit-status-mode-map ("y" . rk-magit-show-refs)))
+
+(use-package f)
+(use-package magit-todos
+  :config
+  (add-to-list 'magit-todos-keywords-list "REVIEW"))
 
 (defun rk--add-el-get-info-dirs ()
   (require 'find-lisp)
