@@ -1,4 +1,5 @@
 (rk-el-get-bundles
+ wgrep
  ag
  diminish
  paredit
@@ -60,6 +61,8 @@
    ("\C-c" display-time-world)))
 
 ;;;;;;;;;;;;;;;;
+
+(use-package wgrep)
 
 (use-package ag
   :config
