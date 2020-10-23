@@ -135,11 +135,45 @@
             '(lambda ()
                (lisp-indent-region (point-min) (point-max)))))
 
+(defun hybrid-lisp-indent-function (indent-point state)
+  (cl-labels ((cl-form-p (pts)
+                (let (break-loop)
+                  (while (and (null break-loop) pts)
+                    (let* ((pt (pop pts))
+                           (clp ))
+                      (save-excursion
+                       (goto-char pt)
+                       (when (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")
+                         (message "hybrid-lisp-indent-function: found cl-form: %s"
+                                  (match-string 1))
+                         (setq break-loop t)))))
+                  break-loop)))
+    (let ((pts (nth 9 state)))
+      (if (cl-form-p pts)
+          (common-lisp-indent-function indent-point state)
+          (lisp-indent-function indent-point state)))))
+
+(defun setup-lisp-indent-function (indent-function indent-settings)
+  (dolist (x indent-settings)
+    (put (car x)
+         indent-function
+         (if (numberp (cdr x))
+             (cdr x)
+           (get (cdr x) indent-function)))))
+
 (defun rk-emacs-lisp-mode-hook ()
   ;; (local-set-key " " 'lisp-complete-symbol)
   (outline-minor-mode 1)
   (setq outline-regexp "^[(;]"
         indent-tabs-mode nil)
+  (set (make-local-variable 'lisp-indent-function) 'hybrid-lisp-indent-function)
+  (setup-lisp-indent-function 'lisp-indent-function
+                              '((if-let . if)))
+  (setup-lisp-indent-function 'common-lisp-indent-function
+                              '((cl-labels . labels)
+                                (cl-flet . flet)
+                                (while . when)))
+  ;; don't do the following, inconsistent
   ;; (setup-lisp-indent-function)
   (local-set-key "\M-." 'find-function)
   (font-lock-mode 1)
@@ -151,26 +185,6 @@
     "\C-c\C-p" 'pp-eval-last-sexp)
   (define-key lisp-interaction-mode-map
     "\C-c\C-p" 'pp-eval-last-sexp))
-
-(defun setup-lisp-indent-function (&optional indent-function)
-  (let ((indent-function (or indent-function 'lisp-indent-function))
-        (lisp-indent-alist '((awhen . 1)
-                             (when-let . 1)
-                             (aif . if)
-                             (if-let . if)
-                             (awhile . 1)
-                             (while-let . 1)
-                             (bind . 1)
-                             (callback . lambda)
-                             (c-fficall . with-slots)
-                             (with-cwd . 1)
-                             (save-values . 1))))
-    (dolist (x lisp-indent-alist)
-      (put (car x)
-           indent-function
-           (if (numberp (cdr x))
-               (cdr x)
-             (get (cdr x) indent-function))))))
 
 (defun set-common-lisp-block-comment-syntax ()
   (modify-syntax-entry ?# "<1" font-lock-syntax-table)
@@ -187,7 +201,18 @@
   (modify-syntax-entry ?\{ "(}" lisp-mode-syntax-table)
   (modify-syntax-entry ?\} "){" lisp-mode-syntax-table)
   (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
-  (setup-lisp-indent-function 'common-lisp-indent-function)
+  (setup-lisp-indent-function 'common-lisp-indent-function
+                              '((awhen . 1)
+                                (when-let . 1)
+                                (aif . if)
+                                (if-let . if)
+                                (awhile . 1)
+                                (while-let . 1)
+                                ;; (bind . lambda)
+                                (callback . lambda)
+                                (c-fficall . with-slots)
+                                (with-cwd . 1)
+                                (save-values . 1)))
   (setq indent-tabs-mode nil)
   (paredit-mode 1)
   (rk-lisp-mode-indent-on-save))
