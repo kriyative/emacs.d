@@ -91,7 +91,7 @@
 
 (use-package magit-popup)
 
-(defvar *rk-forge-toggle-topic-settings* '((25 . 0) (100 . 25)))
+(defvar *rk-forge-toggle-topic-settings* '((75 . 0) (100 . 50)))
 
 (defun rk-forge-toggle-closed-topics ()
   (interactive)
