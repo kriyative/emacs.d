@@ -9,7 +9,7 @@
  (t
   (rk-el-get-bundles
    clojure-mode
-   (cider :checkout "v0.22.0")
+   (cider :checkout "v0.23.0")
    kriyative/git-code-review)))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
