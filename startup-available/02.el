@@ -218,6 +218,8 @@
   (rk-lisp-mode-indent-on-save))
 
 (use-package lisp-mode
+  :bind (:map emacs-lisp-mode-map
+              ("C-c C-m" . pp-macroexpand-last-sexp))
   :config
   (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
