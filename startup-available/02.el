@@ -225,3 +225,10 @@
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'rk-common-lisp-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
+
+(defun rk-java-mode-hook ()
+  (setq tab-width 4))
+
+(use-package cc-mode
+  :config
+  (add-hook 'java-mode-hook 'rk-java-mode-hook))
