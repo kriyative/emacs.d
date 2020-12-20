@@ -41,7 +41,9 @@
   (add-to-list 'emms-player-base-format-list "opus")
   (emms-all)
   (emms-default-players)
-  (setq emms-source-file-default-directory "~/Music/"
+  (setq emms-player-list (list emms-player-mpv)
+        emms-player-mpv-parameters (cons "--no-video" emms-player-mpv-parameters)
+        emms-source-file-default-directory "~/Music/"
         emms-player-mplayer-parameters '("-slave"
                                          "-quiet"
                                          "-really-quiet"
