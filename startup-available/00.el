@@ -99,6 +99,12 @@
 
 (use-package efun-cmds)
 
+(use-package imenu
+  :config
+  (global-set-key "\C-c\C-i" 'imenu))
+
+(use-package term)
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (setq inhibit-startup-message t
