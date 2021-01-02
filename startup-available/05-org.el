@@ -62,7 +62,8 @@ one."
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((ditaa . t) (shell . t)))
   (setq org-src-window-setup 'other-window
-        org-agenda-window-setup 'other-window))
+        org-agenda-window-setup 'other-window
+        org-startup-folded 'nofold))
 
 (use-package ox-latex
   :after org
