@@ -224,7 +224,9 @@
   (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-mode-hook 'rk-common-lisp-mode-hook)
-  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode)))
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+  (with-current-buffer "*scratch*"
+    (lisp-interaction-mode)))
 
 (defun rk-java-mode-hook ()
   (setq tab-width 4))
