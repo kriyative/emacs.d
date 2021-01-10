@@ -142,16 +142,16 @@
                     (let* ((pt (pop pts))
                            (clp ))
                       (save-excursion
-                       (goto-char pt)
-                       (when (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")
-                         (message "hybrid-lisp-indent-function: found cl-form: %s"
-                                  (match-string 1))
-                         (setq break-loop t)))))
+                        (goto-char pt)
+                        (when (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")
+                          (message "hybrid-lisp-indent-function: found cl-form: %s"
+                                   (match-string 1))
+                          (setq break-loop t)))))
                   break-loop)))
     (let ((pts (nth 9 state)))
       (if (cl-form-p pts)
           (common-lisp-indent-function indent-point state)
-          (lisp-indent-function indent-point state)))))
+        (lisp-indent-function indent-point state)))))
 
 (defun setup-lisp-indent-function (indent-function indent-settings)
   (dolist (x indent-settings)
