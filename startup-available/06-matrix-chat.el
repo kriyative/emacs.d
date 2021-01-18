@@ -1,4 +1,5 @@
 (rk-el-get-bundles ov
+                   ht
                    rainbow-identifiers
                    frame-purpose
                    alphapapa/matrix-client.el)
