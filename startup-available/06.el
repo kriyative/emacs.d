@@ -1,7 +1,11 @@
 (rk-el-get-bundles
  hagleitn/speed-type
  ht
- iqbalansari/emacs-emojify)
+ iqbalansari/emacs-emojify
+ (speed-type-patterns
+  :url "https://gitlab.com/kriyative/speed-type-patterns.git"
+  :features speed-type-patterns)
+ key-chord)
 
 (defun rk--file-age (file)
   (float-time
@@ -38,16 +42,25 @@
 
 (use-package emojify
   :config
-  (global-emojify-mode 1))
+  (add-hook 'mu4e-view-mode-hook 'emojify-mode))
+
+;; (use-package key-chord)
+;; (key-chord-define emacs-lisp-mode-map "df" "(defun  ()\n)\M-b\M-f\C-f")
+;; (key-chord-define emacs-lisp-mode-map "up" "(use-package ")
+;; (key-chord-define emacs-lisp-mode-map "((" "[")
+;; (key-chord-define emacs-lisp-mode-map "ff" ffap)
+;; (setq key-chord-two-keys-delay 0.08)
 
 (when (file-exists-p diary-file)
   (diary 0))
 
-(setq server-socket-dir "~/.emacs.d/server/"
-      server-name "server"
-      server-use-tcp t)
-(server-force-delete)
-(server-start)
+(use-package server
+  :config
+  (setq server-socket-dir "~/.emacs.d/server/"
+        server-name "server"
+        server-use-tcp t)
+  (server-force-delete)
+  (server-start))
 
 (when (fboundp 'mbsync-sync-accounts)
   (mbsync-sync-accounts))

@@ -231,3 +231,149 @@
 
 (advice-add 'message :around #'message-with-timestamp)
 ;; (message "hello")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; base functions
+
+(defun rk-toggle-frame-width ()
+  "Toggle between narrow and wide frame layouts"
+  (interactive)
+  (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
+    (if (< (frame-width) z-wid)
+        (set-frame-width (selected-frame) z-wid)
+      (set-frame-width (selected-frame) 81))))
+
+(defun rk-toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+
+(defun rk-previous-window ()
+  "Switch to previous window"
+  (interactive)
+  (other-window -1))
+
+(defun rk-next-window ()
+  "Switch to next window"
+  (interactive)
+  (other-window 1))
+
+(defun rk-other-buffer ()
+  "Replacement for bury-buffer"
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
+(defun rk-kill-files-matching (pattern)
+  "Kill all buffers whose filenames match specified regexp"
+  (interactive "sRegexp: ")
+  (dolist (buffer (buffer-list))
+    (let ((file-name (buffer-file-name buffer)))
+      (if (and file-name (string-match pattern file-name))
+          (kill-buffer buffer)))))
+
+(defun rk-narrow-forward-page (arg)
+  (interactive "p")
+  (widen)
+  (forward-page arg)
+  (narrow-to-page))
+
+(defun rk-narrow-backward-page (arg)
+  (interactive "p")
+  (widen)
+  (backward-page (1+ (or arg 1)))
+  (narrow-to-page))
+
+(defun rk-toggle-debug-on-error ()
+  (interactive)
+  (setq debug-on-error (not debug-on-error))
+  (message "debug-on-error set to `%s'" debug-on-error))
+
+(defun rk--n-col-view (n)
+  "Split the current frame into N vertical windows"
+  (let ((cur (selected-window)))
+    (save-excursion
+      (delete-other-windows)
+      (let* ((frame-width-cols (/ (frame-pixel-width) (frame-char-width)))
+             (pane-width (round (/ (- frame-width-cols n 1) n))))
+        (dotimes (i (1- n))
+          (split-window-horizontally pane-width)
+          (other-window 1)
+          (bury-buffer))
+        (balance-windows)))
+    (select-window cur)))
+
+(defun rk-4col-view ()
+  (interactive)
+  (rk--n-col-view 4))
+
+(defun rk-3col-view ()
+  (interactive)
+  (rk--n-col-view 3))
+
+(defun rk-2col-view ()
+  (interactive)
+  (rk--n-col-view 2))
+
+(defun rk-fill-vertical-panes ()
+  (interactive)
+  (delete-other-windows)
+  (let ((pane-width 80)
+        (cur (selected-window)))
+    (save-excursion
+      (dotimes (i (1- (/ (/ (frame-pixel-width) (frame-char-width))
+                         pane-width)))
+        (split-window-horizontally pane-width)
+        (other-window 1)
+        (bury-buffer))
+      (balance-windows))
+    (select-window cur)))
+
+(defun rk-other-window-send-keys (keys)
+  (interactive (list (read-key-sequence "Keysequence: ")))
+  (let ((window (selected-window)))
+    (unwind-protect
+        (save-excursion
+          (other-window (or current-prefix-arg 1))
+          (let ((last-kbd-macro (read-kbd-macro keys)))
+            (call-last-kbd-macro)))
+      (select-window window))))
+
+(defun rk--get-region-or-read-terms (prompt)
+  (replace-regexp-in-string "[ ]+"
+                            "+"
+                            (or (region-string) (read-string prompt))))
+
+(defun rk--query-string-encode (s)
+  (replace-regexp-in-string "[ ]+" "+" s))
+
+(defun rk-next-page ()
+  (interactive)
+  (widen)
+  (forward-page)
+  (narrow-to-page))
+
+(defun rk-prev-page ()
+  (interactive)
+  (widen)
+  (backward-page 2)
+  (narrow-to-page))

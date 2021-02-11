@@ -2,8 +2,8 @@
  wgrep
  ag
  diminish
- paredit
- slime)
+ ;; joaotavora/sly
+ )
 
 (cond
  ((string-match "24\\.3\\." emacs-version)
@@ -143,11 +143,6 @@
   :bind
   (:map magit-status-mode-map ("y" . rk-magit-show-refs)))
 
-(use-package f)
-(use-package magit-todos
-  :config
-  (add-to-list 'magit-todos-keywords-list "REVIEW"))
-
 (defun rk--add-el-get-info-dirs ()
   (require 'find-lisp)
   (let ((local-info-directory (expand-file-name "~/.emacs.d/info")))
@@ -167,13 +162,16 @@
                          "dir")
            (add-to-list 'Info-additional-directory-list d)))))
     (add-to-list 'Info-directory-list local-info-directory))
-  (add-to-list 'Info-directory-list "/usr/local/share/info"))
+  (add-to-list 'Info-directory-list "/usr/local/share/info")
+  (add-to-list 'Info-directory-list (expand-file-name "~/share/info")))
 
 (use-package info
   :config
   (set-face-attribute 'info-header-node nil :foreground "black")
   (set-face-attribute 'info-node nil :foreground "black")
   (rk--add-el-get-info-dirs))
+
+(use-package info-look)
 
 (use-package man
   :config
@@ -216,47 +214,6 @@
   :config
   (winner-mode 1))
 
-(defun rk-slime-list-connections ()
-  (interactive)
-  (slime-list-connections)
-  (pop-to-buffer "*SLIME Connections*"))
-
-(defun rk-slime-mode-hook ()
-  (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
-  ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
-  (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
-  (define-key slime-mode-map "\C-c\C-xc" 'rk-slime-list-connections)
-  (unless (boundp 'last-command-char)
-    (defvar last-command-char nil)))
-
-(use-package slime
-  :config
-  (slime-setup '(slime-repl))
-  (setq slime-protocol-version 'ignore)
-  (add-hook 'slime-mode-hook 'rk-slime-mode-hook))
-
-(defun rk-sbcl ()
-  (interactive)
-  (if-bind (lisp-path (locate-path "sbcl" exec-path))
-    (let ((slime-lisp-implementations `((sbcl (,lisp-path)))))
-      ;; (setenv "SBCL_HOME" (file-name-directory sbcl-path))
-      (slime))
-    (error "The sbcl application could not be found")))
-
-(defun rk-cloture ()
-  (interactive)
-  (if-bind (lisp-path "/home/ram/src/cloture/cloture")
-    (let ((inferior-lisp-program cloture-path))
-      (slime))
-    (error "The cloture application could not be found")))
-
-(defun rk-clisp ()
-  (interactive)
-  (if-bind (lisp-path (locate-path "clisp" exec-path))
-    (let ((slime-lisp-implementations `((clisp (,lisp-path)))))
-      (slime))
-    (error "The clisp application could not be found")))
-
 (use-package minibuffer
   :config
   (setq completion-cycle-threshold 2
@@ -277,137 +234,6 @@
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
-(defun rk-toggle-frame-width ()
-  "Toggle between narrow and wide frame layouts"
-  (interactive)
-  (let ((z-wid (aif (assq 'width initial-frame-alist) (cdr it) 162)))
-    (if (< (frame-width) z-wid)
-        (set-frame-width (selected-frame) z-wid)
-      (set-frame-width (selected-frame) 81))))
-
-(defun rk-toggle-window-split ()
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
-
-(defun rk-previous-window ()
-  "Switch to previous window"
-  (interactive)
-  (other-window -1))
-
-(defun rk-next-window ()
-  "Switch to next window"
-  (interactive)
-  (other-window 1))
-
-(defun rk-other-buffer ()
-  "Replacement for bury-buffer"
-  (interactive)
-  (switch-to-buffer (other-buffer)))
-
-(defun rk-kill-files-matching (pattern)
-  "Kill all buffers whose filenames match specified regexp"
-  (interactive "sRegexp: ")
-  (dolist (buffer (buffer-list))
-    (let ((file-name (buffer-file-name buffer)))
-      (if (and file-name (string-match pattern file-name))
-          (kill-buffer buffer)))))
-
-(defun rk-narrow-forward-page (arg)
-  (interactive "p")
-  (widen)
-  (forward-page arg)
-  (narrow-to-page))
-
-(defun rk-narrow-backward-page (arg)
-  (interactive "p")
-  (widen)
-  (backward-page (1+ (or arg 1)))
-  (narrow-to-page))
-
-(defun rk-toggle-debug-on-error ()
-  (interactive)
-  (setq debug-on-error (not debug-on-error))
-  (message "debug-on-error set to `%s'" debug-on-error))
-
-(defun rk--n-col-view (n)
-  "Split the current frame into N vertical windows"
-  (let ((cur (selected-window)))
-    (save-excursion
-      (delete-other-windows)
-      (let* ((frame-width-cols (/ (frame-pixel-width) (frame-char-width)))
-             (pane-width (round (/ (- frame-width-cols n 1) n))))
-        (dotimes (i (1- n))
-          (split-window-horizontally pane-width)
-          (other-window 1)
-          (bury-buffer))
-        (balance-windows)))
-    (select-window cur)))
-
-(defun rk-4col-view ()
-  (interactive)
-  (rk--n-col-view 4))
-
-(defun rk-3col-view ()
-  (interactive)
-  (rk--n-col-view 3))
-
-(defun rk-2col-view ()
-  (interactive)
-  (rk--n-col-view 2))
-
-(defun rk-fill-vertical-panes ()
-  (interactive)
-  (delete-other-windows)
-  (let ((pane-width 80)
-        (cur (selected-window)))
-    (save-excursion 
-      (dotimes (i (1- (/ (/ (frame-pixel-width) (frame-char-width))
-                         pane-width)))
-        (split-window-horizontally pane-width)
-        (other-window 1)
-        (bury-buffer))
-      (balance-windows))
-    (select-window cur)))
-
-(defun rk-other-window-send-keys (keys)
-  (interactive (list (read-key-sequence "Keysequence: ")))
-  (let ((window (selected-window)))
-    (unwind-protect
-        (save-excursion
-          (other-window (or current-prefix-arg 1))
-          (let ((last-kbd-macro (read-kbd-macro keys)))
-            (call-last-kbd-macro)))
-      (select-window window))))
-
-(defun rk--get-region-or-read-terms (prompt)
-  (replace-regexp-in-string "[ ]+"
-                            "+"
-                            (or (region-string) (read-string prompt))))
-
-(defun rk--query-string-encode (s)
-  (replace-regexp-in-string "[ ]+" "+" s))
-
 (defun rk-google (q)
   (interactive
    (list (rk--query-string-encode (or (region-string)
@@ -421,15 +247,3 @@
    (concat "https://duckduckgo.com/?q="
            (rk--query-string-encode (or (region-string)
                                         (read-string "DuckDuckGo: "))))))
-
-(defun rk-next-page ()
-  (interactive)
-  (widen)
-  (forward-page)
-  (narrow-to-page))
-
-(defun rk-prev-page ()
-  (interactive)
-  (widen)
-  (backward-page 2)
-  (narrow-to-page))

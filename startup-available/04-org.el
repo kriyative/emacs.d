@@ -56,14 +56,11 @@ one."
   (define-key org-mode-map "\M-n" 'rk-next-page)
   (define-key org-mode-map "\M-p" 'rk-prev-page)
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
-  (setq org-export-html-postamble nil
-        org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
-        org-log-done 'time)
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((ditaa . t) (shell . t)))
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window
         org-startup-folded 'nofold))
+
+(use-package org-compat)
 
 (use-package ox-latex
   :after org
@@ -76,6 +73,18 @@ one."
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package ox-beamer)
+
+(use-package ox-publish
+  :after org
+  :after org-compat
+  :config
+  (setq org-export-html-postamble nil
+        org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
+        org-log-done 'time)
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((ditaa . t) (shell . t))))
 
 (use-package org-agenda
   :after org
@@ -147,3 +156,8 @@ one."
          start end
          '(font-lock-fontified t fontified t font-lock-multiline t))
         (set-buffer-modified-p modified)))))
+
+;; (use-package org-roam
+;;   :config
+;;   (setq org-roam-directory "~/.emacs.d/org-roam/")
+;;   (add-hook 'after-init-hook 'org-roam-mode))
