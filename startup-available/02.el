@@ -17,6 +17,16 @@
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
+(defun rk-start-lisp ()
+  (interactive)
+  (cond
+   ((or (file-exists-p "deps.edn")
+        (file-exists-p "project.clj"))
+    (call-interactively 'cider-jack-in))
+   ((or (file-exists-p "deps.lisp")
+        (directory-files "." nil "\\.asd$"))
+    (call-interactively 'rk-sbcl))))
+
 (defun clojure-mode-hook ()
   (auto-revert-mode 1)
   (outline-minor-mode 1)
@@ -28,9 +38,6 @@
 
 (use-package clojure-mode
   :demand t
-  :bind
-  (:map global-map
-        ("H-l" . cider-jack-in))
   :bind
   (:map clojure-mode-map
         ("C-c ,"   . cider-test-run-loaded-tests)
@@ -183,7 +190,7 @@
   ;; (auto-complete-mode -1)
   (eldoc-mode 1)
   (paredit-mode 1)
-  (rk-lisp-mode-indent-on-save)
+  ;; (rk-lisp-mode-indent-on-save)
   (define-key emacs-lisp-mode-map
     "\C-c\C-p" 'pp-eval-last-sexp)
   (define-key lisp-interaction-mode-map
@@ -218,8 +225,8 @@
                                 (with-cwd . 1)
                                 (save-values . 1)))
   (setq indent-tabs-mode nil)
-  (paredit-mode 1)
-  (rk-lisp-mode-indent-on-save))
+  ;; (rk-lisp-mode-indent-on-save)
+  (paredit-mode 1))
 
 (use-package lisp-mode
   :bind (:map emacs-lisp-mode-map
