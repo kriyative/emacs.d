@@ -42,12 +42,25 @@
   (error
    (format "No implementation for '%s' on %S" fname system-type)))
 
+(defun rk-bind-keys (bindings &optional keymap)
+  (dolist (binding bindings)
+    (let* ((key (first binding))
+           (key (if (stringp key)
+                    (kbd key)
+                  key))
+           (def (second binding)))
+      (if keymap
+          (define-key keymap key def)
+        (global-unset-key key)
+        (when def
+          (global-set-key key def))))))
+
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
 (use-package ibuffer
   :config
   (setq ibuffer-expert t)
-  (global-set-key "\C-x\C-b" 'ibuffer))
+  (rk-bind-keys '(("\C-x\C-b" ibuffer))))
 
 (use-package vc
   :config
@@ -101,7 +114,7 @@
 
 (use-package imenu
   :config
-  (global-set-key "\C-c\C-i" 'imenu))
+  (rk-bind-keys '(("\C-c\C-i" imenu))))
 
 (use-package term)
 
@@ -157,36 +170,56 @@
 
 (add-to-list 'kill-emacs-query-functions 'rk--confirm-exit)
 
+;;;;;;;;;;;;;;;; ctl-c-prefix keymap ;;;;;;;;;;;;;;;;
+
+(defun ctl-c-commands-prefix-help ()
+  (interactive)
+  (message "Welcome to the Ctl-c Commands Prefix map"))
+
+(defvar ctl-c-commands-prefix-map (make-sparse-keymap))
+
+(global-unset-key "\C-c")
+(define-prefix-command 'ctl-c-commands-prefix 'ctl-c-commands-prefix-map "\C-c")
+(define-key global-map "\C-c" 'ctl-c-commands-prefix)
+
 ;;;;;;;;;;;;;;;; keys ;;;;;;;;;;;;;;;;
 
-(global-unset-key "\C-z")
-(global-unset-key "\M-g")
-(global-set-key "\M-g" 'goto-line)
-(global-unset-key "\M-`")
-(global-set-key "\M-`" 'next-error)
-(global-set-key (kbd "C-M-`") 'previous-error)
-(global-set-key "\r" 'newline-and-indent)
-(global-set-key "\C-xn" 'rk-next-window)
-(global-set-key "\C-xp" 'rk-previous-window)
-(define-key minibuffer-local-completion-map '[tab] 'minibuffer-complete)
-(define-key minibuffer-local-completion-map '[spc] 'minibuffer-complete-word)
-(define-key minibuffer-local-must-match-map '[tab] 'minibuffer-complete)
-(define-key minibuffer-local-must-match-map '[spc] 'minibuffer-complete-word)
-(global-set-key "\C-ct" 'transpose-lines)
-(global-set-key "\C-\M-l" 'rk-other-buffer)
-(global-unset-key "\C-\\")
-(global-set-key "\C-\\" 'compile)
-;; (global-set-key "\C-xb" 'iswitchb-buffer)
-;; (global-set-key "\C-xb" 'switch-to-buffer)
-(global-set-key [C-M-left] 'previous-buffer)
-(global-set-key [C-M-right] 'next-buffer)
-(global-set-key [?\C-.] 'tags-search)
-(global-set-key [?\C-,] 'tags-loop-continue)
-(global-set-key "\C-x\C-f" 'x-find-file)
-(global-set-key (kbd "<f7>") 'next-error)
+(rk-bind-keys
+ '(("M-g" goto-line)
+   ("M-`" next-error)
+   ("C-M-`" previous-error)
+   ("\r" newline-and-indent)
+   ("\C-xn" rk-next-window)
+   ("\C-xp" rk-previous-window)
+   ("H-t" transpose-lines)
+   ("C-M-l" rk-other-buffer)
+   ;; ("\C-\\" compile)
+   ;; ("\C-xb" iswitchb-buffer)
+   ;; ("\C-xb" switch-to-buffer)
+   ([C-M-left] previous-buffer)
+   ([C-M-right] next-buffer)
+   ([?\C-.] tags-search)
+   ([?\C-,] tags-loop-continue)
+   ("\C-x\C-f" x-find-file)
+   ("<f7>" next-error)
+   ("C-=" text-scale-increase)
+   ("C--" text-scale-decrease)
+   ("H-l" rk-start-lisp)
 
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
+   ("M-i" completion-at-point)
+   ("M-j" jump-to-register)
+   ("M-k" kill-sentence)
+   ("M-l" downcase-dwim)
+   ("M-a" beginning-of-line)
+   ("M-e" end-of-line)
+   ("M-o" other-window)))
+
+(rk-bind-keys
+ `(([tab] minibuffer-complete)
+   ([spc] minibuffer-complete-word)
+   ([tab] minibuffer-complete)
+   ([spc] minibuffer-complete-word))
+ minibuffer-local-completion-map)
 
 (define-key ctl-x-4-map "k" 'other-window-send-keys)
 
@@ -206,19 +239,6 @@
   (setq explicit-bash-args '("--login" "--init-file" "~/.bash_profile" "-i")))
 
 (setq custom-file "~/.emacs.d/custom.el")
-
-;; (global-set-key (kbd "<f2>") 'save-buffer)
-;; (global-set-key (kbd "<f3>") 'find-file)
-;; (global-set-key (kbd "<f4>") 'switch-to-buffer)
-;; (global-set-key (kbd "<f5>") 'ibuffer-other-window)
-;; (global-set-key (kbd "<f6>") 'completion-at-point)
-(global-set-key (kbd "M-i") 'completion-at-point)
-(global-set-key (kbd "M-j") 'jump-to-register)
-(global-set-key (kbd "M-k") 'kill-sentence)
-(global-set-key (kbd "M-l") 'downcase-dwim)
-(global-set-key (kbd "M-a") 'beginning-of-line)
-(global-set-key (kbd "M-e") 'end-of-line)
-(global-set-key (kbd "M-o") 'other-window)
 
 (defun message-with-timestamp (old-func fmt-string &rest args)
   "Prepend current timestamp (with microsecond precision) to a message"

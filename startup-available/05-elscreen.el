@@ -1,5 +1,7 @@
 (rk-el-get-bundles elscreen)
 
+(rk-bind-keys '(("C-z")))
+
 (use-package elscreen
   :demand t
   :bind

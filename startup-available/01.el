@@ -27,14 +27,7 @@
 ;; (set-user-commands-prefix-key (kbd "C-;"))
 (set-user-commands-prefix-key (kbd "\C-\\"))
 
-(defun rk--define-keys (kmap ks)
-  (dolist (k ks)
-    (let ((key (first k))
-          (def (second k)))
-      (define-key kmap (kbd key) def))))
-
-(rk--define-keys
- user-commands-prefix-map
+(rk-bind-keys
  '(("\C-\\" compile)
    ("." find-tag)
    ("2" rk-2col-view)
@@ -58,7 +51,8 @@
    ("z" switch-to-app)
    ("\C-z" switch-to-app)
    ("|" rk-toggle-window-split)
-   ("\C-c" display-time-world)))
+   ("\C-c" display-time-world))
+ user-commands-prefix-map)
 
 ;;;;;;;;;;;;;;;;
 
@@ -68,9 +62,13 @@
   :config
   (setq ag-reuse-buffers t)
   :bind (("C-c g g" . ag)
+         ("H-g g" . ag)
          ("C-c g d" . ag-dired)
+         ("H-g d" . ag-dired)
          ("C-c g p" . ag-project)
-         ("C-c g r" . ag-regexp)))
+         ("H-g p" . ag-project)
+         ("C-c g r" . ag-regexp)
+         ("H-g r" . ag-regexp)))
 
 (use-package buffer-move
   :bind (:map user-commands-prefix-map
@@ -140,6 +138,7 @@
     (set-face-attribute 'magit-tag nil :foreground "black"))
   (setq magit-last-seen-setup-instructions "1.4.0")
   (add-hook 'magit-mode-hook 'rk--magit-setup-hook)
+  (rk-bind-keys '(("H-v" magit-status)))
   :bind
   (:map magit-status-mode-map ("y" . rk-magit-show-refs)))
 
