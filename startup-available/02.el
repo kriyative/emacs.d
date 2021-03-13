@@ -258,7 +258,7 @@
 (defun rk-slime-list-connections ()
   (interactive)
   (slime-list-connections)
-  (pop-to-buffer "*SLIME Connections*"))
+  (pop-to-buffer "*slime-connections*"))
 
 (defun rk-slime-mode-hook ()
   (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
