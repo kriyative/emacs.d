@@ -32,9 +32,8 @@
   (outline-minor-mode 1)
   (enable-paredit-mode)
   (make-local-variable 'before-save-hook)
-  (add-hook 'before-save-hook
-            '(lambda ()
-               (clojure-indent-region (point-min) (point-max)))))
+  ;; (rk-lisp-mode-indent-on-save)
+  )
 
 (use-package clojure-mode
   :demand t
