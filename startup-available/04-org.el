@@ -58,7 +58,7 @@ one."
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window
-        org-startup-folded 'nofold))
+        org-startup-folded t))
 
 (use-package org-compat)
 
