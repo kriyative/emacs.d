@@ -291,7 +291,11 @@
 (defun rk-sbcl ()
   (interactive)
   (if-bind (lisp-path (locate-path "sbcl" exec-path))
-    (let ((slime-lisp-implementations `((sbcl (,lisp-path "--dynamic-space-size" "160")))))
+    (let ((slime-lisp-implementations
+           `((sbcl (,lisp-path
+                    ;; "--dynamic-space-size" "512"
+                    ;; "--control-stack-size" "64"
+                    )))))
       ;; (setenv "SBCL_HOME" (file-name-directory sbcl-path))
       (slime))
     (error "The sbcl application could not be found")))
