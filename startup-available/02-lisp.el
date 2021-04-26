@@ -1,0 +1,121 @@
+(rk-el-get-bundles paredit)
+
+(defun rk-start-lisp ()
+  (interactive)
+  (cond
+   ((or (file-exists-p "deps.edn")
+        (file-exists-p "project.clj"))
+    (call-interactively 'cider-jack-in))
+   ((or (file-exists-p "deps.lisp")
+        (directory-files "." nil "\\.asd$"))
+    (call-interactively 'rk-sbcl))))
+
+(defun rk-lisp-mode-indent-on-save ()
+  (make-local-variable 'before-save-hook)
+  (add-hook 'before-save-hook
+            '(lambda ()
+               (lisp-indent-region (point-min) (point-max)))))
+
+(defun hybrid-lisp-indent-function (indent-point state)
+  (cl-labels ((cl-form-p (pts)
+                (let (break-loop)
+                  (while (and (null break-loop) pts)
+                    (let* ((pt (pop pts))
+                           (clp ))
+                      (save-excursion
+                       (goto-char pt)
+                       (when (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")
+                         (message "hybrid-lisp-indent-function: found cl-form: %s"
+                                  (match-string 1))
+                         (setq break-loop t)))))
+                  break-loop)))
+    (let ((pts (nth 9 state)))
+      (if (cl-form-p pts)
+          (common-lisp-indent-function indent-point state)
+          (lisp-indent-function indent-point state)))))
+
+(defun setup-lisp-indent-function (indent-function indent-settings)
+  (dolist (x indent-settings)
+    (put (car x)
+         indent-function
+         (if (numberp (cdr x))
+             (cdr x)
+           (get (cdr x) indent-function)))))
+
+(defun rk-emacs-lisp-mode-hook ()
+  ;; (local-set-key " " 'lisp-complete-symbol)
+  (outline-minor-mode 1)
+  (setq outline-regexp "^[(;]"
+        indent-tabs-mode nil)
+  (set (make-local-variable 'lisp-indent-function) 'hybrid-lisp-indent-function)
+  (setup-lisp-indent-function 'lisp-indent-function
+                              '((if-let . if)))
+  (setup-lisp-indent-function 'common-lisp-indent-function
+                              '((cl-labels . labels)
+                                (cl-flet . flet)
+                                (while . when)))
+  ;; don't do the following, inconsistent
+  ;; (setup-lisp-indent-function)
+  (local-set-key "\M-." 'find-function)
+  (font-lock-mode 1)
+  ;; (auto-complete-mode -1)
+  (eldoc-mode 1)
+  (paredit-mode 1)
+  ;; (rk-lisp-mode-indent-on-save)
+  (define-key emacs-lisp-mode-map
+    "\C-c\C-p" 'pp-eval-last-sexp)
+  (define-key lisp-interaction-mode-map
+    "\C-c\C-p" 'pp-eval-last-sexp))
+
+(defun set-common-lisp-block-comment-syntax ()
+  (modify-syntax-entry ?# "<1" font-lock-syntax-table)
+  (modify-syntax-entry ?| ">2" font-lock-syntax-table)
+  (modify-syntax-entry ?| "<3" font-lock-syntax-table)
+  (modify-syntax-entry ?# ">4" font-lock-syntax-table))
+
+(defun rk-common-lisp-mode-hook ()
+  (font-lock-mode)
+  (font-lock-add-keywords 'lisp-mode
+                          '(("defclass\*" . font-lock-keyword-face)))
+  (modify-syntax-entry ?\[ "(]" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\] ")[" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\{ "(}" lisp-mode-syntax-table)
+  (modify-syntax-entry ?\} "){" lisp-mode-syntax-table)
+  ;; (set-common-lisp-block-comment-syntax)
+  (set (make-local-variable 'lisp-indent-function)
+       'common-lisp-indent-function)
+  (setup-lisp-indent-function 'common-lisp-indent-function
+                              '((awhen . 1)
+                                (when-let . 1)
+                                (aif . if)
+                                (if-let . if)
+                                (awhile . 1)
+                                (while-let . 1)
+                                ;; (bind . lambda)
+                                (callback . lambda)
+                                (c-fficall . with-slots)
+                                (with-cwd . 1)
+                                (save-values . 1)))
+  (setq indent-tabs-mode nil)
+  ;; (rk-lisp-mode-indent-on-save)
+  (paredit-mode 1))
+
+(use-package lisp-mode
+  :bind (:map emacs-lisp-mode-map
+              ("C-c C-m" . pp-macroexpand-last-sexp))
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
+  (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
+  (add-hook 'lisp-mode-hook 'rk-common-lisp-mode-hook)
+  (add-to-list 'auto-mode-alist '("\\.cl\\'" . lisp-mode))
+  (with-current-buffer "*scratch*"
+    (lisp-interaction-mode))
+  (info-lookup-add-help
+   :mode 'lisp-mode
+   :regexp "[^][()'\" \t\n]+"
+   :ignore-case t
+   :doc-spec '(("(ansicl)Index" nil nil nil)))
+  ;; (let* ((ilc-symbol (assoc 'symbol info-lookup-cache))
+  ;;        (ilc-lisp-mode (assoc 'lisp-mode ilc-symbol)))
+  ;;   (rplacd ilc-symbol (remove ilc-lisp-mode (cdr ilc-symbol))))
+  (info-lookup-setup-mode 'symbol 'lisp-mode))
