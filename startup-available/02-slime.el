@@ -1,6 +1,4 @@
-(rk-el-get-bundles
- slime
- mmontone/slime-doc-contribs)
+(rk-el-get-bundles slime)
 
 (defun rk-slime-list-connections ()
   (interactive)
@@ -51,7 +49,7 @@
 
 (defun rk-cloture ()
   (interactive)
-  (if-bind (lisp-path "/home/ram/src/cloture/cloture")
+  (if-bind (lisp-path (locate-path "cloture" exec-path))
     (let ((inferior-lisp-program cloture-path))
       (slime))
     (error "The cloture application could not be found")))
