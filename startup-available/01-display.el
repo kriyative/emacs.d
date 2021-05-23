@@ -30,17 +30,19 @@
          (mm-size (cdr (assq 'mm-size attrib1)))
          (convert 0.039)
          (width (* (first mm-size) convert))
-         (height (* (second mm-size) convert)))
+         (height (* (second mm-size) convert))
+         (geometry (cdr (assq 'geometry attrib1))))
     (list :width (round width)
           :height (round height)
-          :diagonal (round (sqrt (+ (* width width) (* height height)))))))
+          :diagonal (round (sqrt (+ (* width width) (* height height))))
+          :geometry geometry)))
 
 ;; (plist-get (rk--display-dimensions-inches) :diagonal)
 
 (defun rk--display-dpi ()
   (when (eq window-system 'x)
     (let ((dim (rk--display-dimensions-inches)))
-      (round (/ (x-display-pixel-width)
+      (round (/ (nth 2 (plist-get dim :geometry))
                 (plist-get dim :width))))))
 
 ;; (rk--display-dpi)
