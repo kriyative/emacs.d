@@ -82,13 +82,14 @@ maildir)."
   (visual-line-mode 1))
 
 (defun rk-mu4e-sent-messages-behavior ()
-  (let ((sent-folder (or mu4e-sent-folder
-                         (alist-get 'mu4e-sent-folder
-                                    (alist-get mu4e-multi-last-read-account
-                                               mu4e-multi-account-alist
-                                               nil
-                                               nil
-                                               'equal)))))
+  (let ((sent-folder (if (and mu4e-sent-folder (stringp mu4e-sent-folder))
+                         mu4e-sent-folder
+                       (alist-get 'mu4e-sent-folder
+                                  (alist-get mu4e-multi-last-read-account
+                                             mu4e-multi-account-alist
+                                             nil
+                                             nil
+                                             'equal)))))
     (if (string-match "\\[Gmail\\]" sent-folder)
         'delete
       'sent)))
