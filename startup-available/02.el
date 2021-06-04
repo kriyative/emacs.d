@@ -1,6 +1,8 @@
 (rk-el-get-bundles
  kriyative/git-code-review
- geiser)
+ geiser
+ json-mode
+ json-snatcher)
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
@@ -19,6 +21,8 @@
   (dolist (pv '((:prompt-regexp "^[-[:alnum:]_]*=[#>] ")
                 (:prompt-cont-regexp "^[-[:alnum:]_]*[-(][#>] ")))
     (apply 'sql-set-product-feature 'postgres pv)))
+
+(use-package json-mode)
 
 (defun rk-java-mode-hook ()
   (setq tab-width 4))
