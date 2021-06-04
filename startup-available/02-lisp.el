@@ -17,22 +17,12 @@
                (lisp-indent-region (point-min) (point-max)))))
 
 (defun hybrid-lisp-indent-function (indent-point state)
-  (cl-labels ((cl-form-p (pts)
-                (let (break-loop)
-                  (while (and (null break-loop) pts)
-                    (let* ((pt (pop pts))
-                           (clp ))
-                      (save-excursion
-                       (goto-char pt)
-                       (when (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")
-                         (message "hybrid-lisp-indent-function: found cl-form: %s"
-                                  (match-string 1))
-                         (setq break-loop t)))))
-                  break-loop)))
-    (let ((pts (nth 9 state)))
-      (if (cl-form-p pts)
-          (common-lisp-indent-function indent-point state)
-          (lisp-indent-function indent-point state)))))
+  (if (save-excursion
+        (cl-loop for pt in (nth 9 state)
+                 do (goto-char pt)
+                 thereis (looking-at "(\\(labels\\|cl-labels\\|flet\\|cl-flet\\)")))
+      (common-lisp-indent-function indent-point state)
+    (lisp-indent-function indent-point state)))
 
 (defun setup-lisp-indent-function (indent-function indent-settings)
   (dolist (x indent-settings)
