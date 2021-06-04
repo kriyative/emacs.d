@@ -31,7 +31,7 @@
 (use-package slime
   :config
   ;; (setq slime-contribs '(slime-fancy slime-help slime-info))
-  (slime-setup '(slime-repl slime-help slime-info))
+  (slime-setup '(slime-repl))
   (setq slime-protocol-version 'ignore)
   (add-hook 'slime-mode-hook 'rk-slime-mode-hook))
 
