@@ -64,3 +64,29 @@
 
 (when (fboundp 'mbsync-sync-accounts)
   (mbsync-sync-accounts))
+
+(defun rk-aws-doc (commands)
+  (interactive "sCommand: ")
+  (let ((bufname (concat "*AWS-doc: " commands "*")))
+    (pop-to-buffer
+     (or (get-buffer bufname)
+         (let ((buf (get-buffer-create bufname))
+               (args (append
+                      '("--color" "off"
+                        "--no-cli-pager"
+                        "--no-paginate")
+                      (split-string commands)
+                      '("help"))))
+           (message "rk-aws-doc: args=%S" args)
+           (with-current-buffer buf
+             (apply 'call-process
+                    "aws"
+                    nil
+                    t
+                    t
+                    args)
+             (goto-char (point-min))
+             (while (re-search-forward "." nil t)
+               (replace-match "")))
+           buf)))))
+
