@@ -5,7 +5,8 @@
  corpix/ob-blockdiag.el
  alf/ob-restclient.el
  org-sync
- org-present)
+ org-present
+ ob-ipython)
 
 ;;;;;;;;;;;;;;;; org
 
@@ -83,12 +84,15 @@ one."
   (setq org-export-html-postamble nil
         org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
         org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar"
+        org-babel-python-command "python3"
         org-log-done 'time)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((ditaa . t)
                                  (shell . t)
                                  (plantuml . t)
-                                 (dot . t))))
+                                 (dot . t)
+                                 (python . t)
+                                 (ipython .t))))
 
 (use-package org-agenda
   :after org
