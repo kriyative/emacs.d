@@ -39,6 +39,9 @@
 
 ;; (plist-get (rk--display-dimensions-inches) :diagonal)
 
+(defun rk-display-pixel-width ()
+  (nth 2 (plist-get (rk--display-dimensions-inches) :geometry)))
+
 (defun rk--display-dpi ()
   (when (eq window-system 'x)
     (let ((dim (rk--display-dimensions-inches)))
@@ -53,7 +56,7 @@
   (let ((dpi (rk--display-dpi)))
     (cond
      ((< 170 dpi) 16)
-     ((or (< 1920 (x-display-pixel-width)) (< 150 dpi)) 13)
+     ((or (< 1920 (rk-display-pixel-width)) (< 150 dpi)) 13)
      (t 11))))
 
 ;; (rk--optimum-font-size)
