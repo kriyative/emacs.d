@@ -49,3 +49,7 @@
 (defun rk-racket ()
   (interactive)
   (run-geiser 'racket))
+
+(use-package python
+  :config
+  (setq python-shell-interpreter "python3"))
