@@ -19,6 +19,20 @@
   ;; (rk-lisp-mode-indent-on-save)
   )
 
+(defvar rk-outline-visibility nil)
+
+(defun rk-outline-toggle ()
+  (interactive)
+  (unless (boundp 'rk-outline-visibility)
+    (make-local-variable 'rk-outline-visibility)
+    (setq rk-outline-visibility nil))
+  (if (eq 'visible rk-outline-visibility)
+      (progn
+        (outline-hide-body)
+        (set 'rk-outline-visibility 'hidden))
+    (outline-show-all)
+    (set 'rk-outline-visibility 'visible)))
+
 (use-package clojure-mode
   :demand t
   :bind
@@ -30,7 +44,8 @@
         ("H-j"     . cider-javadoc)
         ("H-w"     . cider-grimoire)
         ("H-r"     . cider-switch-to-repl-buffer)
-        ("H-l"     . cider-jack-in))
+        ("H-l"     . cider-jack-in)
+        ("<backtab>" . rk-outline-toggle))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (setq auto-mode-alist
