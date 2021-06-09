@@ -35,7 +35,7 @@ one."
    (format-time-string "%Y-%m-%d %H:%M:%S")))
 
 (defun rk-org-mode-hook ()
-  (visual-line-mode)
+  (visual-line-mode 1)
   (org-display-inline-images))
 
 (use-package org
