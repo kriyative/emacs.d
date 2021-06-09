@@ -59,7 +59,18 @@ one."
   (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window
-        org-startup-folded t))
+        org-startup-folded t
+        org-babel-python-command "python3"
+        org-log-done 'time
+        org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
+        org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((ditaa . t)
+                                 (shell . t)
+                                 (plantuml . t)
+                                 (dot . t)
+                                 (python . t)
+                                 (ipython .t))))
 
 (use-package org-compat)
 
@@ -81,18 +92,7 @@ one."
   :after org
   :after org-compat
   :config
-  (setq org-export-html-postamble nil
-        org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
-        org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar"
-        org-babel-python-command "python3"
-        org-log-done 'time)
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((ditaa . t)
-                                 (shell . t)
-                                 (plantuml . t)
-                                 (dot . t)
-                                 (python . t)
-                                 (ipython .t))))
+  (setq org-export-html-postamble nil))
 
 (use-package org-agenda
   :after org
