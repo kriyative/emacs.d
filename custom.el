@@ -8,27 +8,27 @@
  '(fringe-mode 4 nil (fringe))
  '(menu-bar-mode nil)
  '(package-selected-packages
-   (quote
-    (tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap)))
+   '(tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
  '(safe-local-variable-values
-   (quote
-    ((cider-shadow-cljs-default-options . "app")
+   '((visual-line-mode . t)
+     (org-todo-keyword-faces
+      ("Mike" . "orange")
+      ("Ram" . "orange"))
+     (cider-shadow-cljs-default-options . "app")
      (cider-default-cljs-repl . shadow)
      (Minor-mode . paredit)
      (eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
-	   (add-hook
-	    (quote write-contents-functions)
-	    (lambda nil
-	      (delete-trailing-whitespace)
-	      nil))
-	   (require
-	    (quote whitespace))
+	   (add-hook 'write-contents-functions
+		     (lambda nil
+		       (delete-trailing-whitespace)
+		       nil))
+	   (require 'whitespace)
 	   "Sometimes the mode needs to be toggled off and on."
 	   (whitespace-mode 0)
 	   (whitespace-mode 1))
      (whitespace-style face tabs trailing lines-tail)
-     (checkdoc-package-keywords-flag))))
- '(send-mail-function (quote smtpmail-send-it))
+     (checkdoc-package-keywords-flag)))
+ '(send-mail-function 'smtpmail-send-it)
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25)
  '(tool-bar-mode nil)
