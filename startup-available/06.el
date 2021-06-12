@@ -90,3 +90,17 @@
                (replace-match "")))
            buf)))))
 
+(defun rk-countdown-timer-alert (message)
+  (let ((alert-default-style 'mode-line))
+    (alert message)))
+
+(defun rk-countdown-timer (&optional seconds message)
+  (interactive
+   (list
+    (if current-prefix-arg
+        (read-number "Seconds: " 60)
+      60)
+    (if current-prefix-arg
+        (read-string "Message: ")
+      "Countdown timer alert!")))
+  (run-with-timer seconds nil 'rk-countdown-timer-alert message))
