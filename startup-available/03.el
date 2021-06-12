@@ -33,7 +33,32 @@
   (epa-file-enable)
   (rk-ensure-gpg-loopback-pinentry))
 
-(use-package git-link)
+(defun rk-git-link-codecommit (hostname
+                               dirname
+                               filename
+                               branch
+                               commit
+                               start
+                               end)
+  (let* ((matchp (string-match "\\([^\\.]*\\)\\.\\([^\\.]*\\)"
+                               hostname))
+         (region (when matchp
+                   (match-string 2 hostname)))
+         (domainname ".console.aws.amazon.com/codesuite/codecommit/repositories"))
+    (format "https://%s/%s/browse/refs/heads/%s/--/%s"
+	    (concat region domainname)
+	    (file-name-nondirectory dirname)
+	    (or branch commit)
+	    (concat filename
+                    (when start
+                      (format "?lines=%s-%s"
+                              start
+                              (or end start)))))))
+
+(use-package git-link
+  :config
+  (push '("git-codecommit" rk-git-link-codecommit)
+        git-link-remote-alist))
 
 (use-package image
   :bind
