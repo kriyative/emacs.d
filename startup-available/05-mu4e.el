@@ -65,6 +65,14 @@ maildir)."
        'browse-url-default-browser)
   (setq shr-width nil))
 
+;;; overrides shr-tag-base to workaround cases where dom-attribute
+;;; base has an empty string href (why?)
+(defun shr-tag-base (dom)
+  (let ((base (dom-attr dom 'href)))
+    (when (and base (< 0 (length base)))
+      (setq shr-base (shr-parse-base base))))
+  (shr-generic dom))
+
 (defun mu4e-compose-mode-hook ()
   (setq mu4e-compose-format-flowed t
         mu4e-compose-dont-reply-to-self t
