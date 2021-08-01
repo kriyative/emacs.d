@@ -1,16 +1,9 @@
 (rk-el-get-bundles
- kriyative/git-code-review
  geiser
  json-mode
  json-snatcher)
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
-
-(use-package git-code-review
-  :config
-  (add-hook 'clojure-mode-hook 'gcr-mode)
-  (add-hook 'emacs-lisp-mode-hook 'gcr-mode)
-  (add-hook 'common-lisp-mode-hook 'gcr-mode))
 
 (use-package ediff
   :config

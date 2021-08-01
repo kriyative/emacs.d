@@ -5,11 +5,6 @@
  ;; joaotavora/sly
  )
 
-(cond
- ((string-match "24\\.3\\." emacs-version)
-  (rk-el-get-bundles magit-1))
- (t (rk-el-get-bundles magit f magit-todos)))
-
 ;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
 
 (defun user-commands-prefix-help ()
@@ -118,29 +113,6 @@
   (add-hook 'pcl-cvs-load-hook 'rk--cvs-load-hook)
   (setq log-edit-keep-buffer t)
   (setenv "CVS_RSH" "ssh"))
-
-(defun rk--magit-setup-hook ()
-  (local-unset-key [C-tab])
-  (define-key magit-mode-map [C-tab] nil))
-
-(defun rk-magit-show-refs (&optional transient)
-  (interactive)
-  (let ((magit-buffer-arguments '(("-s" . "-commiterdate"))))
-    (magit-show-refs transient)))
-
-(use-package magit
-  :config
-  (when (facep 'magit-item-highlight)
-    (set-face-attribute 'magit-item-highlight nil
-                        :background "lightgrey"
-                        :foreground "black"))
-  (when (facep 'magit-tag)
-    (set-face-attribute 'magit-tag nil :foreground "black"))
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  (add-hook 'magit-mode-hook 'rk--magit-setup-hook)
-  (rk-bind-keys '(("H-v" magit-status)))
-  :bind
-  (:map magit-status-mode-map ("y" . rk-magit-show-refs)))
 
 (defun rk--add-el-get-info-dirs ()
   (require 'find-lisp)
