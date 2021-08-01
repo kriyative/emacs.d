@@ -397,3 +397,14 @@
   (widen)
   (backward-page 2)
   (narrow-to-page))
+
+;;; backward compatibility function to support some ancient version of
+;;; dictionary.el
+(unless (fboundp 'process-kill-without-query)
+  (defun process-kill-without-query (process)
+    (let ((kill-buffer-query-functions (remove 'process-kill-buffer-query-function
+                                               kill-buffer-query-functions)))
+      (ignore-errors
+        (kill-process process))
+      (kill-buffer
+       (process-buffer process)))))
