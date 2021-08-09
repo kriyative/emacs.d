@@ -65,5 +65,12 @@
           (replace-match "</code></pre>\n"))
         (buffer-substring-no-properties (point-min) (point-max))))))
 
-;; 
+(defvar pantalaimon-proc nil)
 
+(defun run-pantalaimon ()
+  (interactive)
+  (unless (and pantalaimon-proc
+               (process-live-p pantalaimon-proc))
+    (setq pantalaimon-proc (start-process "pantalaimon"
+                                          "*pantalaimon*"
+                                          "pantalaimon"))))
