@@ -1,5 +1,5 @@
 (rk-el-get-bundles alphapapa/plz.el
-                   alphapapa/ement.el
+                   kriyative/ement.el
                    ts)
 
 (use-package ement
