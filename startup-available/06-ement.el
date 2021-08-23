@@ -8,13 +8,14 @@
   (require 'ement-notify)
   (setq ement-uri-proxy "http://localhost:8008"
         ement-room-message-format-spec "%S %L%B%r%R%t"
-        ement-formatted-body-formatter-function 'ement--body-format-md-html)
+        ement-formatted-body-formatter-function 'ement--body-format-org-html
+        ement-plain-body-formatter-function 'ement--body-format-org-md
+        ;; ement-save-session t
+        )
   (copy-face 'ement-room-message 'ement-room-self-message))
 
 (defun rk--generate-jitsi-link ()
-  (format "https://meet.jit.si/%s@%s/%s"
-          user-login-name
-          (system-name)
+  (format "https://meet.jit.si/kriyative%s"
           (time-convert nil 'integer)))
 
 ;; (rk--generate-jitsi-link)
@@ -74,3 +75,5 @@
     (setq pantalaimon-proc (start-process "pantalaimon"
                                           "*pantalaimon*"
                                           "pantalaimon"))))
+
+(run-pantalaimon)
