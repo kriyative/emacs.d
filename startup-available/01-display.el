@@ -1,4 +1,9 @@
 (rk-el-get-bundles kriyative/kriyative-emacs-themes)
+(rk-el-get-bundles unicode-fonts)
+
+(use-package unicode-fonts
+  :config
+  (unicode-fonts-setup))
 
 (defun rk--set-window-width* (width pixelwisep)
   (let* ((w (selected-window))
@@ -61,10 +66,15 @@
 
 ;; (rk--optimum-font-size)
 
+(defvar *rk--font* "DejaVu Sans Mono Book")
+(defvar *rk--font-size* 0)
+
 (defun rk--x-set-font (font-family &optional font-size)
   (let* ((font-size (or font-size (rk--optimum-font-size)))
          (x-font (concat font-family " " (prin1-to-string font-size))))
     (set-frame-font x-font t t)
+    (setq *rk--font* font-family
+          *rk--font-size* font-size)
     (setq default-frame-alist `((font . ,x-font)))))
 
 ;; to deal with tty mode emacsclient connections
@@ -73,6 +83,27 @@
 
 ;; (rk--x-set-font "Iosevka Term Slab")
 ;; (rk--x-set-font "Hack")
+;; (rk--x-set-font "Fira Code")
+
+;; (rk--x-set-font "DejaVu Sans Mono Book" 18)
+
+(defun rk--x-zoom-in ()
+  (interactive)
+  (rk--x-set-font *rk--font* (1+ *rk--font-size*)))
+
+(defun rk--x-zoom-out ()
+  (interactive)
+  (rk--x-set-font *rk--font* (max 9 (- *rk--font-size* 1))))
+
+(defun rk--x-zoom-reset ()
+  (interactive)
+  (rk--x-set-font *rk--font*))
+
+(rk-bind-keys
+ '(("+" rk--x-zoom-in)
+   ("-" rk--x-zoom-out)
+   ("0" rk--x-zoom-reset))
+ user-commands-prefix-map)
 
 (defvar *rk--emacs-focused-p* t)
 (defun rk--emacs-focused-p ()
@@ -156,6 +187,15 @@
                                  :key (lambda (p) (plist-get p :name))))
                     (rk--x-set-inputs-parse-devices)))
 
+(defun rk--xinput (device-id command &rest args)
+  (apply 'call-process
+         "xinput"
+         nil
+         nil
+         nil
+         command
+         (append args (list device-id))))
+
 (defun rk--x-set-inputs-enabled (device-patterns bool)
   (dolist (device (rk--x-set-inputs-find-devices device-patterns))
     (call-process "xinput"
@@ -180,6 +220,21 @@
 (defun rk-disable-input-devices ()
   (interactive)
   (rk--x-set-inputs-enabled rk--x-set-inputs-devices nil))
+
+(defun rk--xinput-query-state (device-name)
+  (rk--xinput (plist-get (first
+                          (rk--x-set-inputs-find-devices (list device-name)))
+                         :id)
+              "--query-state"))
+
+;; (plist-get (rk--x-set-inputs-find-devices (list "Synaptics")) :id)
+;; (rk--xinput-query-state "Synaptics")
+;; (rk--x-set-inputs-enabled '("Synaptics") nil)
+;; (rk--x-set-inputs-enabled '("Synaptics") t)
+
+(defun rk-toggle-touchpad ()
+  (interactive)
+  (rk--x-set-inputs-enabled ))
 
 (defun rk-x-init-roller-mouse ()
   (interactive)
@@ -220,6 +275,9 @@
 
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
 (setq initial-frame-alist nil)
+
+;; emoji chars
+(set-fontset-font t '(#x1f300 . #x1fad0) "Symbola")
 
 (use-package kriyative-emacs-themes
   :config
