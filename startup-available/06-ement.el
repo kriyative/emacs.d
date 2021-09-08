@@ -70,10 +70,13 @@
 
 (defun run-pantalaimon ()
   (interactive)
-  (unless (and pantalaimon-proc
-               (process-live-p pantalaimon-proc))
-    (setq pantalaimon-proc (start-process "pantalaimon"
-                                          "*pantalaimon*"
-                                          "pantalaimon"))))
+  (let ((buf "*pantalaimon*"))
+    (unless (and pantalaimon-proc
+                 (process-live-p pantalaimon-proc))
+      (setq pantalaimon-proc (start-process "pantalaimon"
+                                            buf
+                                            "pantalaimon"))
+      (with-current-buffer buf
+        (comint-mode)))))
 
 (run-pantalaimon)
