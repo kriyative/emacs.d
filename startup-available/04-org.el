@@ -5,8 +5,7 @@
  corpix/ob-blockdiag.el
  alf/ob-restclient.el
  org-sync
- org-present
- ob-ipython)
+ org-present)
 
 ;;;;;;;;;;;;;;;; org
 
@@ -69,8 +68,7 @@ one."
                                  (shell . t)
                                  (plantuml . t)
                                  (dot . t)
-                                 (python . t)
-                                 (ipython .t))))
+                                 (python . t))))
 
 (use-package org-compat)
 
