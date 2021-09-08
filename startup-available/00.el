@@ -402,9 +402,5 @@
 ;;; dictionary.el
 (unless (fboundp 'process-kill-without-query)
   (defun process-kill-without-query (process)
-    (let ((kill-buffer-query-functions (remove 'process-kill-buffer-query-function
-                                               kill-buffer-query-functions)))
-      (ignore-errors
-        (kill-process process))
-      (kill-buffer
-       (process-buffer process)))))
+    (set-process-query-on-exit-flag process nil))
+  )
