@@ -404,3 +404,47 @@
   (defun process-kill-without-query (process)
     (set-process-query-on-exit-flag process nil))
   )
+
+;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
+
+(defun user-commands-prefix-help ()
+  (interactive)
+  (message "Welcome to the User Commands Prefix map"))
+
+(defvar user-commands-prefix-map (make-sparse-keymap))
+
+(defun set-user-commands-prefix-key (k)
+  (global-unset-key k)
+  (define-prefix-command 'user-commands-prefix
+    'user-commands-prefix-map
+    k)
+  (define-key global-map k 'user-commands-prefix))
+;; (set-user-commands-prefix-key (kbd "C-;"))
+(set-user-commands-prefix-key (kbd "\C-\\"))
+
+(rk-bind-keys
+ '(("\C-\\" compile)
+   ("." find-tag)
+   ("2" rk-2col-view)
+   ("3" rk-3col-view)
+   ("4" rk-4col-view)
+   ("9" rk-fill-vertical-panes)
+   ("<" pop-tag-mark)
+   ("\C-l" bury-buffer)
+   ("g" rk-toggle-debug-on-error)
+   ("j" jump-to-register)
+   ("l" cider-jack-in)
+   ("m" switch-to-mu4e)
+   ("o" browse-url-default-browser)
+   ("q" switch-back)
+   ("r" cider-switch-to-current-repl-buffer)
+   ("t" toggle-truncate-lines)
+   ("u" browse-url)
+   ("v" magit-status)
+   ("w" window-configuration-to-register)
+   ("W" visual-line-mode)
+   ("z" switch-to-app)
+   ("\C-z" switch-to-app)
+   ("|" rk-toggle-window-split)
+   ("\C-c" display-time-world))
+ user-commands-prefix-map)
