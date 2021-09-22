@@ -320,3 +320,12 @@ Also number them so they can be opened using `mu4e-view-go-to-url'."
               (overlay-put ov 'after-string
                            (propertize (format "\u200B[%d]" num)
                                        'face 'mu4e-url-number-face)))))))))
+
+(defun rk-maildir-fix-unread-trash (&optional root-dir)
+  "Mark any unread Maildir files in Trash folders as SEEN."
+  (interactive "DMaildir Root: ")
+  (dolist (f (directory-files-recursively root-dir
+                                          ",[^S]*$"))
+    (let* ((parts (split-string f ","))
+           (new-name (concat (car parts) ",S" (cadr parts))))
+      (rename-file f new-name))))
