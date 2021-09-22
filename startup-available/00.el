@@ -118,6 +118,8 @@
 
 (use-package term)
 
+(use-package epg)
+
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
 (setq inhibit-startup-message t
@@ -201,6 +203,10 @@
    ([?\C-.] tags-search)
    ([?\C-,] tags-loop-continue)
    ("\C-x\C-f" x-find-file)
+
+   ("<f5> f" search-forward)
+   ("<f5> b" search-backward)
+   ("<f6>" previous-error)
    ("<f7>" next-error)
    ("C-=" text-scale-increase)
    ("C--" text-scale-decrease)
@@ -404,6 +410,12 @@
   (defun process-kill-without-query (process)
     (set-process-query-on-exit-flag process nil))
   )
+
+(defun rk--file-age (file)
+  (float-time
+   (time-subtract (current-time)
+                  (file-attribute-modification-time
+                   (file-attributes file)))))
 
 ;;;;;;;;;;;;;;;; user-prefix keymap ;;;;;;;;;;;;;;;;
 
