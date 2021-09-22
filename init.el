@@ -5,6 +5,8 @@
 (package-initialize)
 
 (require 'cl)
+(require 'epg)
+(setq epg-pinentry-mode 'loopback)
 
 (defvar *rk--default-start-level* 3)
 
@@ -16,7 +18,7 @@
       (load f))))
 
 (defun rk--start-emacs (&optional run-level)
-  (load "~/.personal.el" 'noerror)
+  (load "~/.personal.el.gpg" 'noerror)
   (rk--start-emacs-level (or run-level 5))
   (load custom-file 'noerror)
   (setq *rk--inited-p* t))
