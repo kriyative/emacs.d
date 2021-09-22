@@ -82,3 +82,18 @@
         (read-string "Message: ")
       "Countdown timer alert!")))
   (run-with-timer seconds nil 'rk-countdown-timer-alert message))
+
+(defun rk-make-window-east ()
+  (interactive)
+  (split-window (frame-root-window) nil 'right))
+
+(defun rk-make-window-south ()
+  (interactive)
+  (split-window (frame-root-window) nil 'below))
+
+(rk-bind-keys
+ '(("RET" rk-countdown-timer)
+   ("C-x 2" rk-make-window-south)
+   ("C-x 3" rk-make-window-east))
+ user-commands-prefix-map)
+
