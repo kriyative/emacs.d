@@ -142,7 +142,9 @@
 
 ;; (rk--x-notify "hello")
 
-(use-package alert)
+(use-package alert
+  :config
+  (setq alert-default-style 'notifications))
 
 (defun rk--compilation-end-notifier (buffer status)
   (rk--x-notify status (concat "emacs - " (buffer-name buffer))))
