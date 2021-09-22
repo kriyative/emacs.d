@@ -1,36 +1,57 @@
-(rk-el-get-bundles org-gcal)
+(rk-el-get-bundles persist
+                   org-gcal)
 
 (use-package org-gcal
   :after org
   :config
   (setq org-agenda-mode-hook nil
-        org-gcal-auto-archive nil))
+        org-gcal-auto-archive nil
+        org-gcal-client-id nil
+        org-gcal-client-secret nil
+        org-gcal-file-alist nil
+        org-gcal-token-file nil))
 
-(defvar org-gcal-multi-account-id nil)
-(defvar org-gcal-multi-accounts-fun nil)
-(defvar org-gcal-multi-accounts-cursor nil)
+(defun rk--org-gcal-multi-fetch (accounts)
+  (dolist (account accounts)
+    (destructuring-bind (&key name
+                              client-id
+                              client-secret
+                              file-alist
+                              token-file)
+        account
+      (let ((buf (get-buffer-create (concat "org-gcal: " name))))
+        (with-current-buffer buf
+          (make-local-variable 'org-gcal-client-id)
+          (make-local-variable 'org-gcal-client-secret)
+          (make-local-variable 'org-gcal-file-alist)
+          (make-local-variable 'org-gcal-token-file)
+          (setq org-gcal-client-id client-id
+                org-gcal-client-secret client-secret
+                org-gcal-file-alist file-alist
+                org-gcal-token-file token-file)
+          (org-gcal-fetch))))))
 
-(defun org-gcal-multi-do-acct (spec)
-  (cl-labels
-      ((assoc-cdr (x alist) (cdr (assoc x alist))))
-    (let* ((acct (cdr spec)))
-      (setq org-gcal-multi-account-id (car spec)
-            org-gcal-client-id (assoc-cdr 'org-gcal-client-id acct)
-            org-gcal-client-secret (assoc-cdr 'org-gcal-client-secret acct)
-            org-gcal-file-alist (assoc-cdr 'org-gcal-file-alist acct)
-            org-gcal-token-file (assoc-cdr 'org-gcal-token-file acct)
-            org-gcal-token-plist nil)
-      (message "org-gcal-multi-do: %S..." org-gcal-multi-account-id)
-      (org-gcal-fetch))))
+(defvar rk--org-gcal-accounts nil)
 
-(defun org-gcal-multi-fetch ()
+(defun rk-org-gcal-multi-fetch ()
   (interactive)
-  (deferred:$
-    (deferred:next
-      (lambda ()
-        (org-gcal-multi-do-acct (first org-gcal-accounts))))
-    (deferred:nextc it
-      (lambda ()
-        (org-gcal-multi-do-acct (second org-gcal-accounts))))))
+  (let ((browse-url-browser-function 'browse-url-chromium))
+   (rk--org-gcal-multi-fetch rk--org-gcal-accounts)))
 
-;; (org-gcal-multi-fetch)
+(defun rk--org-gcal-files ()
+  (reduce (lambda (all-files account)
+            (cl-concatenate 'list
+                            all-files
+                            (mapcar 'cdr
+                                    (getf account :file-alist))))
+          rk--org-gcal-accounts
+          :initial-value nil))
+
+(defun rk--org-gcal-stalep ()
+  (let ((gcal-file (first (rk--org-gcal-files))))
+    (< 3600 (rk--file-age gcal-file))))
+
+(defun rk-org-gcal-multi-fetch-if-stale ()
+  (when (rk--org-gcal-stalep)
+    (rk-org-gcal-multi-fetch))
+  (org-agenda-list nil nil 'day))

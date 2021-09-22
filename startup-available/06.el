@@ -7,31 +7,9 @@
   :features speed-type-patterns)
  key-chord)
 
-(defun rk--file-age (file)
-  (float-time
-   (time-subtract (current-time)
-                  (file-attribute-modification-time
-                   (file-attributes file)))))
-
-(defun rk--org-gcal-files ()
-  (reduce (lambda (all-files account)
-            (cl-concatenate 'list
-                            all-files
-                            (mapcar 'cdr
-                                    (cdr
-                                     (assoc 'org-gcal-file-alist
-                                            (cdr account))))))
-          org-gcal-accounts
-          :initial-value nil))
-
 (defun rk--midnight-hook ()
-  (when (fboundp 'org-gcal-multi-fetch)
-    (let ((gcal-file (cdadr
-                      (assoc 'org-gcal-file-alist
-                             (cdr (first org-gcal-accounts))))))
-      (when (< 3600 (rk--file-age gcal-file))
-        (org-gcal-multi-fetch))
-      (org-agenda-list nil nil 'day))))
+  (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
+    (rk-org-gcal-multi-fetch-if-stale)))
 
 (use-package midnight
   :config
