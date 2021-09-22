@@ -19,8 +19,8 @@
 
 (use-package helm-ag
   :bind
-  (("\C-cg" . helm-ag-project-root)
-   ("\C-cG" . helm-ag)))
+  (("\C-c G g" . helm-ag-project-root)
+   ("\C-c G a" . helm-ag)))
 
 (use-package helm-cider)
 
