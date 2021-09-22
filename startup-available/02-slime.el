@@ -68,3 +68,9 @@
       (slime))
     (error "The ecl application could not be found")))
 
+(defun rk-ccl ()
+  (interactive)
+  (if-bind (lisp-path (locate-path "lx86cl64" exec-path))
+    (let ((slime-lisp-implementations `((ccl (,lisp-path)))))
+      (slime))
+    (error "The CCL application could not be found")))
