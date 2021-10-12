@@ -18,14 +18,14 @@
      (cider-default-cljs-repl . shadow)
      (Minor-mode . paredit)
      (eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
-	   (add-hook 'write-contents-functions
-		     (lambda nil
-		       (delete-trailing-whitespace)
-		       nil))
-	   (require 'whitespace)
-	   "Sometimes the mode needs to be toggled off and on."
-	   (whitespace-mode 0)
-	   (whitespace-mode 1))
+           (add-hook 'write-contents-functions
+                     (lambda nil
+                       (delete-trailing-whitespace)
+                       nil))
+           (require 'whitespace)
+           "Sometimes the mode needs to be toggled off and on."
+           (whitespace-mode 0)
+           (whitespace-mode 1))
      (whitespace-style face tabs trailing lines-tail)
      (checkdoc-package-keywords-flag)))
  '(send-mail-function 'smtpmail-send-it)
@@ -44,6 +44,10 @@
  '(Info-quoted ((t (:inherit nil :weight bold))))
  '(compilation-mode-line-exit ((t (:inherit compilation-info :foreground "green"))))
  '(compilation-mode-line-fail ((t (:foreground "red"))))
+ '(ement-room-mention ((t (:foreground "blue" :weight bold))))
+ '(ement-room-self ((t (:inherit (font-lock-variable-name-face ement-room-user)))))
+ '(ement-room-self-message ((t nil)))
+ '(ement-room-user ((t (:inherit font-lock-function-name-face))))
  '(erc-nick-default-face ((t (:foreground "blue" :weight bold))))
  '(erc-timestamp-face ((t (:foreground "blue" :weight bold))))
  '(jabber-activity-personal-face ((t (:foreground "yellow" :weight bold))))
