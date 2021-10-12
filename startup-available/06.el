@@ -5,11 +5,14 @@
  (speed-type-patterns
   :url "https://gitlab.com/kriyative/speed-type-patterns.git"
   :features speed-type-patterns)
- key-chord)
+ org-caldav)
+
+(use-package org-caldav)
 
 (defun rk--midnight-hook ()
   (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
-    (rk-org-gcal-multi-fetch-if-stale)))
+    (rk-org-gcal-multi-fetch-if-stale))
+  (org-caldav-sync))
 
 (use-package midnight
   :config
@@ -55,7 +58,6 @@
                         "--no-paginate")
                       (split-string commands)
                       '("help"))))
-           (message "rk-aws-doc: args=%S" args)
            (with-current-buffer buf
              (apply 'call-process
                     "aws"
