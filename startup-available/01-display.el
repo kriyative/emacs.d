@@ -155,24 +155,11 @@
   (interactive)
   (call-process "setxkbmap" nil nil nil "-option" "ctrl:nocaps"))
 
-(defun rk--x-set-inputs-parse-devices ()
-  (let ((dev-re (concat
-                 "^[^A-Za-z]*\\([A-Za-z][-A-Za-z0-9/:,_ ]+"
-                 "[-A-Za-z0-9/:,_]\\)"
-                 "[ \t]*id=\\([0-9]+\\)"
-                 "[ \t]*\\[\\(\\w+\\)"
-                 "[ \t]*\\(\\w+\\)"))
-        devices)
-    (with-temp-buffer
-      (call-process "xinput" nil t)
-      (goto-char (point-min))
-      (while (re-search-forward dev-re nil t)
-        (push (list :name (match-string 1)
-                    :id (match-string 2)
-                    :class (match-string 3)
-                    :type (match-string 4))
-              devices))
-      devices)))
+(defun rk--call-process-post (process-fn post-process-fn)
+  (with-temp-buffer
+    (funcall process-fn)
+    (goto-char (point-min))
+    (funcall post-process-fn)))
 
 (defun rk--match (item matchers &keys key)
   (cl-find-if (lambda (matcher)
@@ -183,23 +170,54 @@
                    (t (equal matcher value)))))
               matchers))
 
-(defun rk--x-set-inputs-find-devices (device-patterns)
+(defun rk--xinput-get-devices ()
+  (rk--call-process-post
+   (lambda ()
+     (call-process "xinput" nil t))
+   (lambda ()
+     (let ((dev-re (concat
+                    "^[^A-Za-z]*\\([A-Za-z][-A-Za-z0-9/:,_ ]+"
+                    "[-A-Za-z0-9/:,_]\\)"
+                    "[ \t]*id=\\([0-9]+\\)"
+                    "[ \t]*\\[\\(\\w+\\)"
+                    "[ \t]*\\(\\w+\\)"))
+           devices)
+       (while (re-search-forward dev-re nil t)
+         (push (list :name (match-string 1)
+                     :id (match-string 2)
+                     :class (match-string 3)
+                     :type (match-string 4))
+               devices))
+       devices))))
+
+(defun rk--xinput-find-device (pattern)
+  (find-if (lambda (device)
+             (string-match pattern (plist-get device :name)))
+           (rk--xinput-get-devices)))
+
+;; (rk--xinput-find-device "Synaptics")
+
+(defun rk--xinput (device-ident command &rest args)
+  (let* ((device (rk--xinput-find-device device-ident))
+         (device-id (if device
+                        (plist-get device :id)
+                      device-ident)))
+    (apply 'call-process
+           "xinput"
+           nil
+           t
+           nil
+           command
+           (append args (list device-id)))))
+
+(defun rk--xinput-find-devices (device-patterns)
   (cl-remove-if-not (lambda (device)
                       (rk--match device device-patterns
                                  :key (lambda (p) (plist-get p :name))))
-                    (rk--x-set-inputs-parse-devices)))
+                    (rk--xinput-get-devices)))
 
-(defun rk--xinput (device-id command &rest args)
-  (apply 'call-process
-         "xinput"
-         nil
-         nil
-         nil
-         command
-         (append args (list device-id))))
-
-(defun rk--x-set-inputs-enabled (device-patterns bool)
-  (dolist (device (rk--x-set-inputs-find-devices device-patterns))
+(defun rk--xinput-set-enabled (device-patterns bool)
+  (dolist (device (rk--xinput-find-devices device-patterns))
     (call-process "xinput"
                   nil
                   nil
@@ -207,8 +225,8 @@
                   (if bool "--enable" "--disable")
                   (plist-get device :id))))
 
-(defvar rk--x-set-inputs-devices nil)
-(setq rk--x-set-inputs-devices
+(defvar rk--xinput-devices-list nil)
+(setq rk--xinput-devices-list
       '("AT Translated Set 2 keyboard"
         "ThinkPad Extra Buttons"
         ;; "SynPS/2 Synaptics TouchPad"
@@ -217,26 +235,37 @@
 
 (defun rk-enable-input-devices ()
   (interactive)
-  (rk--x-set-inputs-enabled rk--x-set-inputs-devices t))
+  (rk--xinput-set-enabled rk--xinput-devices-list t))
 
 (defun rk-disable-input-devices ()
   (interactive)
-  (rk--x-set-inputs-enabled rk--x-set-inputs-devices nil))
+  (rk--xinput-set-enabled rk--xinput-devices-list nil))
 
-(defun rk--xinput-query-state (device-name)
-  (rk--xinput (plist-get (first
-                          (rk--x-set-inputs-find-devices (list device-name)))
-                         :id)
-              "--query-state"))
+(defun rk--xinput-list-props (device-name &optional keys)
+  (rk--call-process-post
+   (lambda ()
+     (rk--xinput device-name "--list-props"))
+   (lambda ()
+     (let (matches
+           (re (concat "^[ \t]*\\("
+                       (if keys
+                           (mapconcat 'identity keys "\\|")
+                         "[^(]*")
+                       "\\)[ ]*([0-9]+):[ \t]*\\(.*\\)$")))
+       (while (re-search-forward re nil t)
+         (push (cons (match-string 1) (match-string 2)) matches))
+       matches))))
 
-;; (plist-get (rk--x-set-inputs-find-devices (list "Synaptics")) :id)
-;; (rk--xinput-query-state "Synaptics")
-;; (rk--x-set-inputs-enabled '("Synaptics") nil)
-;; (rk--x-set-inputs-enabled '("Synaptics") t)
+(defun rk--xinput-get-prop (device-name property)
+  (cdar (rk--xinput-list-props device-name (list property))))
+
+;; (rk--xinput-get-prop "Synaptics" "Device Enabled")
 
 (defun rk-toggle-touchpad ()
   (interactive)
-  (rk--x-set-inputs-enabled ))
+  (let ((enabledp (equal "1"
+                         (rk--xinput-get-prop "Synaptics" "Device Enabled"))))
+    (rk--x-set-inputs-enabled '("Synaptics") (not enabledp))))
 
 (defun rk-x-init-roller-mouse ()
   (interactive)
