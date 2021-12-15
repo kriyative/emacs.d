@@ -6,7 +6,6 @@
  plantuml-mode
  projectile
  csv-mode
- geiser
  restclient)
 
 (defun rk-find-or-insert (expr insertion)

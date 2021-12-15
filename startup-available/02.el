@@ -1,5 +1,4 @@
 (rk-el-get-bundles
- geiser
  json-mode
  json-snatcher)
 
@@ -23,26 +22,3 @@
 (use-package cc-mode
   :config
   (add-hook 'java-mode-hook 'rk-java-mode-hook))
-
-(defun setup-geiser ()
-  )
-
-(use-package geiser
-  :config
-  (add-hook 'geiser-mode-hook 'setup-geiser))
-
-(defun rk-chez ()
-  (interactive)
-  (run-geiser 'chez))
-
-(defun rk-guile ()
-  (interactive)
-  (run-geiser 'guile))
-
-(defun rk-racket ()
-  (interactive)
-  (run-geiser 'racket))
-
-(use-package python
-  :config
-  (setq python-shell-interpreter "python3"))
