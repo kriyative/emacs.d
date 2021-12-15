@@ -135,12 +135,16 @@ maildir)."
         ;; mu4e-html2text-command "html2text -utf8 -width 72"
         mu4e-doc-dir mu4e-builddir
         mu4e-use-fancy-chars nil
+        mu4e-headers-thread-child-prefix '("" . "")
+        mu4e-headers-thread-last-child-prefix '("  " . "  ")
+        mu4e-headers-thread-connection-prefix '("" . "")
+        mu4e-headers-thread-blank-prefix '("" . "")
         mu4e-index-cleanup t
         ;; mu4e-index-cleanup nil      ;; don't do a full cleanup check
         mu4e-index-lazy-check nil
         ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
         org-export-with-toc nil
-        mu4e-view-use-gnus nil          ;; don't use gnus to render
+        mu4e-view-use-gnus nil ;; don't use gnus to render
         gnus-inhibit-images t
         mu4e-completing-read-function 'completing-read
         mu4e-view-func 'rk--mu4e-view-func)
@@ -250,6 +254,11 @@ date. The formats used for date and time are
   :config
   ;; (setq *mbsync-accounts* '("gmail" ("outlook" 600)))
   (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update))
+
+(defun rk-mbsync-stop ()
+  (interactive)
+  (dolist (spec *mbsync-accounts*)
+    (mbsync--sync-stop (if (listp spec) (car spec) spec))))
 
 ;;;;;;;;;;;;;;;; overrides ;;;;;;;;;;;;;;;;
 
