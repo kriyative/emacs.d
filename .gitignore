@@ -44,3 +44,12 @@ info
 /emojis/
 /jabber-history/
 /jabber-avatar-cache/
+/.cache/
+/.dap-breakpoints
+/.lsp-session-v1
+/.org-generic-id-locations
+/eclipse.jdt.ls/
+/forge-database.sqlite*
+/matrix-client.el.token
+/org-caldav*
+/workspace/
