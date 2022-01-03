@@ -1,11 +1,4 @@
-(rk-el-get-bundles
- hagleitn/speed-type
- ht
- iqbalansari/emacs-emojify
- (speed-type-patterns
-  :url "https://gitlab.com/kriyative/speed-type-patterns.git"
-  :features speed-type-patterns)
- org-caldav)
+(rk-el-get-bundles org-caldav)
 
 (use-package org-caldav)
 
@@ -18,19 +11,6 @@
   :config
   (midnight-delay-set 'midnight-delay "9:00am")
   (add-hook 'midnight-hook 'rk--midnight-hook))
-
-(use-package ht)
-
-(use-package emojify
-  :config
-  (add-hook 'mu4e-view-mode-hook 'emojify-mode))
-
-;; (use-package key-chord)
-;; (key-chord-define emacs-lisp-mode-map "df" "(defun  ()\n)\M-b\M-f\C-f")
-;; (key-chord-define emacs-lisp-mode-map "up" "(use-package ")
-;; (key-chord-define emacs-lisp-mode-map "((" "[")
-;; (key-chord-define emacs-lisp-mode-map "ff" ffap)
-;; (setq key-chord-two-keys-delay 0.08)
 
 (when (file-exists-p diary-file)
   (diary 0))

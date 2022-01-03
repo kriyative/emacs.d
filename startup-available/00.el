@@ -22,15 +22,25 @@
           `(el-get-bundle ,@(if (listp rcp) rcp (list rcp))))
         rcps)))
 
+(defmacro rk-require-packages (&rest pkgs)
+  `(progn
+     ,@(mapcar
+        (lambda (pkg)
+          `(unless (require ',pkg nil 'noerror)
+	     (package-install ',pkg)))
+        pkgs)))
+
 ;;;;;;;;;;;;;;;; regular startup ;;;;;;;;;;;;;;;;
 
-(rk-el-get-bundles
+(rk-require-packages
+ use-package
  alert
  buffer-move
+ popup)
+
+(rk-el-get-bundles
  (emacs-fun :url "https://github.com/kriyative/emacs-fun.git"
-            :features (efun-base efun-cmds))
- popup
- use-package)
+            :features (efun-base efun-cmds)))
 
 (defun rk--set-all-line-truncation (v)
   (make-local-variable 'truncate-lines)

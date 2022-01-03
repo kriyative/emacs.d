@@ -1,4 +1,4 @@
-(rk-el-get-bundles elscreen)
+(rk-require-packages elscreen)
 
 (rk-bind-keys '(("C-z")))
 

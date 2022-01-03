@@ -1,12 +1,11 @@
-(rk-el-get-bundles
- sshaw/git-link
- window-numbering
- graphviz-dot-mode
- markdown-mode
- plantuml-mode
- projectile
- csv-mode
- restclient)
+(rk-require-packages git-link
+		     window-numbering
+		     graphviz-dot-mode
+		     markdown-mode
+		     plantuml-mode
+		     projectile
+		     csv-mode)
+(rk-el-get-bundles restclient)
 
 (defun rk-find-or-insert (expr insertion)
   (goto-char (point-min))

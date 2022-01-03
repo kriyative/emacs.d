@@ -1,4 +1,4 @@
-(rk-el-get-bundles paredit)
+(rk-require-packages paredit)
 
 (defun rk-start-lisp ()
   (interactive)

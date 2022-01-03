@@ -1,15 +1,6 @@
-(cond
- ((string-match "24\\.3\\." emacs-version)
-  (rk-el-get-bundles
-   (subr-x
-    :type http
-    :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/emacs-lisp/subr-x.el")
-   (clojure-mode :checkout "5.5.2")
-   (cider :checkout "v0.17.0")))
- (t
-  (rk-el-get-bundles
-   clojure-mode
-   (cider :checkout "v0.23.0"))))
+(rk-require-packages
+ clojure-mode
+ cider)
 
 (defun clojure-mode-hook ()
   (auto-revert-mode 1)

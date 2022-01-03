@@ -1,4 +1,4 @@
-(rk-el-get-bundles slime)
+(rk-require-packages slime)
 
 (defun rk-slime-list-connections ()
   (interactive)

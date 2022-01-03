@@ -1,4 +1,4 @@
-(rk-el-get-bundles
+(rk-require-packages
  json-mode
  json-snatcher)
 

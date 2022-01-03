@@ -1,9 +1,5 @@
-(cond
- ((string-match "24\\.3\\." emacs-version)
-  (rk-el-get-bundles magit-1))
- (t (rk-el-get-bundles magit f magit-todos)))
-(rk-el-get-bundles
- kriyative/git-code-review)
+(rk-require-packages magit f magit-todos)
+(rk-el-get-bundles kriyative/git-code-review)
 
 (defun rk--magit-setup-hook ()
   (local-unset-key [C-tab])

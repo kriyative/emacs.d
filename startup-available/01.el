@@ -1,4 +1,4 @@
-(rk-el-get-bundles
+(rk-require-packages
  wgrep
  ag
  diminish

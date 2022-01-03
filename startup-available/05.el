@@ -1,20 +1,20 @@
 ;;;;;;;;;;;;;;;; dependencies ;;;;;;;;;;;;;;;;
 
-(rk-el-get-bundles
- alert
- (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
-                :features disable-mouse)
+(rk-require-packages
  dictionary
  edit-server
+ magit-popup)
+
+(rk-el-get-bundles
+ (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
+                :features disable-mouse)
  (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
             :features ipinfo
             :depends (request))
  ;; libvterm ;; -- needs newer cmake to build in 18.04
  (password-mode
   :url "https://github.com/juergenhoetzel/password-mode.git"
-  :features password-mode)
- magit-popup
- )
+  :features password-mode))
 
 ;;;;;;;;;;;;;;;; commands ;;;;;;;;;;;;;;;;
 

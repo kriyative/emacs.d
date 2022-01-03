@@ -1,5 +1,5 @@
 (rk-el-get-bundles kriyative/kriyative-emacs-themes)
-(rk-el-get-bundles unicode-fonts)
+(rk-require-packages unicode-fonts)
 
 (use-package unicode-fonts
   :config
