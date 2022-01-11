@@ -5,17 +5,6 @@
  edit-server
  magit-popup)
 
-(rk-el-get-bundles
- (disable-mouse :url "https://github.com/purcell/disable-mouse.git"
-                :features disable-mouse)
- (ipinfo.el :url "https://github.com/dakra/ipinfo.el.git"
-            :features ipinfo
-            :depends (request))
- ;; libvterm ;; -- needs newer cmake to build in 18.04
- (password-mode
-  :url "https://github.com/juergenhoetzel/password-mode.git"
-  :features password-mode))
-
 ;;;;;;;;;;;;;;;; commands ;;;;;;;;;;;;;;;;
 
 (defun rk-set-mode-line-color (color)
@@ -85,16 +74,7 @@
         edit-server-new-frame nil)
   (edit-server-start))
 
-(use-package ipinfo)
-
-(use-package password-mode)
-
 (use-package magit-popup)
-
-(when (boundp 'vterm)
-  (use-package vterm
-    :config
-    (define-key vterm-mode-map (kbd "C-c C-z") #'vterm--self-insert)))
 
 (defun fortune-computers ()
   (interactive)
