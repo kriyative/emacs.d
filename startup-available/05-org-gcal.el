@@ -1,4 +1,4 @@
-(rk-el-get-bundles persist org-gcal)
+(rk-require-packages org-gcal)
 
 (use-package org-gcal
   :after org
