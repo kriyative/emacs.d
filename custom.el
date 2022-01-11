@@ -8,7 +8,7 @@
  '(fringe-mode 4 nil (fringe))
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
+   '(flycheck elpy tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
  '(safe-local-variable-values
    '((visual-line-mode . t)
      (org-todo-keyword-faces
