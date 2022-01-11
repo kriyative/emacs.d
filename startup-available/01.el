@@ -15,6 +15,7 @@
   :bind (("C-c g g" . ag)
          ("H-g g" . ag)
          ("C-c g d" . ag-dired)
+         ("C-c g f" . ag-dired)
          ("H-g d" . ag-dired)
          ("C-c g p" . ag-project)
          ("H-g p" . ag-project)
