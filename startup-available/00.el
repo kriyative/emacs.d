@@ -51,18 +51,26 @@
   (error
    (format "No implementation for '%s' on %S" fname system-type)))
 
-(defun rk-bind-keys (bindings &optional keymap)
-  (dolist (binding bindings)
-    (let* ((key (first binding))
-           (key (if (stringp key)
-                    (kbd key)
-                  key))
-           (def (second binding)))
-      (if keymap
-          (define-key keymap key def)
-        (global-unset-key key)
-        (when def
-          (global-set-key key def))))))
+(defun as-list (x)
+  (if (consp x) x (list x)))
+
+(defun rk-bind-keys (bindings &rest keymaps)
+  (dolist (keymap (or keymaps (list :global)))
+    (dolist (binding bindings)
+      (let* ((key (first binding))
+             (key (if (stringp key)
+                      (kbd key)
+                    key))
+             (def (second binding)))
+        (if (eq :global keymap)
+            (progn
+              (global-unset-key key)
+              (when def
+                (global-set-key key def)))
+          (define-key (if (symbolp keymap)
+                          (symbol-value keymap)
+                        keymap)
+            key def))))))
 
 ;;;;;;;;;;;;;;;; packages ;;;;;;;;;;;;;;;;
 
