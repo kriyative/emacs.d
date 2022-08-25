@@ -1,4 +1,5 @@
-(rk-el-get-bundles kriyative/kriyative-emacs-themes)
+(when window-system
+  (rk-el-get-bundles kriyative/kriyative-emacs-themes))
 (rk-require-packages unicode-fonts)
 
 (use-package unicode-fonts
@@ -81,6 +82,7 @@
 (when (eq window-system 'x)
   (rk--x-set-font "DejaVu Sans Mono Book"))
 
+;; (rk--x-set-font "DejaVu Sans Mono Book")
 ;; (rk--x-set-font "Iosevka Term Slab")
 ;; (rk--x-set-font "Hack")
 ;; (rk--x-set-font "Fira Code")
@@ -265,7 +267,7 @@
   (interactive)
   (let ((enabledp (equal "1"
                          (rk--xinput-get-prop "Synaptics" "Device Enabled"))))
-    (rk--x-set-inputs-enabled '("Synaptics") (not enabledp))))
+    (rk--xinput-set-enabled '("Synaptics") (not enabledp))))
 
 (defun rk-x-init-roller-mouse ()
   (interactive)
@@ -310,6 +312,7 @@
 ;; emoji chars
 (set-fontset-font t '(#x1f300 . #x1fad0) "Symbola")
 
-(use-package kriyative-emacs-themes
-  :config
-  (load-theme 'kriyative-light))
+(when window-system
+  (use-package kriyative-emacs-themes
+    :config
+    (load-theme 'kriyative-light)))
