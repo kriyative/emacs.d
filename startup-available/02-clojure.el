@@ -7,6 +7,8 @@
   (outline-minor-mode 1)
   (enable-paredit-mode)
   (make-local-variable 'before-save-hook)
+  (setq outline-heading-alist nil
+        outline-regexp "^[(;]")
   ;; (rk-lisp-mode-indent-on-save)
   )
 
@@ -36,13 +38,13 @@
         ("H-w"     . cider-grimoire)
         ("H-r"     . cider-switch-to-repl-buffer)
         ("H-l"     . cider-jack-in)
-        ("<backtab>" . rk-outline-toggle))
+        ("<backtab>" . rk-outline-toggle)
+        ("C-c C-y" . rk-yank-unescape-quotes))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
-  (setq auto-mode-alist
-        (remove-if (lambda (x)
-                     (equal (car x) "\\.cljc\\'"))
-                   auto-mode-alist))
+  (setq auto-mode-alist (remove-if (lambda (x)
+                                     (equal (car x) "\\.cljc\\'"))
+                                   auto-mode-alist))
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
 
 (use-package cider-repl
@@ -71,8 +73,7 @@
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-global-options "-Anrepl:dev"
-        cider-clojure-cli-global-options "-Anrepl:dev")
+        cider-clojure-cli-global-options "-Adev")
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 (defun cider--remove-current-ns (&optional buffer)
@@ -111,3 +112,5 @@
         (message "Removing sym: %s" sym)
         (cider--remove-sym sym))))
   (cider-eval-defun-at-point nil))
+
+(define-key clojure-mode-map (kbd "C-c p g") 'projectile-grep)
