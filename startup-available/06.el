@@ -3,9 +3,10 @@
 (use-package org-caldav)
 
 (defun rk--midnight-hook ()
-  (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
-    (rk-org-gcal-multi-fetch-if-stale))
-  (org-caldav-sync))
+  ;; (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
+  ;;   (rk-org-gcal-multi-fetch-if-stale))
+  ;; (org-caldav-sync)
+  )
 
 (use-package midnight
   :config

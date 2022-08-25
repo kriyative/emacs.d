@@ -1,5 +1,5 @@
 (rk-el-get-bundles alphapapa/plz.el
-                   kriyative/ement.el
+                   alphapapa/ement.el
                    ts)
 
 (use-package ement
@@ -109,7 +109,8 @@
   (with-temp-buffer
     (insert body)
     (org-mode)
-    (let ((org-export-show-temporary-export-buffer nil))
+    (let ((org-export-show-temporary-export-buffer nil)
+          (org-export-with-toc nil))
       (org-html-export-as-html nil nil nil :body-only)
       (delete-region (point-min) (point-max))
       (with-current-buffer "*Org HTML Export*"
@@ -135,16 +136,71 @@
           (replace-match "</code></pre>\n"))
         (buffer-substring-no-properties (point-min) (point-max))))))
 
+(cl-defun rk--ement-room-send-message (room session
+                                            &key
+                                            body
+                                            formatted-body
+                                            formatted-body-format
+                                            replying-to-event)
+  "Send message to ROOM on SESSION with BODY and FORMATTED-BODY.
+REPLYING-TO-EVENT may be an event the message is in reply to; the
+message will reference it appropriately.
+
+If `ement-room-send-message-filter' is non-nil, the message's
+content alist is passed through it before sending.  This may be
+used to, e.g. process the BODY into another format and add it to
+the content. (e.g. see `ement-room-send-org-filter')."
+  (interactive (progn
+                 (cl-assert ement-room) (cl-assert ement-session)
+                 (let* ((room ement-room)
+                        (session ement-session)
+                        (prompt (format "Send message (%s): " (ement-room-display-name room)))
+                        (body (ement-room-with-typing
+                                (ement-room-read-string prompt nil nil nil
+                                                        'inherit-input-method))))
+                   (list room session :body body))))
+  (cl-assert (not (string-empty-p body)))
+  (cl-assert (or (not formatted-body) (not (string-empty-p formatted-body))))
+  (pcase-let* (((cl-struct ement-room (id room-id) (local (map buffer))) room)
+               (window (when buffer (get-buffer-window buffer)))
+               (endpoint (format "rooms/%s/send/m.room.message/%s" (url-hexify-string room-id)
+                                 (ement-room-update-transaction-id session)))
+               (content (ement-aprog1
+                            (ement-alist "msgtype" "m.text"
+                                         "body" body)
+                          (when formatted-body
+                            (push (cons "formatted_body" formatted-body) it))
+                          (when formatted-body-format
+                            (push (cons "format" formatted-body-format) it)))))
+    (when replying-to-event
+      (setf content (ement-room--add-reply content replying-to-event)))
+    (when ement-room-send-message-filter
+      (setf content (funcall ement-room-send-message-filter content)))
+    (ement-api session endpoint :method 'put :data (json-encode content)
+      :then (apply-partially #'ement-room-send-event-callback :room room :session session
+                             :content content :data)) ;; Data is added when calling back.
+    ;; NOTE: This assumes that the selected window is the buffer's window.  For now
+    ;; this is almost surely the case, but in the future, we might let the function
+    ;; send messages to other rooms more easily, so this assumption might not hold.
+    (when window
+      (with-selected-window window
+        (when (>= (window-point) (ewoc-location (ewoc-nth ement-ewoc -1)))
+          ;; Point is on last event: advance it to eob so that when the event is received
+          ;; back, the window will scroll.  (This might not always be desirable, because
+          ;; the user might have point on that event for a reason, but I think in most
+          ;; cases, it will be what's expected and most helpful.)
+          (setf (window-point) (point-max)))))))
+
 (defun rk-ement-room-send-message-send ()
   (interactive)
   (let* ((body (buffer-substring-no-properties (point-min) (point-max)))
          (formatted-body (rk--ement-body-format-org-html body)))
-    (ement-room-send-message ement-room
-                             ement-session
-                             :body body
-                             :formatted-body formatted-body
-                             :formatted-body-format "org.matrix.custom.html"
-                             :replying-to-event ement-room-replying-to-event)
+    (rk--ement-room-send-message ement-room
+                                 ement-session
+                                 :body body
+                                 :formatted-body formatted-body
+                                 :formatted-body-format "org.matrix.custom.html"
+                                 :replying-to-event ement-room-replying-to-event)
     (delete-region (point-min) (point-max))
     (quit-window)))
 

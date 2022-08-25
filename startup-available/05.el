@@ -20,9 +20,7 @@
 (use-package dictionary
   :bind
   (("\C-cs" . dictionary-search)
-   ("\C-cm" . dictionary-match-words))
-  :config
-  (load-library "dictionary-init"))
+   ("\C-cm" . dictionary-match-words)))
 
 (defun iso-calendar ()
   (interactive)

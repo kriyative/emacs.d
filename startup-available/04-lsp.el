@@ -5,13 +5,16 @@
                      dap-mode)
 
 (defun rk--lsp-mode-hook ()
-  (lsp-headerline--disable-breadcrumb))
+  (lsp-headerline-breadcrumb-mode -1))
 
 (use-package lsp-mode
-  :hook
-  ((lsp-mode . rk--lsp-mode-hook))
+  ;; :hook ((lsp-mode . rk--lsp-mode-hook))
+  :init
+  (setq lsp-headerline-breadcrumb-enable nil
+        lsp-completion-enable-additional-text-edit nil)
   :config
-  (setq lsp-completion-enable-additional-text-edit nil))
+  (setq lsp-log-io t
+        lsp-print-io t))
 
 (use-package dap-mode
   :after lsp-mode

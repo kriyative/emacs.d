@@ -1,11 +1,10 @@
-(rk-require-packages git-link
-		     window-numbering
+(rk-require-packages window-numbering
 		     graphviz-dot-mode
 		     markdown-mode
 		     plantuml-mode
 		     projectile
 		     csv-mode)
-(rk-el-get-bundles restclient)
+(rk-el-get-bundles kriyative/git-link restclient)
 
 (defun rk-find-or-insert (expr insertion)
   (goto-char (point-min))
@@ -55,8 +54,9 @@
 
 (use-package git-link
   :config
-  (push '("git-codecommit" rk-git-link-codecommit)
-        git-link-remote-alist))
+  ;; not needed any more, part of git-link now
+  ;; (push '("git-codecommit" rk-git-link-codecommit) git-link-remote-alist)
+  )
 
 (use-package image
   :bind

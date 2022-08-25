@@ -142,7 +142,7 @@ maildir)."
         mu4e-index-cleanup t
         ;; mu4e-index-cleanup nil      ;; don't do a full cleanup check
         mu4e-index-lazy-check nil
-        ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
+        ;; mu4e-index-lazy-check t     ;; don't consider up-to-date dirs
         org-export-with-toc nil
         mu4e-view-use-gnus nil ;; don't use gnus to render
         gnus-inhibit-images t
@@ -159,7 +159,8 @@ maildir)."
   (add-to-list 'mu4e-bookmarks
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
-  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
+  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox)
+  (define-key mu4e-view-mode-map (kbd "C-c u") 'mu4e-view-save-url))
 
 (defun mu4e~headers-human-date (msg)
   "Show a 'human' date.

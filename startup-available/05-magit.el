@@ -5,9 +5,9 @@
   (local-unset-key [C-tab])
   (define-key magit-mode-map [C-tab] nil))
 
-(defun rk-magit-show-refs (&optional transient)
+(defun rk-magit-show-refs-sort-by-committerdate (&optional transient)
   (interactive)
-  (setq-local magit-buffer-arguments '(("-s" . "-committerdate")))
+  (setq-local magit-buffer-arguments '("--sort=-committerdate"))
   (magit-show-refs transient))
 
 (use-package magit
@@ -23,7 +23,11 @@
   :bind
   (("H-v" . magit-status)
    :map magit-status-mode-map
-   ("y" . rk-magit-show-refs))
+   ("y" . magit-show-refs)
+   ("M-y" . rk-magit-show-refs-sort-by-committerdate)
+   :map magit-refs-mode-map
+   ("y" . magit-show-refs)
+   ("M-y" . rk-magit-show-refs-sort-by-committerdate))
   :bind
   (:map user-commands-prefix-map
         ("v" . magit-status)))
