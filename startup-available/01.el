@@ -3,7 +3,10 @@
  ag
  diminish
  ;; joaotavora/sly
+ ;; rg
  )
+
+(rk-el-get-bundles juergenhoetzel/password-mode)
 
 ;;;;;;;;;;;;;;;;
 
@@ -18,9 +21,15 @@
          ("C-c g f" . ag-dired)
          ("H-g d" . ag-dired)
          ("C-c g p" . ag-project)
+         ("C-c g P" . ag-project-dired)
          ("H-g p" . ag-project)
          ("C-c g r" . ag-regexp)
          ("H-g r" . ag-regexp)))
+
+;; (use-package rg
+;;   :config
+;;   (global-set-key (kbd "C-c g") #'rg-menu))
+;; (global-unset-key (kbd "C-c g"))
 
 (use-package buffer-move
   :bind (:map user-commands-prefix-map
@@ -159,6 +168,8 @@
   (file-name-shadow-mode 1)
   (minibuffer-depth-indicate-mode 1)
   (minibuffer-electric-default-mode 1))
+
+(use-package password-mode)
 
 ;;;;;;;;;;;;;;;; startup ;;;;;;;;;;;;;;;;
 
