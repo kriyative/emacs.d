@@ -8,7 +8,7 @@
  '(fringe-mode 4 nil (fringe))
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(flycheck elpy tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
+   '(juergenhoetzel/password-mode rg yaml-mode flycheck elpy tracking speed-type dired-du oauth2 slack queue htmlize csv-mode clojure-mode adaptive-wrap))
  '(safe-local-variable-values
    '((visual-line-mode . t)
      (org-todo-keyword-faces
@@ -58,7 +58,7 @@
  '(jabber-title-medium ((t (:weight bold))))
  '(jabber-title-small ((t (:height 1.0))))
  '(magit-tag ((t (:background "yellow" :foreground "black"))))
- '(mu4e-header-highlight-face ((t (:background "grey" :underline t :weight bold))))
+ '(mu4e-header-highlight-face ((t (:background "grey" :weight bold))))
  '(mu4e-unread-face ((t (:inherit font-lock-keyword-face :foreground "blue" :weight bold)))))
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
