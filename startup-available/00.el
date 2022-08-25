@@ -165,7 +165,8 @@
                                              ".DS_Store"))
       mc-gpg-path (locate-path "gpg" exec-path)
       ispell-program-name (locate-path "aspell" exec-path)
-      auto-window-vscroll nil)
+      auto-window-vscroll nil
+      indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
 
