@@ -6,6 +6,7 @@
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
+(package-refresh-contents)
 
 (require 'cl)
 (require 'epg)
@@ -38,3 +39,4 @@
                       command-line-args)
   (message "No startup function specified in command line")
   (rk--start-emacs))
+(put 'set-goal-column 'disabled nil)
