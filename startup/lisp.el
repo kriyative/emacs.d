@@ -1,4 +1,4 @@
-(rk-require-packages paredit)
+(use-package paredit :straight t)
 
 (defun rk-start-lisp ()
   (interactive)
@@ -94,12 +94,7 @@ level of escaping from quote chars."
   (eldoc-mode 1)
   (paredit-mode 1)
   ;; (rk-lisp-mode-indent-on-save)
-  (rk-bind-keys '(("\C-c\C-p" pp-eval-last-sexp)
-                  ("\C-c\C-p" pp-eval-last-sexp)
-                  ("\C-c\C-k" eval-buffer)
-                  ("\C-c\C-y" rk-yank-escape-quotes))
-                emacs-lisp-mode-map
-                lisp-interaction-mode-map))
+  )
 
 (defun set-common-lisp-block-comment-syntax ()
   (modify-syntax-entry ?# "<1" font-lock-syntax-table)
@@ -135,8 +130,17 @@ level of escaping from quote chars."
   (paredit-mode 1))
 
 (use-package lisp-mode
-  :bind (:map emacs-lisp-mode-map
-              ("C-c C-m" . pp-macroexpand-last-sexp))
+  :bind
+  (:map emacs-lisp-mode-map
+        ("C-c C-m" . pp-macroexpand-last-sexp)
+        ("C-c C-p" . pp-eval-last-sexp)
+        ("C-c C-k" . eval-buffer)
+        ("C-c C-y" . rk-yank-escape-quotes)
+        :map lisp-interaction-mode-map
+        ("C-c C-m" . pp-macroexpand-last-sexp)
+        ("C-c C-p" . pp-eval-last-sexp)
+        ("C-c C-k" . eval-buffer)
+        ("C-c C-y" . rk-yank-escape-quotes))
   :config
   (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)

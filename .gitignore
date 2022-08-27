@@ -38,7 +38,6 @@ info
 /history
 /smex-items
 /speed-type
-/startup
 /transient
 /type-break
 /emojis/
@@ -54,3 +53,8 @@ info
 /org-caldav*
 /workspace/
 /custom.el
+/straight
+/persist
+/ex.db
+/org-roam*
+/wip

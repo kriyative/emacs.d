@@ -1,5 +1,3 @@
-(rk-el-get-bundles emms)
-
 (defun rk-emms-browser ()
   (interactive)
   (delete-other-windows)

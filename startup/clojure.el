@@ -1,7 +1,3 @@
-(rk-require-packages
- clojure-mode
- cider)
-
 (defun clojure-mode-hook ()
   (auto-revert-mode 1)
   (outline-minor-mode 1)
@@ -27,6 +23,7 @@
     (set 'rk-outline-visibility 'visible)))
 
 (use-package clojure-mode
+  :straight t
   :demand t
   :bind
   (:map clojure-mode-map
@@ -39,13 +36,32 @@
         ("H-r"     . cider-switch-to-repl-buffer)
         ("H-l"     . cider-jack-in)
         ("<backtab>" . rk-outline-toggle)
-        ("C-c C-y" . rk-yank-unescape-quotes))
+        ("C-c C-y" . rk-yank-unescape-quotes)
+        ("C-c p g" . projectile-grep))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (setq auto-mode-alist (remove-if (lambda (x)
                                      (equal (car x) "\\.cljc\\'"))
                                    auto-mode-alist))
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
+
+(defun cider-mode-hook ()
+  (eldoc-mode)
+  (outline-minor-mode))
+
+;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
+;; (unload-feature 'cider t)
+
+(use-package cider
+  :straight t
+  :bind
+  (:map cider-mode-map
+        ("C-c C-k" . cider-load-buffer-ext))
+  :config
+  (add-hook 'cider-mode-hook 'cider-mode-hook)
+  (setq cider-lein-parameters "trampoline repl :headless"
+        cider-clojure-cli-global-options "-Adev")
+  (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 (use-package cider-repl
   :bind
@@ -58,23 +74,6 @@
         cider-use-overlays nil
         cider-repl-use-pretty-printing nil
         cider-redirect-server-output-to-repl nil))
-
-(defun cider-mode-hook ()
-  (eldoc-mode)
-  (outline-minor-mode))
-
-;; (remove-hook 'cider-mode-hook 'cider-mode-hook)
-;; (unload-feature 'cider t)
-
-(use-package cider
-  :bind
-  (:map cider-mode-map
-        ("C-c C-k" . cider-load-buffer-ext))
-  :config
-  (add-hook 'cider-mode-hook 'cider-mode-hook)
-  (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-cli-global-options "-Adev")
-  (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 (defun cider--remove-current-ns (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
@@ -112,5 +111,3 @@
         (message "Removing sym: %s" sym)
         (cider--remove-sym sym))))
   (cider-eval-defun-at-point nil))
-
-(define-key clojure-mode-map (kbd "C-c p g") 'projectile-grep)

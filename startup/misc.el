@@ -1,6 +1,14 @@
-(rk-el-get-bundles org-caldav)
+(defun fortune-computers ()
+  (interactive)
+  (fortune (concat fortune-dir "/computers")))
 
-(use-package org-caldav)
+(use-package fortune
+  :bind (:map user-commands-prefix-map
+              ("ff" . fortune)
+              ("fc" . fortune-computers))
+  :config
+  (setq fortune-dir "/usr/share/games/fortunes"
+        fortune-file "/usr/share/games/fortunes/fortunes"))
 
 (defun rk--midnight-hook ()
   ;; (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
