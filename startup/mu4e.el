@@ -1,11 +1,3 @@
-(rk-el-get-bundles
- (mu4e :checkout "1.4.7")
- mu4e-multi
- kriyative/mu4e-maildirs-extension
- kriyative/mbsync.el)
-
-;;;;;;;;;;;;;;;; mu4e
-
 (defun mu4e-get-inbox-maildirs ()
   (remove-if-not (lambda (x)
                    (string-match "INBOX$" x))
@@ -103,7 +95,11 @@ maildir)."
       'sent)))
 
 (use-package mu4e
-  :demand t
+  :straight (mu4e :files ("build/mu4e/*.el")
+                  :pre-build (("./autogen.sh")
+                              ("ninja" "-C" "build")))
+  :custom (mu4e-mu-binary (expand-file-name "build/mu/mu"
+                                            (straight--repos-dir "mu")))
   :config
   (setq mu4e-maildir "~/Mail" ;; top-level Maildir
         ;; mu4e-get-mail-command "mbsync-all -u"
@@ -142,7 +138,7 @@ maildir)."
         mu4e-index-cleanup t
         ;; mu4e-index-cleanup nil      ;; don't do a full cleanup check
         mu4e-index-lazy-check nil
-        ;; mu4e-index-lazy-check t ;; don't consider up-to-date dirs
+        ;; mu4e-index-lazy-check t     ;; don't consider up-to-date dirs
         org-export-with-toc nil
         mu4e-view-use-gnus nil ;; don't use gnus to render
         gnus-inhibit-images t
@@ -159,7 +155,12 @@ maildir)."
   (add-to-list 'mu4e-bookmarks
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
-  (define-key mu4e-main-mode-map "i" 'mu4e~headers-jump-to-inbox))
+
+  :bind
+  (:map mu4e-main-mode-map
+        ("i" . mu4e~headers-jump-to-inbox))
+  (:map mu4e-view-mode-map
+        ("C-c u" . mu4e-view-save-url)))
 
 (defun mu4e~headers-human-date (msg)
   "Show a 'human' date.
@@ -185,16 +186,13 @@ date. The formats used for date and time are
      (list start end)))
 
 (use-package mu4e-multi
+  :straight (mu4e-multi :type git
+                        :host github
+                        :repo "kriyative/mu4e-multi")
   :demand t
   :bind
   (("C-x m" . mu4e-multi-compose-new))
   :config
-  (when (fboundp 'rk--setup-mu4e-multi-account)
-    (rk--setup-mu4e-multi-account)
-    (setq mu4e-user-mail-address-list
-          (mapcar (lambda (p)
-                    (cdr (assoc 'user-mail-address (cdr p))))
-                  mu4e-multi-account-alist)))
   (mu4e-multi-enable)
   (remove-hook 'message-mode-hook 'mu4e-multi-compose-set-account)
   (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
@@ -205,6 +203,9 @@ date. The formats used for date and time are
   (mu4e-maildirs-extension-force-update '(16)))
 
 (use-package mu4e-maildirs-extension
+  :straight (mu4e-maildirs-extension :type git
+                                     :host github
+                                     :repo "kriyative/mu4e-maildirs-extension")
   :after mu4e
   :config
   (mu4e-maildirs-extension)
@@ -220,7 +221,11 @@ date. The formats used for date and time are
                 (cons ?n (plist-get m :name))
                 (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
                 (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
-  (define-key mu4e-main-mode-map "g" 'rk-mu4e-reload-main))
+
+  ;; :bind
+  ;; (:map mu4e-main-mode-map
+  ;;       ("g" . rk-mu4e-reload-main))
+  )
 
 (defun message-mode-hook ()
   (setq message-fill-column nil
@@ -251,6 +256,9 @@ date. The formats used for date and time are
     (mu4e-update-mail-and-index t)))
 
 (use-package mbsync
+  :straight (mbsync :type git
+                    :host github
+                    :repo "kriyative/mbsync.el")
   :config
   ;; (setq *mbsync-accounts* '("gmail" ("outlook" 600)))
   (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update))
@@ -291,8 +299,9 @@ detect ACCOUNT from it."
               :prompt "dtrash"
               :dyn-target ,(lambda (target msg) (mu4e-get-trash-folder msg))
               :action ,(lambda (docid msg target)
-                         (mu4e~proc-move docid
-                                         (mu4e~mark-check-target target) "-N")))
+                         (mu4e--server-move docid
+                                            (mu4e--mark-check-target target)
+                                            "-N")))
             (remove-if (lambda (x)
                          (equal 'trash (car x)))
                        mu4e-marks)))

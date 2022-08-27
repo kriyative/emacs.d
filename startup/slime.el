@@ -1,5 +1,3 @@
-(rk-require-packages slime)
-
 (defun rk-slime-list-connections ()
   (interactive)
   (slime-list-connections)
@@ -8,8 +6,6 @@
 (defun rk-slime-mode-hook ()
   (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
-  (define-key slime-mode-map "\M-\C-x" 'slime-compile-defun)
-  (define-key slime-mode-map "\C-c\C-xc" 'rk-slime-list-connections)
   (unless (boundp 'last-command-char)
     (defvar last-command-char nil)))
 
@@ -29,11 +25,17 @@
   (slime-interactive-eval expr))
 
 (use-package slime
+  :straight t
   :config
   ;; (setq slime-contribs '(slime-fancy slime-help slime-info))
   (slime-setup '(slime-repl))
   (setq slime-protocol-version 'ignore)
-  (add-hook 'slime-mode-hook 'rk-slime-mode-hook))
+  (add-hook 'slime-mode-hook 'rk-slime-mode-hook)
+
+  :bind
+  (:map slime-mode-map
+        ("\M-\C-x" . slime-compile-defun)
+        ("\C-c\C-xc" . rk-slime-list-connections)))
 
 (defun rk-sbcl ()
   (interactive)

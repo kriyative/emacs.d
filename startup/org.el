@@ -1,12 +1,3 @@
-(rk-el-get-bundles
- org-mime
- org-passwords
- xcezx/blockdiag-mode
- corpix/ob-blockdiag.el
- alf/ob-restclient.el
- org-sync
- org-present)
-
 ;;;;;;;;;;;;;;;; org
 
 (defvar org-journal-date-format "%Y-%m-%d %H:%M:%S"
@@ -46,16 +37,6 @@ one."
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'rk-org-mode-hook)
 
-  (define-key global-map "\C-cl" 'org-store-link)
-  (define-key global-map "\C-ca" 'org-agenda)
-  (global-set-key (kbd "C-c j") 'org-journal-entry)
-  (define-key org-mode-map "\C-c!" 'rk-org-time-stamp-inactive)
-  (define-key org-mode-map (kbd "C-c (") 'show-all)
-  (define-key org-mode-map (kbd "C-c )") 'hide-sublevels)
-  (define-key org-mode-map '[C-tab] nil)
-  (define-key org-mode-map "\M-n" 'rk-next-page)
-  (define-key org-mode-map "\M-p" 'rk-prev-page)
-  (define-key org-mode-map (kbd "C-c o") 'org-open-at-point)
   (setq org-src-window-setup 'other-window
         org-agenda-window-setup 'other-window
         org-startup-folded t
@@ -68,7 +49,21 @@ one."
                                  (shell . t)
                                  (plantuml . t)
                                  (dot . t)
-                                 (python . t))))
+                                 (python . t)))
+
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c a" . org-agenda)
+   ("C-c j" . org-journal-entry)
+
+   :map org-mode-map
+   ("C-c !" . rk-org-time-stamp-inactive)
+   ("C-c (" . show-all)
+   ("C-c )" . hide-sublevels)
+   ([C-tab] . nil)
+   ("\M-n" . rk-next-page)
+   ("\M-p" . rk-prev-page)
+   ("C-c o" . org-open-at-point)))
 
 (use-package org-compat)
 
@@ -103,21 +98,24 @@ one."
                                              org-agenda-prefix-format))))
 
 (use-package org-passwords
+  :straight t
   :after org
   :config
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
-(use-package org-mime :after org)
-(use-package blockdiag-mode)
+(use-package org-mime :straight t :after org)
+(use-package blockdiag-mode :straight t)
 (use-package ob-blockdiag
+  :straight t
   :after (org blockdiag-mode)
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((blockdiag . t))))
 
-(use-package org-present)
+(use-package org-present :straight t)
 
 (use-package ob-restclient
+  :straight t
   :after restclient
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))

@@ -1,4 +1,4 @@
-(rk-require-packages paredit)
+(use-package paredit :straight t)
 
 (defun rk-start-lisp ()
   (interactive)
@@ -32,6 +32,48 @@
              (cdr x)
            (get (cdr x) indent-function)))))
 
+(defun rk-yank-simple-escape-quotes ()
+  "Same as the `yank' command, inserts the most recently killed
+text, additionally escaping any double quotes within the text."
+  (interactive)
+  (let ((str (substring-no-properties (current-kill 0 t)))
+        (start (point))
+        (end (make-marker)))
+    (insert str)
+    (set-marker end (point))
+    (save-excursion
+      (goto-char start)
+      (while (search-forward "\"" (marker-position end) t)
+        (replace-match "\\\"" 'fixedcase 'literal)))))
+
+(defun rk-yank-escape-quotes (&optional unescape-p)
+  "Like the `yank' command, inserts the most recently killed
+text, additionally escaping any double quotes within the
+text. When invoked with prefix arg, unescapes - i.e.,removes one
+level of escaping from quote chars."
+  (interactive "P")
+  (let ((str (substring-no-properties (current-kill 0 t)))
+        (start (point))
+        (end (make-marker)))
+    (insert str)
+    (set-marker end (point))
+    (save-excursion
+      (goto-char start)
+      (while (search-forward-regexp (if unescape-p
+                                        "\\([\\]*\\)\\([\\]\"\\)"
+                                      "\"")
+                                    (marker-position end)
+                                    t)
+        (replace-match (if unescape-p
+                           (let ((slashes (match-string 1)))
+                             (concat (substring slashes
+                                                0
+                                                (max 0 (- (length slashes) 1)))
+                                     "\""))
+                         "\\\"")
+                       'fixedcase
+                       'literal)))))
+
 (defun rk-emacs-lisp-mode-hook ()
   ;; (local-set-key " " 'lisp-complete-symbol)
   (outline-minor-mode 1)
@@ -52,10 +94,7 @@
   (eldoc-mode 1)
   (paredit-mode 1)
   ;; (rk-lisp-mode-indent-on-save)
-  (define-key emacs-lisp-mode-map
-    "\C-c\C-p" 'pp-eval-last-sexp)
-  (define-key lisp-interaction-mode-map
-    "\C-c\C-p" 'pp-eval-last-sexp))
+  )
 
 (defun set-common-lisp-block-comment-syntax ()
   (modify-syntax-entry ?# "<1" font-lock-syntax-table)
@@ -91,8 +130,17 @@
   (paredit-mode 1))
 
 (use-package lisp-mode
-  :bind (:map emacs-lisp-mode-map
-              ("C-c C-m" . pp-macroexpand-last-sexp))
+  :bind
+  (:map emacs-lisp-mode-map
+        ("C-c C-m" . pp-macroexpand-last-sexp)
+        ("C-c C-p" . pp-eval-last-sexp)
+        ("C-c C-k" . eval-buffer)
+        ("C-c C-y" . rk-yank-escape-quotes)
+        :map lisp-interaction-mode-map
+        ("C-c C-m" . pp-macroexpand-last-sexp)
+        ("C-c C-p" . pp-eval-last-sexp)
+        ("C-c C-k" . eval-buffer)
+        ("C-c C-y" . rk-yank-escape-quotes))
   :config
   (add-hook 'emacs-lisp-mode-hook 'rk-emacs-lisp-mode-hook)
   (add-hook 'lisp-interaction-mode-hook 'rk-emacs-lisp-mode-hook)
