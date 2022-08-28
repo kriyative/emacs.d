@@ -3,6 +3,8 @@
                 (vertical-scroll-bars)))
   (push prop default-frame-alist))
 
+(put 'list-timers 'disabled nil)
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
