@@ -348,25 +348,8 @@
   (add-hook 'compilation-filter-hook 'rk--compilation-mode-colorize-buffer)
   (add-hook 'eshell-preoutput-filter-functions 'ansi-color-filter-apply))
 
-(defun rk--add-el-get-info-dirs ()
+(defun rk--add-info-dirs ()
   (require 'find-lisp)
-  (let ((local-info-directory (expand-file-name "~/.emacs.d/info")))
-    (unless (file-directory-p local-info-directory)
-      (mkdir local-info-directory))
-    (with-cwd
-     local-info-directory
-     (dolist (f (find-lisp-find-files "~/.emacs.d/el-get/" "\\.info$"))
-       (let ((d (file-name-directory f)))
-         (when (directory-files d nil "\\.info$")
-           (call-process "install-info"
-                         nil
-                         '(" *info-setup*" t)
-                         nil
-                         "--debug"
-                         f
-                         "dir")
-           (add-to-list 'Info-additional-directory-list d)))))
-    (add-to-list 'Info-directory-list local-info-directory))
   (add-to-list 'Info-directory-list "/usr/local/share/info")
   (add-to-list 'Info-directory-list (expand-file-name "~/share/info")))
 
@@ -374,7 +357,7 @@
   :config
   (set-face-attribute 'info-header-node nil :foreground "black")
   (set-face-attribute 'info-node nil :foreground "black")
-  (rk--add-el-get-info-dirs))
+  (rk--add-info-dirs))
 
 (use-package info-look)
 
