@@ -31,6 +31,3 @@
         server-use-tcp t)
   (server-force-delete)
   (server-start))
-
-(when (fboundp 'mbsync-sync-accounts)
-  (mbsync-sync-accounts))

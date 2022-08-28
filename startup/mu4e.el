@@ -261,7 +261,8 @@ date. The formats used for date and time are
                     :repo "kriyative/mbsync.el")
   :config
   ;; (setq *mbsync-accounts* '("gmail" ("outlook" 600)))
-  (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update))
+  (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update)
+  (mbsync-sync-accounts))
 
 (defun rk-mbsync-stop ()
   (interactive)
