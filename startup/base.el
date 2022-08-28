@@ -474,34 +474,6 @@
         edit-server-new-frame nil)
   (edit-server-start))
 
-;;;;;;;;;;;;;;;; epa ;;;;;;;;;;;;;;;;
-
-(defun rk-find-or-insert (expr insertion)
-  (goto-char (point-min))
-  (or (re-search-forward expr nil t)
-      (progn
-        (goto-char (point-max))
-        (insert insertion))))
-
-(defun rk-ensure-gpg-loopback-pinentry ()
-  (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf")))
-    (with-current-buffer (find-file-noselect fname)
-      (dolist (cfg '("allow-emacs-pinentry"
-                     "allow-loopback-pinentry"))
-        (rk-find-or-insert (format "^[\s ]*%s[\s ]*$" cfg)
-                           (format "\n%s" cfg)))
-      (save-buffer))))
-
-;; (rk-ensure-gpg-loopback-pinentry)
-
-(use-package epa-file
-  :config
-  (setq epa-pinentry-mode 'loopback)
-  (epa-file-enable)
-  (rk-ensure-gpg-loopback-pinentry))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package emacs
   :config
   ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
