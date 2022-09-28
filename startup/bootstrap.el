@@ -50,13 +50,16 @@ LOAD-ARGS"
         (insert insertion))))
 
 (defun rk-ensure-gpg-loopback-pinentry ()
-  (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf")))
-    (with-current-buffer (find-file-noselect fname)
-      (dolist (cfg '("allow-emacs-pinentry"
-                     "allow-loopback-pinentry"))
-        (rk-find-or-insert (format "^[\s ]*%s[\s ]*$" cfg)
-                           (format "\n%s" cfg)))
-      (save-buffer))))
+  (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf"))
+        (buf (find-file-noselect fname)))
+    (unwind-protect
+        (with-current-buffer buf
+          (dolist (cfg '("allow-emacs-pinentry"
+                         "allow-loopback-pinentry"))
+            (rk-find-or-insert (format "^[\s ]*%s[\s ]*$" cfg)
+                               (format "\n%s" cfg)))
+          (save-buffer))
+      (kill-buffer buf))))
 
 ;; (rk-ensure-gpg-loopback-pinentry)
 
