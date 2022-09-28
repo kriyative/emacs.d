@@ -165,3 +165,16 @@ one."
 ;;   :config
 ;;   (setq org-roam-directory "~/.emacs.d/org-roam/")
 ;;   (add-hook 'after-init-hook 'org-roam-mode))
+
+(defun rk-org-md-copy-as-markdown (pt mk)
+  (interactive "r")
+  (save-excursion
+    (let ((org-export-show-temporary-export-buffer nil)
+          (buf (generate-new-buffer "*rk-org-md*")))
+      (unwind-protect
+          (org-export-to-buffer 'md buf
+            nil nil nil nil nil
+            (lambda ()
+              (with-current-buffer buf
+                (kill-region (point-min) (point-max)))))
+        (kill-buffer buf)))))
