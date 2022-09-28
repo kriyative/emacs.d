@@ -59,3 +59,6 @@
   ;; why is the default to connect to plantuml.com?
   (setq plantuml-server-url nil
         plantuml-default-exec-mode 'jar))
+
+(use-package markdown-mode
+  :straight t)

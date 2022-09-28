@@ -21,6 +21,7 @@
   (rk-emms-show))
 
 (use-package emms
+  :straight t
   :bind
   (:map user-commands-prefix-map
         ("eb" . rk-emms-browser)
