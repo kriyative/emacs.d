@@ -1,23 +1,24 @@
 (use-package helm
   :straight t
   :config
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "M-w") 'helm-copy-selection)
-  (global-set-key (kbd "M-x") #'helm-M-x)
-  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-  (global-set-key (kbd "C-x C-f") #'helm-find-files)
   (setq helm-command-prefix-key "\C-c\C-h")
   (global-set-key (kbd "C-c C-h") #'helm-command-prefix)
   (helm-mode 1)
   :bind
-  (("\C-xb" . helm-mini)))
+  (("\C-xb"   . helm-mini)
+   ;; ("<tab>"   . helm-execute-persistent-action)
+   ;; ("C-i"     . helm-execute-persistent-action)
+   ("M-w"     . helm-copy-selection)
+   ("M-x"     . helm-M-x)
+   ("C-x r b" . helm-filtered-bookmarks)
+   ("C-x C-f" . helm-find-files)))
 
 (use-package helm-ag
   :straight t
+  :after ag
   :bind
-  (("\C-c G g" . helm-ag-project-root)
-   ("\C-c G a" . helm-ag)))
+  (("C-c G g" . helm-ag-project-root)
+   ("C-c G a" . helm-ag)))
 
 (use-package helm-cider :straight t)
 
