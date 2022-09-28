@@ -206,7 +206,7 @@ date. The formats used for date and time are
   :straight (mu4e-maildirs-extension :type git
                                      :host github
                                      :repo "kriyative/mu4e-maildirs-extension")
-  :after mu4e
+  :demand t
   :config
   (mu4e-maildirs-extension)
   (setq mu4e-maildirs-extension-count-command-format
@@ -222,10 +222,9 @@ date. The formats used for date and time are
                 (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
                 (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
 
-  ;; :bind
-  ;; (:map mu4e-main-mode-map
-  ;;       ("g" . rk-mu4e-reload-main))
-  )
+  :bind
+  (:map mu4e-main-mode-map
+        ("g" . rk-mu4e-reload-main)))
 
 (defun message-mode-hook ()
   (setq message-fill-column nil
