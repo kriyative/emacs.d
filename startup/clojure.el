@@ -111,3 +111,14 @@
         (message "Removing sym: %s" sym)
         (cider--remove-sym sym))))
   (cider-eval-defun-at-point nil))
+
+(defvar rk-nrepl-buffer-maximum-size 1000)
+
+(defun rk-nrepl-server-filter-after (process output)
+  (let ((server-buffer (process-buffer process)))
+    (when (buffer-live-p server-buffer)
+      (with-current-buffer server-buffer
+        (let ((comint-buffer-maximum-size rk-nrepl-buffer-maximum-size))
+          (comint-truncate-buffer))))))
+
+(advice-add 'nrepl-server-filter :after #'rk-nrepl-server-filter-after)
