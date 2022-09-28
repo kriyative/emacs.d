@@ -13,15 +13,15 @@ maildirs under `mu4e-maildir'."
     (format
      "/%s/INBOX"
      (funcall mu4e-completing-read-function
-             prompt
-             (mapcar (lambda (maildir)
-                       (cons (progn
-                               (string-match "\/\\(.*\\)\/" maildir)
-                               (match-string 1 maildir))
-                             maildir))
-                     (mu4e-get-inbox-maildirs))
-             nil
-             t))))
+              prompt
+              (mapcar (lambda (maildir)
+                        (cons (progn
+                                (string-match "\/\\(.*\\)\/" maildir)
+                                (match-string 1 maildir))
+                              maildir))
+                      (mu4e-get-inbox-maildirs))
+              nil
+              t))))
 
 (defun mu4e~headers-jump-to-inbox (maildir)
   "Show the messages in maildir (user is prompted to ask what
