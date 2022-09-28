@@ -50,8 +50,8 @@ LOAD-ARGS"
         (insert insertion))))
 
 (defun rk-ensure-gpg-loopback-pinentry ()
-  (let ((fname (expand-file-name "~/.gnupg/gpg-agent.conf"))
-        (buf (find-file-noselect fname)))
+  (let* ((fname (expand-file-name "~/.gnupg/gpg-agent.conf"))
+         (buf (find-file-noselect fname)))
     (unwind-protect
         (with-current-buffer buf
           (dolist (cfg '("allow-emacs-pinentry"
