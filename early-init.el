@@ -9,8 +9,9 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6
+(setq ;; don't make the following settings permanent
+      ;; gc-cons-threshold most-positive-fixnum
+      ;; gc-cons-percentage 0.6
       ;; raise the limit for bindings and unwind-protect contexts
       max-specpdl-size 5000
       package-enable-at-startup nil
