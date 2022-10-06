@@ -266,7 +266,10 @@ date. The formats used for date and time are
 (defun rk-mbsync-stop ()
   (interactive)
   (dolist (spec *mbsync-accounts*)
-    (mbsync--sync-stop (if (listp spec) (car spec) spec))))
+    (let* ((account (if (listp spec) (car spec) spec))
+           (existing (assoc account *mbsync--timers*)))
+      (when existing
+        (cancel-timer (cdr existing))))))
 
 ;;;;;;;;;;;;;;;; overrides ;;;;;;;;;;;;;;;;
 
