@@ -26,8 +26,7 @@
   (let ((alert-default-style 'mode-line)
         (frame (selected-frame)))
     (alert message)
-    (unless (frame-visible-p frame)
-      (raise-frame frame))))
+    (raise-frame frame)))
 
 (defun rk-countdown-timer (&optional seconds message)
   (interactive
