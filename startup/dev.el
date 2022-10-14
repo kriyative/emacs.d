@@ -39,7 +39,15 @@
 (use-package projectile
   :straight t
   :config
-  (setq projectile-keymap-prefix (kbd "C-c C-p")))
+  :bind
+  (:map projectile-mode-map
+        ("C-c p C-f" . projectile-find-file))
+  (:map projectile-command-map
+        ("C-f" . projectile-find-file)
+        ("C-d" . projectile-dired))
+  (:map user-commands-prefix-map
+        ("C-p" . projectile-command-map)
+        ("p" . projectile-command-map)))
 
 (use-package csv-mode
   :straight t

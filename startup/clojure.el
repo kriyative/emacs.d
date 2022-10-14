@@ -40,6 +40,7 @@
         ("C-c p g" . projectile-grep))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
+  (add-hook 'clojure-mode-hook (lambda () (projectile-mode)))
   (setq auto-mode-alist (remove-if (lambda (x)
                                      (equal (car x) "\\.cljc\\'"))
                                    auto-mode-alist))
