@@ -25,8 +25,7 @@
 (defun rk-countdown-timer-alert (message)
   (let ((alert-default-style 'mode-line)
         (frame (selected-frame)))
-    (alert message)
-    (raise-frame frame)))
+    (alert message)))
 
 (defun rk-countdown-timer (&optional seconds message)
   (interactive
