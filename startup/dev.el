@@ -68,5 +68,10 @@
   (setq plantuml-server-url nil
         plantuml-default-exec-mode 'jar))
 
+(defun markdown-mode-hook ()
+  (setq markdown-hide-urls t))
+
 (use-package markdown-mode
-  :straight t)
+  :straight t
+  :config
+  (add-hook 'markdown-mode-hook 'markdown-mode-hook))
