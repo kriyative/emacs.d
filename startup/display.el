@@ -70,7 +70,8 @@
   (let ((dpi (rk--display-dpi)))
     (cond
      ((< 170 dpi) 16)
-     ((or (< 1920 (rk-display-pixel-width)) (< 150 dpi)) 13)
+     ((or (<= 1920 (rk-display-pixel-width)) (< 150 dpi)) 13)
+     ((or (< 1024 (rk-display-pixel-width) 1920)) 7)
      (t 11))))
 
 ;; (rk--optimum-font-size)
