@@ -29,6 +29,7 @@ one."
   (org-display-inline-images))
 
 (use-package org
+  :straight t
   :config
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))
@@ -64,8 +65,6 @@ one."
    ("\M-n" . rk-next-page)
    ("\M-p" . rk-prev-page)
    ("C-c o" . org-open-at-point)))
-
-(use-package org-compat)
 
 (use-package ox-latex
   :after org
