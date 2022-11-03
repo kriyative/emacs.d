@@ -123,3 +123,11 @@
           (comint-truncate-buffer))))))
 
 (advice-add 'nrepl-server-filter :after #'rk-nrepl-server-filter-after)
+
+(defun custom-cider-jack-in-cljs (params)
+  (interactive "P")
+  (let ((process-environment (cl-copy-list process-environment)))
+    (setenv "JAVA_HOME" "/usr/lib/jvm/java-11-openjdk-amd64")
+    (setenv "PATH" (concat "/usr/lib/jvm/java-11-openjdk-amd64/bin:"
+                           (getenv "PATH")))
+    (cider-jack-in-cljs params)))
