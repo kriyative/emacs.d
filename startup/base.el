@@ -407,7 +407,7 @@
 
 (use-package minibuffer
   :config
-  (setq completion-cycle-threshold 2
+  (setq completion-cycle-threshold nil
         completion-flex-nospace nil
         completion-pcm-complete-word-inserts-delimiters t
         completion-pcm-word-delimiters "-_./:| "
