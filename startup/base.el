@@ -316,9 +316,9 @@
          ("C-c g r" . ag-regexp)
          ("H-g r" . ag-regexp)))
 
-(require 'cl)
-(use-package buffer-move
-  :straight t
+(use-package  buffer-move
+  :straight (buffer-move :build (:not compile))
+  :after (cl)
   :bind (:map user-commands-prefix-map
               ("<left>"  . buf-move-left)
               ("<right>" . buf-move-right)
