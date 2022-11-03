@@ -10,6 +10,8 @@
 
 (use-package json-mode :straight t)
 
+(use-package yaml-mode :straight t)
+
 (defun rk-java-mode-hook ()
   (setq tab-width 4))
 
