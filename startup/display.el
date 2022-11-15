@@ -76,7 +76,7 @@
 
 ;; (rk--optimum-font-size)
 
-(defvar *rk--font* "DejaVu Sans Mono Book")
+(defvar *rk--font* "Hack")
 (defvar *rk--font-size* 0)
 
 (defun rk--x-set-font (font-family &optional font-size)
@@ -89,7 +89,7 @@
 
 ;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
-  (rk--x-set-font "DejaVu Sans Mono Book"))
+  (rk--x-set-font *rk--font*))
 
 ;; (rk--x-set-font "DejaVu Sans Mono Book")
 ;; (rk--x-set-font "Iosevka Term Slab")
