@@ -1,4 +1,6 @@
-(use-package paredit :straight t)
+(use-package paredit
+  :straight t
+  :delight)
 
 (defun rk-start-lisp ()
   (interactive)

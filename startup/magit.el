@@ -39,6 +39,7 @@
   :straight (git-code-review :type git
                              :host github
                              :repo "kriyative/git-code-review")
+  :delight
   :config
   (add-hook 'clojure-mode-hook 'gcr-mode)
   (add-hook 'emacs-lisp-mode-hook 'gcr-mode)
