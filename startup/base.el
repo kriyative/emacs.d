@@ -477,6 +477,14 @@
         edit-server-new-frame nil)
   (edit-server-start))
 
+(use-package delight :straight t)
+
+(use-package diminish :straight t)
+
+(use-package eww
+  :config
+  (setq eww-search-prefix "http://localhost:5000/search?q="))
+
 (use-package emacs
   :config
   ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
