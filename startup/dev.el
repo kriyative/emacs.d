@@ -39,7 +39,9 @@
   (window-numbering-update))
 
 (use-package projectile
+  :ensure t
   :straight t
+  :delight
   :config
   :bind
   (:map projectile-mode-map
@@ -75,5 +77,6 @@
 
 (use-package markdown-mode
   :straight t
+  :diminish "MD"
   :config
   (add-hook 'markdown-mode-hook 'markdown-mode-hook))
