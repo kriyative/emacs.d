@@ -2,7 +2,14 @@
   :config
   (setq erc-server "irc.libera.chat"
 	erc-port erc-default-port-tls
-	erc-hide-list '("JOIN" "PART" "QUIT")))
+	erc-hide-list '("JOIN" "PART" "QUIT")
+        erc-prompt-for-password nil
+        erc-use-auth-source-for-nickserv-password t
+        erc-prompt-for-nickserv-password nil))
+
+(use-package erc-services
+  :config
+  (erc-services-mode 1))
 
 (use-package erc-sasl
   :straight (erc-sasl :type git
