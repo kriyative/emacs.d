@@ -214,7 +214,8 @@
 (use-package efun-cmds
   :straight (efun-cmds :type git
 		       :host github
-		       :repo "kriyative/emacs-fun"))
+		       :repo "kriyative/emacs-fun"
+                       :build (:not compile)))
 
 (use-package ibuffer
   :config
