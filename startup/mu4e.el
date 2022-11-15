@@ -259,9 +259,14 @@ date. The formats used for date and time are
                     :host github
                     :repo "kriyative/mbsync.el")
   :config
-  ;; (setq *mbsync-accounts* '("gmail" ("outlook" 600)))
-  (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update)
-  (mbsync-sync-accounts))
+  (add-hook 'mbsync-after-sync-hook 'rk--mbsync-sync-update))
+
+(defun rk-mbsync-start ()
+  (dolist (spec *mbsync-accounts*)
+    (cl-destructuring-bind (account &optional interval)
+        (if (listp spec) spec (list spec))
+      (unless (assoc account *mbsync--timers*)
+        (mbsync--sync-start account interval)))))
 
 (defun rk-mbsync-stop ()
   (interactive)
@@ -270,6 +275,11 @@ date. The formats used for date and time are
            (existing (assoc account *mbsync--timers*)))
       (when existing
         (cancel-timer (cdr existing))))))
+
+(defun rk-mu4e ()
+  (interactive)
+  (rk-mbsync-start)
+  (mu4e))
 
 ;;;;;;;;;;;;;;;; overrides ;;;;;;;;;;;;;;;;
 
