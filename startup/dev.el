@@ -73,7 +73,8 @@
         plantuml-default-exec-mode 'jar))
 
 (defun markdown-mode-hook ()
-  (setq markdown-hide-urls t))
+  (setq markdown-hide-urls t)
+  (visual-line-mode 1))
 
 (use-package markdown-mode
   :straight t
