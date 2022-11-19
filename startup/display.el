@@ -128,7 +128,8 @@
   (unless (eq (rk--display-dpi) *rk--current-display-dpi*)
     (setq *rk--current-display-dpi* (rk--display-dpi))
     ;; (x-set-font "Consolas")
-    (rk--x-set-font "DejaVu Sans Mono Book")))
+    ;; (rk--x-set-font "DejaVu Sans Mono Book")
+    ))
 
 (defun rk--window-configuration-change-hook ()
   (when (eq window-system 'x)
