@@ -42,7 +42,6 @@
   :ensure t
   :straight t
   :delight
-  :config
   :bind
   (:map projectile-mode-map
         ("C-c p C-f" . projectile-find-file))
@@ -51,7 +50,9 @@
         ("C-d" . projectile-dired))
   (:map user-commands-prefix-map
         ("C-p" . projectile-command-map)
-        ("p" . projectile-command-map)))
+        ("p" . projectile-command-map))
+  :config
+  (projectile-mode 1))
 
 (use-package csv-mode
   :straight t
