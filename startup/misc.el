@@ -10,11 +10,31 @@
   (setq fortune-dir "/usr/share/games/fortunes"
         fortune-file "/usr/share/games/fortunes/fortunes"))
 
+(defmacro with-elscreen (screen &rest body)
+  (declare (indent 1))
+  `(if (fboundp 'elscreen-goto)
+       (save-excursion
+         (let ((current-screen (when (fboundp 'elscreen-get-current-screen)
+                                 (elscreen-get-current-screen))))
+           (when (fboundp 'elscreen-goto)
+             (elscreen-goto ,screen))
+           (progn ,@body)
+           (when current-screen
+             (elscreen-goto current-screen))))
+     (progn
+       ,@body)))
+
+(defun rk--goto-daily-agenda ()
+  (interactive)
+  (save-excursion
+    (with-elscreen 0
+      (org-agenda-list))))
+
 (defun rk--midnight-hook ()
   ;; (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
   ;;   (rk-org-gcal-multi-fetch-if-stale))
   ;; (org-caldav-sync)
-  )
+  (org-agenda-list))
 
 (use-package midnight
   :config
