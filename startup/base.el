@@ -482,6 +482,12 @@
 (use-package diminish :straight t)
 
 (use-package eww
+  :bind (:map eww-mode-map
+              ("o" . eww)
+              ("r" . eww-reload)
+              ("H" . eww-back-url)
+              ("L" . eww-forward-url)
+              ("M-h" . eww-list-histories))
   :config
   (setq eww-search-prefix "http://localhost:5000/search?q="))
 
