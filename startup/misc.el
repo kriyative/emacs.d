@@ -44,10 +44,13 @@
 (when (file-exists-p diary-file)
   (diary 0))
 
-(use-package server
-  :config
-  (setq server-socket-dir "~/.emacs.d/server/"
-        server-name "server"
-        server-use-tcp t)
-  (server-force-delete)
-  (server-start))
+(let ((socket-dir "~/.emacs.d/server/")
+      (socket-file "server"))
+  (use-package server
+    :if (not (file-exists-p (expand-file-name socket-file socket-dir)))
+    :config
+    (setq server-socket-dir socket-dir
+          server-name socket-file
+          server-use-tcp t)
+    (server-force-delete)
+    (server-start)))
