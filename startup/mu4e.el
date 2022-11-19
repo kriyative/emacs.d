@@ -95,7 +95,7 @@ maildir)."
       'sent)))
 
 (use-package mu4e
-  :straight (mu4e :files ("build/mu4e/*.el")
+  :straight (mu4e :files ("build/mu4e/*.el" "build/mu4e/*.elc" "build/mu4e/*.info")
                   :pre-build (("./autogen.sh")
                               ("ninja" "-C" "build")))
   :custom (mu4e-mu-binary (expand-file-name "build/mu/mu"
@@ -155,6 +155,9 @@ maildir)."
   (add-to-list 'mu4e-bookmarks
                '("flag:flagged AND NOT flag:trashed"
                  "Flagged messages" 102))
+  (custom-set-faces
+   '(mu4e-unread-face ((t (:foreground "blue"))))
+   '(mu4e-header-highlight-face ((t (:inherit hl-line :extend t)))))
 
   :bind
   (:map mu4e-main-mode-map
