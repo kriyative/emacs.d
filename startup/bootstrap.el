@@ -31,16 +31,19 @@ LOAD-ARGS"
   (when (file-exists-p filename)
     (apply 'load filename load-args)))
 
-(defvar rk-startup-modules '("base" "display" "org" "commands"))
+(defun rk-str (s)
+  (cond
+   ((stringp s) s)
+   ((keywordp s) (substring (symbol-name s) 1))
+   (t (prin1-to-string s))))
+
+(defvar rk-startup-modules '(base display org commands))
 
 (defun rk-load-startup-modules ()
   (dolist (module rk-startup-modules)
     (load
-     (expand-file-name (concat "startup/" module ".el")
-                       user-emacs-directory))))
-
-
-;;;;;;;;;;;;;;;; epa ;;;;;;;;;;;;;;;;
+     (expand-file-name (concat (rk-str module) ".el")
+                       (concat user-emacs-directory "/startup")))))
 
 (defun rk-find-or-insert (expr insertion)
   (goto-char (point-min))
@@ -48,6 +51,9 @@ LOAD-ARGS"
       (progn
         (goto-char (point-max))
         (insert insertion))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; epa setup
 
 (defun rk-ensure-gpg-loopback-pinentry ()
   (let* ((fname (expand-file-name "~/.gnupg/gpg-agent.conf"))
