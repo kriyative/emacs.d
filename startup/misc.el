@@ -44,10 +44,21 @@
 (when (file-exists-p diary-file)
   (diary 0))
 
+(defun rk--emacs-server-running-p ()
+  ;; has to be async call, if current emacs is the server
+  (let ((proc (make-process
+               :name "emacsclient-check"
+               :command '("emacsclient" "-e" "emacs-version"))))
+    ;; fixme: add a timeout for the poll
+    (while (not (eq 'exit (process-status proc)))
+      (sleep-for 0 100))
+    (eq 0 (process-exit-status proc))))
+
 (let ((socket-dir "~/.emacs.d/server/")
       (socket-file "server"))
   (use-package server
-    :if (not (file-exists-p (expand-file-name socket-file socket-dir)))
+    ;; there can be only one!
+    :if (not (rk--emacs-server-running-p))
     :config
     (setq server-socket-dir socket-dir
           server-name socket-file
