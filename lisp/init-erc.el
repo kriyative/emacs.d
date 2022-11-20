@@ -43,3 +43,5 @@
            "0" "*"
            erc-session-user-full-name))
   (erc-update-mode-line))
+
+(provide 'init-erc)

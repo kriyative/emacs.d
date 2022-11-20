@@ -65,3 +65,5 @@
           server-use-tcp t)
     (server-force-delete)
     (server-start)))
+
+(provide 'init-misc)

@@ -33,3 +33,5 @@
                     (intern (format "elscreen-goto-%d" i)))
     (global-set-key (kbd (format "C-z C-%d" i))
                     (intern (format "elscreen-goto-%d" i)))))
+
+(provide 'init-elscreen)

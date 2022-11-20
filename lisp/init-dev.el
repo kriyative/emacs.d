@@ -82,3 +82,5 @@
   :diminish "MD"
   :config
   (add-hook 'markdown-mode-hook 'markdown-mode-hook))
+
+(provide 'init-dev)

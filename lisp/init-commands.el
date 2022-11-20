@@ -53,3 +53,5 @@
 (defun rk-jitsi (&optional url)
   (interactive "sURL: ")
   (browse-url (concat url "#config.startWithVideoMuted=true")))
+
+(provide 'init-commands)

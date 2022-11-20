@@ -92,9 +92,9 @@ one."
   (setq org-agenda-include-diary t
         org-agenda-prefix-format (cons
                                   '(agenda . " %i %-16:c%?-12t% s")
-                                  (remove-if (lambda (x)
-                                               (eq (car x) 'agenda))
-                                             org-agenda-prefix-format))))
+                                  (cl-remove-if (lambda (x)
+                                                  (eq (car x) 'agenda))
+                                                org-agenda-prefix-format))))
 
 (use-package org-passwords
   :straight t
@@ -177,3 +177,5 @@ one."
               (with-current-buffer buf
                 (kill-region (point-min) (point-max)))))
         (kill-buffer buf)))))
+
+(provide 'init-org)

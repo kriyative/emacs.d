@@ -59,3 +59,5 @@
   (add-hook 'emms-playlist-selection-changed-hook 'rk--emms-echo-track-info)
   (emms-mode-line -1)
   (emms-playing-time -1))
+
+(provide 'init-emms)

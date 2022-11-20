@@ -1,14 +1,6 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; load bootstrap
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
-(load (expand-file-name "startup/bootstrap.el" user-emacs-directory))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; load machine specific customizations if present
-
-(load-if-present
- (expand-file-name (concat "private/" (system-name) ".el")
-                   user-emacs-directory))
+(require 'init-bootstrap)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; load private (potential secrets) customizations if present
@@ -17,7 +9,15 @@
  (expand-file-name "private/.personal.el.gpg"
                    user-emacs-directory))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; load customization modules
+(rk-require
+ 'init-base
+ 'init-display
+ 'init-org
+ 'init-commands)
 
-(rk-load-startup-modules)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; load machine specific customizations if present
+
+(load-if-present
+ (expand-file-name (concat "private/" (system-name) ".el")
+                   user-emacs-directory))

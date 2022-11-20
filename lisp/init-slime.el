@@ -76,3 +76,5 @@
     (let ((slime-lisp-implementations `((ccl (,lisp-path)))))
       (slime))
     (error "The CCL application could not be found")))
+
+(provide 'init-slime)

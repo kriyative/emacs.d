@@ -41,9 +41,9 @@
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (add-hook 'clojure-mode-hook (lambda () (projectile-mode)))
-  (setq auto-mode-alist (remove-if (lambda (x)
-                                     (equal (car x) "\\.cljc\\'"))
-                                   auto-mode-alist))
+  (setq auto-mode-alist (cl-remove-if (lambda (x)
+                                        (equal (car x) "\\.cljc\\'"))
+                                      auto-mode-alist))
   (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
 
 (defun cider-mode-hook ()
@@ -131,3 +131,5 @@
     (setenv "PATH" (concat "/usr/lib/jvm/java-11-openjdk-amd64/bin:"
                            (getenv "PATH")))
     (cider-jack-in-cljs params)))
+
+(provide 'init-clojure)

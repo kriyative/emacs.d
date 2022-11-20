@@ -33,3 +33,5 @@
            (message "Saved to clipboard: %s" fpath)
            (sit-for 1))))
      (format "%s" (helm-get-selection nil t)))))
+
+(provide 'init-helm)

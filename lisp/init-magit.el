@@ -44,3 +44,5 @@
   (add-hook 'clojure-mode-hook 'gcr-mode)
   (add-hook 'emacs-lisp-mode-hook 'gcr-mode)
   (add-hook 'common-lisp-mode-hook 'gcr-mode))
+
+(provide 'init-magit)

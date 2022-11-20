@@ -1,7 +1,7 @@
 (defun mu4e-get-inbox-maildirs ()
-  (remove-if-not (lambda (x)
-                   (string-match "INBOX$" x))
-                 (mu4e-get-maildirs)))
+  (cl-remove-if-not (lambda (x)
+                      (string-match "INBOX$" x))
+                    (mu4e-get-maildirs)))
 
 (defun rk-mu4e-ask-inbox (prompt)
   "Ask the user for a shortcut (using PROMPT) as defined in
@@ -318,9 +318,9 @@ detect ACCOUNT from it."
                          (mu4e--server-move docid
                                             (mu4e--mark-check-target target)
                                             "-N")))
-            (remove-if (lambda (x)
-                         (equal 'trash (car x)))
-                       mu4e-marks)))
+            (cl-remove-if (lambda (x)
+                            (equal 'trash (car x)))
+                          mu4e-marks)))
 
 (defun mu4e-maildirs-extension-index-updated-handler ()
   "Handler for `mu4e-index-updated-hook'."
@@ -363,3 +363,5 @@ Also number them so they can be opened using `mu4e-view-go-to-url'."
     (let* ((parts (split-string f ","))
            (new-name (concat (car parts) ",S" (cadr parts))))
       (rename-file f new-name))))
+
+(provide 'init-mu4e)

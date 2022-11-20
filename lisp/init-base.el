@@ -592,3 +592,5 @@
    ([spc] . minibuffer-complete-word)
    ([tab] . minibuffer-complete)
    ([spc] . minibuffer-complete-word)))
+
+(provide 'init-base)

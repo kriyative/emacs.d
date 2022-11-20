@@ -167,3 +167,5 @@ this just means displaying toot client."
      "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n")
     (when mastodon-tl--display-media-p
       (mastodon-media--inline-images start-pos (point)))))
+
+(provide 'init-mastodon)

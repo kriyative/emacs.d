@@ -159,3 +159,5 @@ level of escaping from quote chars."
   ;;        (ilc-lisp-mode (assoc 'lisp-mode ilc-symbol)))
   ;;   (rplacd ilc-symbol (remove ilc-lisp-mode (cdr ilc-symbol))))
   (info-lookup-setup-mode 'symbol 'lisp-mode))
+
+(provide 'init-lisp)

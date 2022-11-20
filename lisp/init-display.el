@@ -316,3 +316,5 @@
 
 ;; emoji chars
 (set-fontset-font t '(#x1f300 . #x1fad0) "Symbola")
+
+(provide 'init-display)
