@@ -34,7 +34,7 @@
   ;; (when (fboundp 'rk-org-gcal-multi-fetch-if-stale)
   ;;   (rk-org-gcal-multi-fetch-if-stale))
   ;; (org-caldav-sync)
-  (org-agenda-list))
+  (rk--goto-daily-agenda))
 
 (use-package midnight
   :config
