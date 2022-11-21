@@ -67,20 +67,18 @@
 (defvar *rk--current-display-dpi* (rk--display-dpi))
 
 (defun rk--optimum-font-size ()
-  (let ((dpi (rk--display-dpi)))
-    (cond
-     ((< 170 dpi) 16)
-     ((or (<= 1920 (rk-display-pixel-width)) (< 150 dpi)) 13)
-     ((or (< 1024 (rk-display-pixel-width) 1920)) 7)
-     (t 11))))
+  (if (<= 1920 (rk-display-pixel-width))
+      13
+    11))
 
 ;; (rk--optimum-font-size)
 
 (defvar *rk--font* "Hack")
 (defvar *rk--font-size* 0)
 
-(defun rk--x-set-font (font-family &optional font-size)
-  (let* ((font-size (or font-size (rk--optimum-font-size)))
+(defun rk--x-set-font (&optional font-family font-size)
+  (let* ((font-family (or font-family *rk--font*))
+         (font-size (or font-size (rk--optimum-font-size)))
          (x-font (concat font-family " " (prin1-to-string font-size))))
     (set-frame-font x-font t t)
     (setq *rk--font* font-family
@@ -89,7 +87,7 @@
 
 ;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
-  (rk--x-set-font *rk--font*))
+  (rk--x-set-font))
 
 ;; (rk--x-set-font "DejaVu Sans Mono Book")
 ;; (rk--x-set-font "Iosevka Term Slab")
@@ -127,9 +125,7 @@
 (defun rk--update-default-font ()
   (unless (eq (rk--display-dpi) *rk--current-display-dpi*)
     (setq *rk--current-display-dpi* (rk--display-dpi))
-    ;; (x-set-font "Consolas")
-    ;; (rk--x-set-font "DejaVu Sans Mono Book")
-    ))
+    (rk--x-set-font)))
 
 (defun rk--window-configuration-change-hook ()
   (when (eq window-system 'x)
