@@ -8,12 +8,21 @@
         mastodon-media--avatar-height 32
         mastodon-tl--enable-relative-timestamps nil
         mastodon-tl--enable-proportional-fonts nil)
-  (add-hook 'mastodon-mode-hook 'rk-mastodon-mode-hook))
+  (add-hook 'mastodon-mode-hook 'rk-mastodon-mode-hook)
+  ;; from: https://mas.to/@ParetoOptimalDev/109378647927115065
+  (add-to-list 'browse-url-handlers
+               '("https?://[^/]+/@[^/]+/.*" . 'rk-mastodon-open-at-point)))
 
 (defun rk-mastodon-mode-hook ()
   (visual-line-mode 1)
   (setq-local switch-to-buffer-obey-display-actions t
-              display-buffer--same-window-action nil))
+              display-buffer--same-window-action nil
+              bidi-display-reordering nil))
+
+(defun rk-mastodon-open-at-point ()
+  "Open the URL at point, or prompt if a URL is not found."
+  (interactive)
+  (mastodon-url-lookup (or (thing-at-point 'url) (read-string "URL: "))))
 
 (use-package mastodon-tl)
 
