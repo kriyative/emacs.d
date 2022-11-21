@@ -87,7 +87,8 @@
 
 ;; to deal with tty mode emacsclient connections
 (when (eq window-system 'x)
-  (rk--x-set-font))
+  (ignore-errors
+    (rk--x-set-font)))
 
 ;; (rk--x-set-font "DejaVu Sans Mono Book")
 ;; (rk--x-set-font "Iosevka Term Slab")
