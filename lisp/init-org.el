@@ -1,23 +1,22 @@
 ;;;;;;;;;;;;;;;; org
 
-(defvar org-journal-date-format "%Y-%m-%d %H:%M:%S"
+(defvar rk--org-journal-date-format "%Y-%m-%d %H:%M:%S"
   "Date format string for journal headings.")
 
-(defun org-journal-entry ()
+(defun rk-org-journal-entry ()
   "Create a new diary entry for today or append to an existing
 one."
   (interactive)
-  (switch-to-buffer (find-file org-journal-file))
+  (unless (eq 'org-mode major-mode)
+    (switch-to-buffer (find-file rk--org-journal-file)))
   (widen)
-  (let ((today (format-time-string org-journal-date-format)))
+  (let ((today (format-time-string rk--org-journal-date-format)))
     (beginning-of-buffer)
-    (next-line)
+    (org-goto-first-child)
     (org-insert-heading)
-    (insert today)
-    (insert "\n\n\n")
-    (backward-char)
-    (unless (= 2 (current-column))
-      (insert "  "))))
+    (insert "[" today "] ")
+    (save-excursion
+      (insert "\n\n\n"))))
 
 (defun rk-org-time-stamp-inactive ()
   (interactive)
@@ -55,7 +54,7 @@ one."
   :bind
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
-   ("C-c j" . org-journal-entry)
+   ("C-c j" . rk-org-journal-entry)
 
    :map org-mode-map
    ("C-c !" . rk-org-time-stamp-inactive)
