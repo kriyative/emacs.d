@@ -489,7 +489,8 @@
               ("L" . eww-forward-url)
               ("M-h" . eww-list-histories))
   :config
-  (setq eww-search-prefix "http://localhost:5000/search?q="))
+  (setq eww-search-prefix "http://localhost:5000/search?q="
+        shr-use-fonts nil))
 
 (use-package emacs
   :config
