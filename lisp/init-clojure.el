@@ -36,15 +36,17 @@
         ("H-r"     . cider-switch-to-repl-buffer)
         ("H-l"     . cider-jack-in)
         ("<backtab>" . rk-outline-toggle)
-        ("C-c C-y" . rk-yank-unescape-quotes)
-        ("C-c p g" . projectile-grep))
+        ("C-c C-y" . rk-yank-unescape-quotes))
   :config
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (add-hook 'clojure-mode-hook (lambda () (projectile-mode)))
   (setq auto-mode-alist (cl-remove-if (lambda (x)
                                         (equal (car x) "\\.cljc\\'"))
                                       auto-mode-alist))
-  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode)))
+  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojurec-mode))
+  ;; compojure.core macros
+  (dolist (sym '(GET POST PUT OPTIONS PATCH DELETE context))
+    (put-clojure-indent sym 2)))
 
 (defun cider-mode-hook ()
   (eldoc-mode)
