@@ -105,6 +105,7 @@ maildir)."
         ;; mu4e-get-mail-command "mbsync-all -u"
         mu4e-get-mail-command "/bin/true"
         mu4e-update-interval nil
+        mu4e-search-results-limit 1000
         ;; mu4e-update-interval nil
         ;; fix for duplicate UID per:
         ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
@@ -233,7 +234,7 @@ date. The formats used for date and time are
   (setq message-fill-column nil
         message-from-style 'angles
         message-citation-line-function 'message-insert-citation-line
-        message-cite-style 'message-cite-style-gmail
+        message-cite-style nil
         message-yank-prefix "> "
         message-yank-cited-prefix "> "
         message-yank-empty-prefix "> "
