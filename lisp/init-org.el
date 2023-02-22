@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;; org
 
-(defvar rk--org-journal-date-format "%Y-%m-%d %H:%M:%S"
+(defvar rk--org-journal-date-format "%Y-%m-%d %a %H:%M"
   "Date format string for journal headings.")
 
 (defun rk-org-journal-entry ()
