@@ -5,19 +5,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; load private (potential secrets) customizations if present
 
-(load-if-present
- (expand-file-name "private/.personal.el.gpg"
-                   user-emacs-directory))
+(rk-load-rel "private/.personal.el.gpg" nil 'noerror)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; load core modules
 
 (rk-require
- 'init-base
- 'init-display
- 'init-org
- 'init-commands)
+ '(init-base
+   init-display
+   init-org
+   init-commands))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; load machine specific customizations if present
 
-(load-if-present
- (expand-file-name (concat "private/" (system-name) ".el")
-                   user-emacs-directory))
+(rk-load-rel (concat "private/" (system-name) ".el") nil 'noerror)

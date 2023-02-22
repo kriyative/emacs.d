@@ -25,13 +25,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; some helper functions
 
-(defun load-if-present (filename &rest load-args)
-  "Load FILENAME if it exists on disk using `load' passing on
-LOAD-ARGS"
-  (when (file-exists-p filename)
-    (apply 'load filename load-args)))
+(defun rk-load-rel (filename &optional base-directory &rest load-args)
+  "Load FILENAME relative to BASE-DIRECTORY (defaults to
+`USER-EMACS-DIRECTORY`) with additional LOAD-ARGS"
+  (let ((base-directory (or base-directory user-emacs-directory)))
+    (apply 'load (expand-file-name filename base-directory) load-args)))
 
-(defun rk-require (&rest modules)
+(defun rk-require (modules)
   (dolist (module modules)
     (require module)))
 
