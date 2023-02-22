@@ -359,10 +359,8 @@ Also number them so they can be opened using `mu4e-view-go-to-url'."
 (defun rk-maildir-fix-unread-trash (&optional root-dir)
   "Mark any unread Maildir files in Trash folders as SEEN."
   (interactive "DMaildir Root: ")
-  (dolist (f (directory-files-recursively root-dir
-                                          ",[^S]*$"))
-    (let* ((parts (split-string f ","))
-           (new-name (concat (car parts) ",S" (cadr parts))))
+  (dolist (f (directory-files-recursively root-dir ",[^S]*$"))
+    (let ((new-name (concat f ",S")))
       (rename-file f new-name))))
 
 (provide 'init-mu4e)
