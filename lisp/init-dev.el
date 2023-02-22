@@ -26,15 +26,13 @@
   (:map image-map
         ("w" . image-transform-fit-to-width)
         ("h" . image-transform-fit-to-height)
-        ("s" . image-transform-set-scale)))
+        ("s" . image-transform-set-scale))
+  :config
+  (setq image-use-external-converter t))
 
 (use-package window-numbering
   :straight t
   :config
-  ;; (dotimes (i 10)
-  ;;   (define-key ctlx-ctlj-map
-  ;;     (prin1-to-string i)
-  ;;     (intern (concat "select-window-" (prin1-to-string i)))))
   (window-numbering-mode)
   (window-numbering-update))
 
@@ -44,7 +42,7 @@
   :delight
   :bind
   (:map projectile-mode-map
-        ("C-c p C-f" . projectile-find-file))
+        ("C-c p" . projectile-command-map))
   (:map projectile-command-map
         ("C-f" . projectile-find-file)
         ("C-d" . projectile-dired))
@@ -52,7 +50,8 @@
         ("C-p" . projectile-command-map)
         ("p" . projectile-command-map))
   :config
-  (projectile-mode 1))
+  (projectile-mode 1)
+  (define-key global-map (kbd "C-x p") nil))
 
 (use-package csv-mode
   :straight t
