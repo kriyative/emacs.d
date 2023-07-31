@@ -32,7 +32,8 @@
         ("es" . rk-emms-show)
         ("ed" . emms-play-directory)
         ("et" . emms-play-directory-tree)
-        ("ef" . emms-play-file))
+        ("ef" . emms-play-file)
+        ("e'" . emms-show))
   :bind
   (:map dired-mode-map
         ("\C-ce" . emms-play-dired))
