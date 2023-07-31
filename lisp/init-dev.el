@@ -50,7 +50,8 @@
         ("p" . projectile-command-map))
   :config
   (projectile-mode 1)
-  (define-key global-map (kbd "C-x p") nil))
+  (define-key global-map (kbd "C-x p") nil)
+  (define-key global-map (kbd "C-x p") 'rk-previous-window))
 
 (use-package csv-mode
   :ensure t
