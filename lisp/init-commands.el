@@ -6,7 +6,6 @@
          (let ((buf (get-buffer-create bufname))
                (args (append
                       '("--color" "off"
-                        "--no-cli-pager"
                         "--no-paginate")
                       (split-string commands)
                       '("help"))))
