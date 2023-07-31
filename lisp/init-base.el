@@ -238,6 +238,11 @@
   (add-to-list 'comint-output-filter-functions 'shell-strip-ctrl-m)
   (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer))
 
+(use-package coterm
+  :ensure t
+  :config
+  (coterm-mode))
+
 (use-package telnet
   :config
   (setq telnet-remote-echoes nil))
