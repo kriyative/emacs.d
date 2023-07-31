@@ -19,7 +19,6 @@
   :config
   (add-to-list 'erc-sasl-server-regexp-list "irc\\.libera\\.chat"))
 
-
 ;; Redefine/Override the erc-login() function from the erc package, so that
 ;; it now uses SASL
 (defun erc-login ()

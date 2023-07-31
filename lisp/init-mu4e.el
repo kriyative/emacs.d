@@ -95,7 +95,9 @@ maildir)."
       'sent)))
 
 (use-package mu4e
-  :straight (mu4e :files ("build/mu4e/*.el" "build/mu4e/*.elc" "build/mu4e/*.info")
+  :straight (mu4e :files ("build/mu4e/*.el"
+                          "build/mu4e/*.elc"
+                          "build/mu4e/*.info")
                   :pre-build (("./autogen.sh")
                               ("ninja" "-C" "build")))
   :custom (mu4e-mu-binary (expand-file-name "build/mu/mu"
@@ -202,34 +204,6 @@ date. The formats used for date and time are
   (add-hook 'mu4e-compose-mode-hook 'mu4e-multi-compose-set-account)
   (add-hook 'message-send-mail-hook 'mu4e-multi-smtpmail-set-msmtp-account))
 
-(defun rk-mu4e-reload-main ()
-  (interactive)
-  (mu4e-maildirs-extension-force-update '(16)))
-
-(use-package mu4e-maildirs-extension
-  :straight (mu4e-maildirs-extension :type git
-                                     :host github
-                                     :repo "kriyative/mu4e-maildirs-extension")
-  :demand t
-  :config
-  (mu4e-maildirs-extension)
-  (setq mu4e-maildirs-extension-count-command-format
-        (concat mu4e-mu-binary " find %s -u --fields 'i' | wc -l")
-        mu4e-maildirs-extension-maildir-format-spec
-        (lambda(m)
-          (list (cons ?i (plist-get m :indent))
-                (cons ?p (plist-get m :prefix))
-                (cons ?l (plist-get m :level))
-                (cons ?e (plist-get m :expand))
-                (cons ?P (plist-get m :path))
-                (cons ?n (plist-get m :name))
-                (cons ?u (or (add-number-grouping (plist-get m :unread)) ""))
-                (cons ?t (or (add-number-grouping (plist-get m :total)) "")))))
-
-  :bind
-  (:map mu4e-main-mode-map
-        ("g" . rk-mu4e-reload-main)))
-
 (defun message-mode-hook ()
   (setq message-fill-column nil
         message-from-style 'angles
@@ -246,12 +220,6 @@ date. The formats used for date and time are
 (use-package message
   :config
   (add-hook 'message-mode-hook 'message-mode-hook))
-
-(use-package mu4e-conversation
-  :disabled t
-  :config
-  ;; (setq mu4e-view-func 'mu4e~headers-view-handler)
-  (setq mu4e-view-func 'mu4e-conversation))
 
 (defun rk--mbsync-sync-update (info)
   (when (cdr info)
@@ -278,9 +246,10 @@ date. The formats used for date and time are
     (let* ((account (if (listp spec) (car spec) spec))
            (existing (assoc account *mbsync--timers*)))
       (when existing
-        (cancel-timer (cdr existing))))))
+        (cancel-timer (cdr existing)))))
+  (setq *mbsync--timers* nil))
 
-(defun rk-mu4e ()
+(defun rk-mail ()
   (interactive)
   (rk-mbsync-start)
   (mu4e))
@@ -322,10 +291,6 @@ detect ACCOUNT from it."
             (cl-remove-if (lambda (x)
                             (equal 'trash (car x)))
                           mu4e-marks)))
-
-(defun mu4e-maildirs-extension-index-updated-handler ()
-  "Handler for `mu4e-index-updated-hook'."
-  (mu4e-maildirs-extension-force-update '(16)))
 
 (defun mu4e~view-make-urls-clickable ()
   "Turn things that look like URLs into clickable things.
