@@ -61,7 +61,9 @@
 
 (use-package epa-file
   :config
-  (setq epa-pinentry-mode 'loopback)
+  (setq epa-pinentry-mode 'loopback
+        epa-file-select-keys nil
+        epa-file-encrypt-to nil)
   (epa-file-enable)
   (rk-ensure-gpg-loopback-pinentry))
 
