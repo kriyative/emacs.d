@@ -1,2 +1,1 @@
-(use-package geiser-guile
-  :straight t)
+(use-package geiser-guile)

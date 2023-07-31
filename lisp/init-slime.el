@@ -25,7 +25,7 @@
   (slime-interactive-eval expr))
 
 (use-package slime
-  :straight t
+  :ensure t
   :config
   ;; (setq slime-contribs '(slime-fancy slime-help slime-info))
   (slime-setup '(slime-repl))

@@ -1,7 +1,5 @@
 (use-package mastodon
-  :straight (mastodon :type git
-                      :host nil
-                      :repo "https://codeberg.org/martianh/mastodon.el.git")
+  :ensure t
   :config
   (setq mastodon-auth-source-file "~/.authinfo.gpg"
         mastodon-tl--show-avatars nil
@@ -24,7 +22,7 @@
   (interactive)
   (mastodon-url-lookup (or (thing-at-point 'url) (read-string "URL: "))))
 
-(use-package mastodon-tl)
+(require 'mastodon-tl)
 
 ;;; Override 'mastodon-tl--render-text' to render HTML without window
 ;;; width, and use visual-line-mode to word wrap dynamically. does NOT

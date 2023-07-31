@@ -23,7 +23,7 @@
     (set 'rk-outline-visibility 'visible)))
 
 (use-package clojure-mode
-  :straight t
+  :ensure t
   :demand t
   :bind
   (:map clojure-mode-map
@@ -56,7 +56,7 @@
 ;; (unload-feature 'cider t)
 
 (use-package cider
-  :straight t
+  :ensure t
   :bind
   (:map cider-mode-map
         ("C-c C-k" . cider-load-buffer-ext))

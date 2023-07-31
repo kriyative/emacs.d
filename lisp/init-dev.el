@@ -8,9 +8,9 @@
                 (:prompt-cont-regexp "^[-[:alnum:]_]*[-(][#>] ")))
     (apply 'sql-set-product-feature 'postgres pv)))
 
-(use-package json-mode :straight t)
+(use-package json-mode :ensure t)
 
-(use-package yaml-mode :straight t)
+(use-package yaml-mode :ensure t)
 
 (defun rk-java-mode-hook ()
   (setq tab-width 4))
@@ -19,7 +19,7 @@
   :config
   (add-hook 'java-mode-hook 'rk-java-mode-hook))
 
-(use-package git-link :straight t)
+(use-package git-link :ensure t)
 
 (use-package image
   :bind
@@ -31,14 +31,13 @@
   (setq image-use-external-converter t))
 
 (use-package window-numbering
-  :straight t
+  :ensure t
   :config
   (window-numbering-mode)
   (window-numbering-update))
 
 (use-package projectile
   :ensure t
-  :straight t
   :delight
   :bind
   (:map projectile-mode-map
@@ -54,19 +53,19 @@
   (define-key global-map (kbd "C-x p") nil))
 
 (use-package csv-mode
-  :straight t
+  :ensure t
   :config
   (setq csv-align-style 'auto))
 
 (use-package graphviz-dot-mode
-  :straight t
+  :ensure t
   :config
   (setq graphviz-dot-view-command "xdot %s"))
 
-(use-package restclient :straight t)
+(use-package restclient :ensure t)
 
 (use-package plantuml-mode
-  :straight t
+  :ensure t
   :config
   ;; why is the default to connect to plantuml.com?
   (setq plantuml-server-url nil
@@ -77,7 +76,7 @@
   (visual-line-mode 1))
 
 (use-package markdown-mode
-  :straight t
+  :ensure t
   :diminish "MD"
   :config
   (add-hook 'markdown-mode-hook 'markdown-mode-hook))

@@ -44,4 +44,5 @@
                                         ".ufasl"
                                         ".DS_Store"))
  auto-window-vscroll nil
- indent-tabs-mode nil)
+ indent-tabs-mode nil
+ native-comp-async-report-warnings-errors 'silent)

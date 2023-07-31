@@ -1,5 +1,5 @@
 (use-package helm
-  :straight t
+  :ensure t
   :config
   (setq helm-command-prefix-key "\C-c\C-h")
   (global-set-key (kbd "C-c C-h") #'helm-command-prefix)
@@ -14,13 +14,13 @@
    ("C-x C-f" . helm-find-files)))
 
 (use-package helm-ag
-  :straight t
+  :ensure t
   :after ag
   :bind
   (("C-c G g" . helm-ag-project-root)
    ("C-c G a" . helm-ag)))
 
-(use-package helm-cider :straight t)
+(use-package helm-cider :ensure t)
 
 (defun helm-copy-selection (arg)
   (interactive "P")

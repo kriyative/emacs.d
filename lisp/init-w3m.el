@@ -13,7 +13,7 @@
          args))
 
 (use-package w3m
-  :straight t
+  :ensure t
   :config
   (setq browse-url-browser-function 'rk-url-browser-function)
   :bind (("\M-t" . w3m-copy-buffer)))

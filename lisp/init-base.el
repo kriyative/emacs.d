@@ -300,10 +300,10 @@
   (("C-c s" . dictionary-search)
    ("C-c m" . dictionary-match-words)))
 
-(use-package wgrep :straight t)
+(use-package wgrep :ensure t)
 
 (use-package ag
-  :straight t
+  :ensure t
   :config
   (setq ag-reuse-buffers t)
   :bind (("C-c g g" . ag)
@@ -318,7 +318,7 @@
          ("H-g r" . ag-regexp)))
 
 (use-package  buffer-move
-  :straight (buffer-move :build (:not compile))
+  :ensure t
   :after (cl)
   :bind (:map user-commands-prefix-map
               ("<left>"  . buf-move-left)
@@ -334,9 +334,7 @@
   (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
 
 (defun rk--compilation-mode-colorize-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
+  (ansi-color-apply-on-region (point-min) (point-max)))
 
 (defun rk-ansi-colorize-region (&optional start end)
   "ANSI colorize a region"
@@ -353,7 +351,6 @@
 
 (defun rk--add-info-dirs ()
   (require 'find-lisp)
-  (add-to-list 'Info-directory-list "/usr/local/share/info")
   (add-to-list 'Info-directory-list (expand-file-name "~/share/info")))
 
 (use-package info
@@ -424,7 +421,7 @@
   (minibuffer-depth-indicate-mode 1)
   (minibuffer-electric-default-mode 1))
 
-(use-package password-mode :straight t)
+(use-package password-mode :ensure t)
 
 (defun iso-calendar ()
   (interactive)
@@ -471,15 +468,15 @@
         display-time-world-time-format "%a %d %b %R %Z"))
 
 (use-package edit-server
-  :straight t
+  :ensure t
   :config
   (setq edit-server-default-major-mode 'normal-mode
         edit-server-new-frame nil)
   (edit-server-start))
 
-(use-package delight :straight t)
+(use-package delight :ensure t)
 
-(use-package diminish :straight t)
+(use-package diminish :ensure t)
 
 (use-package eww
   :bind (:map eww-mode-map

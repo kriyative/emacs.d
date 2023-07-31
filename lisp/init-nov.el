@@ -1,7 +1,7 @@
-(use-package esxml :straight t)
+(use-package esxml :ensure t)
 
 (use-package nov
-  :straight t
+  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   (setq nov-text-width 70

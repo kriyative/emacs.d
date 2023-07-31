@@ -1,5 +1,5 @@
 (use-package paredit
-  :straight t
+  :ensure t
   :delight)
 
 (defun rk-start-lisp ()

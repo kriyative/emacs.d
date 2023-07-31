@@ -7,7 +7,7 @@
   (load-theme 'kriyative-light))
 
 (use-package unicode-fonts
-  :straight t
+  :ensure t
   :config
   (unicode-fonts-setup))
 
@@ -146,7 +146,7 @@
 ;; (rk--x-notify "hello")
 
 (use-package alert
-  :straight t
+  :ensure t
   :config
   (setq alert-default-style 'notifications))
 

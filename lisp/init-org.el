@@ -28,7 +28,6 @@ one."
   (org-display-inline-images))
 
 (use-package org
-  :straight t
   :config
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))
@@ -66,7 +65,6 @@ one."
    ("C-c o" . org-open-at-point)))
 
 (use-package ox-latex
-  :after org
   :config
   (add-to-list 'org-latex-classes
                '("letter"
@@ -80,13 +78,10 @@ one."
 (use-package ox-beamer)
 
 (use-package ox-publish
-  :after org
-  :after org-compat
   :config
   (setq org-export-html-postamble nil))
 
 (use-package org-agenda
-  :after org
   :config
   (setq org-agenda-include-diary t
         org-agenda-prefix-format (cons
@@ -102,10 +97,10 @@ one."
   (setq org-passwords-file "~/.pwcrypt.gpg"
         org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
-(use-package org-mime :straight t :after org)
-(use-package blockdiag-mode :straight t)
+(use-package org-mime :ensure t)
+(use-package blockdiag-mode :ensure t)
 (use-package ob-blockdiag
-  :straight t
+  :ensure t
   :after (org blockdiag-mode)
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((blockdiag . t))))
@@ -113,7 +108,7 @@ one."
 (use-package org-present :straight t)
 
 (use-package ob-restclient
-  :straight t
+  :ensure t
   :after restclient
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((restclient . t))))

@@ -8,7 +8,7 @@
   (magit-show-refs transient))
 
 (use-package magit
-  :straight t
+  :ensure t
   :config
   (when (facep 'magit-item-highlight)
     (set-face-attribute 'magit-item-highlight nil
@@ -31,7 +31,7 @@
         ("v" . magit-status)))
 
 (use-package magit-todos
-  :straight t
+  :ensure t
   :config
   (add-to-list 'magit-todos-keywords-list "REVIEW"))
 

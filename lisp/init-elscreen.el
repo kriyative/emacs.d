@@ -4,7 +4,7 @@
      (elscreen-goto ,i)))
 
 (use-package elscreen
-  :straight t
+  :ensure t
   :demand t
   :bind
   (("H-n" . elscreen-next)
