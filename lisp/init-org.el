@@ -54,6 +54,7 @@ one."
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c j" . rk-org-journal-entry)
+   ("C-c w" . rk-org-link-copy)
 
    :map org-mode-map
    ("C-c !" . rk-org-time-stamp-inactive)
@@ -81,6 +82,10 @@ one."
   :config
   (setq org-export-html-postamble nil))
 
+(use-package org-contrib :ensure t)
+
+;; (use-package ox-confluence :straight t)
+
 (use-package org-agenda
   :config
   (setq org-agenda-include-diary t
@@ -89,13 +94,6 @@ one."
                                   (cl-remove-if (lambda (x)
                                                   (eq (car x) 'agenda))
                                                 org-agenda-prefix-format))))
-
-(use-package org-passwords
-  :straight t
-  :after org
-  :config
-  (setq org-passwords-file "~/.pwcrypt.gpg"
-        org-passwords-random-words-dictionary "/etc/dictionaries-common/words"))
 
 (use-package org-mime :ensure t)
 (use-package blockdiag-mode :ensure t)
@@ -163,6 +161,7 @@ one."
   (interactive "r")
   (save-excursion
     (let ((org-export-show-temporary-export-buffer nil)
+	  (org-export-with-toc nil)
           (buf (generate-new-buffer "*rk-org-md*")))
       (unwind-protect
           (org-export-to-buffer 'md buf
@@ -171,5 +170,49 @@ one."
               (with-current-buffer buf
                 (kill-region (point-min) (point-max)))))
         (kill-buffer buf)))))
+
+(defun rk--org-md-src-block (src-block _contents info)
+  "Transcode SRC-BLOCK element into Markdown format.
+CONTENTS is nil.  INFO is a plist used as a communication
+channel."
+  (let ((lang (plist-get (cadr src-block) :language)))
+    (concat "```" (if lang lang "")
+            "\n"
+            (org-export-format-code-default example-block info)
+            "\n```\n")))
+
+(defun rk--org-md-example-block (orig-fn example-block &rest args)
+  (if (eq 'src-block (car example-block))
+      (apply 'rk--org-md-src-block example-block args)
+    (apply orig-fn example-block args)))
+
+(advice-add 'org-md-example-block :around #'rk--org-md-example-block)
+
+(defun rk-insert-timestamp-comment ()
+  (interactive)
+  (beginning-of-line)
+  (open-line 1)
+  (let ((cnt (if (memq major-mode '(emacs-lisp-mode
+                                    lisp-mode
+                                    scheme-mode
+                                    clojure-mode))
+                 3
+               1)))
+    (dotimes (i cnt)
+      (insert comment-start))
+    (insert " ---------------- "
+            (format-time-string "%FT%T%z")
+            " ----------------\n\n")))
+
+;; from: https://emacs.stackexchange.com/a/60555
+(defun rk-org-link-copy (&optional arg)
+  "Extract URL from org-mode link and add it to kill ring."
+  (interactive "P")
+  (let* ((link (org-element-lineage (org-element-context) '(link) t))
+         (type (org-element-property :type link))
+         (url (org-element-property :path link))
+         (url (concat type ":" url)))
+    (kill-new url)
+    (message (concat "Copied URL: " (replace-regexp-in-string "%" "%%" url)))))
 
 (provide 'init-org)
