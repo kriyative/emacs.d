@@ -63,7 +63,8 @@
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-cli-global-options "-Adev")
+        cider-clojure-cli-global-options "-Adev"
+        cider-use-tooltips nil)
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
 (use-package cider-repl
