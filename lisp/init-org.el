@@ -28,6 +28,7 @@ one."
   (org-display-inline-images))
 
 (use-package org
+  :ensure t
   :config
   (unless (fboundp 'org-at-planning-p)
     (defun org-at-planning-p () nil))

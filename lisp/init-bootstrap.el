@@ -32,7 +32,7 @@
     (apply 'load (expand-file-name filename base-directory) load-args)))
 
 (defun rk-require (modules)
-  (dolist (module modules)
+  (dolist (module (if (consp modules) modules (list modules)))
     (require module)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
