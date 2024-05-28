@@ -70,7 +70,7 @@
   :config
   ;; why is the default to connect to plantuml.com?
   (setq plantuml-server-url nil
-        plantuml-default-exec-mode 'jar))
+        plantuml-default-exec-mode 'executable))
 
 (defun markdown-mode-hook ()
   (setq markdown-hide-urls t)

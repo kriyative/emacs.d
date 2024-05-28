@@ -22,6 +22,9 @@
     (outline-show-all)
     (set 'rk-outline-visibility 'visible)))
 
+(use-package flycheck-clj-kondo
+  :ensure t)
+
 (use-package clojure-mode
   :ensure t
   :demand t
@@ -38,6 +41,7 @@
         ("<backtab>" . rk-outline-toggle)
         ("C-c C-y" . rk-yank-unescape-quotes))
   :config
+  (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook 'clojure-mode-hook)
   (add-hook 'clojure-mode-hook (lambda () (projectile-mode)))
   (setq auto-mode-alist (cl-remove-if (lambda (x)
@@ -63,7 +67,10 @@
   :config
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
-        cider-clojure-cli-global-options "-Adev"
+        cider-clojure-cli-parameters (concat
+                                      "-Adev"
+                                      ;; " -J-agentpath:/usr/local/lib/async-profiler-2.9-linux-x64/build/libasyncProfiler.so"
+                                      " -J-Djdk.attach.allowAttachSelf")
         cider-use-tooltips nil)
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 

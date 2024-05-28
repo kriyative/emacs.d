@@ -30,6 +30,7 @@
     (scroll-bar-mode -1)
     (mouse-avoidance-mode 'none))
   (menu-bar-mode -1)
+  (setq visible-cursor nil)
 
   :bind
   (([C-tab] . rk-next-window)

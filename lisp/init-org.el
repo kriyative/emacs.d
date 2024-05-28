@@ -42,7 +42,8 @@ one."
         org-babel-python-command "python3"
         org-log-done 'time
         org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
-        org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
+        ;; org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar"
+        org-plantuml-jar-path nil)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((ditaa . t)
                                  (shell . t)
@@ -103,7 +104,36 @@ one."
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((blockdiag . t))))
 
-(use-package org-present :straight t)
+(use-package visual-fill-column
+  :ensure t
+  :config
+  (setq visual-fill-column-width 150
+        visual-fill-column-center-text t))
+
+(defun rk--org-present-mode-hook ()
+  ;; (visual-fill-column-mode 1)
+  ;; (visual-line-mode 1)
+  (setq-local face-remapping-alist
+              '((default (:height 1.2) variable-pitch)
+                (header-line (:height 2.0) variable-pitch)
+                (org-document-title (:height 1.2) org-document-title)
+                (org-code (:height 1.2) org-code)
+                (org-verbatim (:height 1.2) org-verbatim)
+                (org-block (:height 1.2) org-block)
+                (org-block-begin-line (:height 0.7) org-block))))
+
+(defun rk--org-present-mode-quit-hook ()
+  (setq-local face-remapping-alist '((default)))
+  ;; (visual-line-mode -1)
+  ;; (visual-fill-column-mode -1)
+  )
+
+(use-package org-present
+  :ensure t
+  :after (visual-fill-column)
+  :config
+  (add-hook 'org-present-mode-hook 'rk--org-present-mode-hook)
+  (add-hook 'org-present-mode-quit-hook 'rk--org-present-mode-quit-hook))
 
 (use-package ob-restclient
   :ensure t

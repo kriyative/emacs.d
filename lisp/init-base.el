@@ -37,12 +37,15 @@
 
 (defun rk--message-with-timestamp (old-func fmt-string &rest args)
   "Prepend current timestamp (with microsecond precision) to a message"
-  (when (and fmt-string (< 0 (length fmt-string)))
-    (apply old-func
-           (concat "[" (format-time-string "%m-%d %T.%3N")
-                   " " (buffer-name (current-buffer))
-                   "] " fmt-string)
-           args)))
+  (if (and fmt-string
+           (< 0 (length fmt-string))
+           (not isearch-mode))
+      (apply old-func
+             (concat "[" (format-time-string "%m-%d %T.%3N")
+                     " " (buffer-name (current-buffer))
+                     "] " fmt-string)
+             args)
+    (apply old-func fmt-string args)))
 
 (defun rk-toggle-frame-width ()
   "Toggle between narrow and wide frame layouts"
@@ -428,7 +431,7 @@
 
 (use-package password-mode :ensure t)
 
-(defun iso-calendar ()
+(defun rk-iso-calendar ()
   (interactive)
   (setq european-calendar-style nil)
   (setq calendar-date-display-form
@@ -453,7 +456,7 @@
 
 (use-package calendar
   :config
-  (iso-calendar)
+  (rk-iso-calendar)
   (add-hook 'diary-display-hook 'fancy-diary-display)
   ;; (add-hook 'calendar-load-hook 'mark-diary-entries)
   (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
@@ -494,6 +497,10 @@
   (setq eww-search-prefix "http://localhost:5000/search?q="
         shr-use-fonts nil))
 
+(defun rk-switch-shell ()
+  (interactive)
+  (shell))
+
 (use-package emacs
   :config
   ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
@@ -527,7 +534,9 @@
         delete-old-versions t
         kept-new-versions 6
         kept-old-versions 2
-        version-control t)
+        version-control t
+        completion-auto-select 'second-tab
+        warning-minimum-level :error)
 
   :bind
   (("M-g" . goto-line)
@@ -550,6 +559,7 @@
    ("<f5> b" . search-backward)
    ("<f6>" . previous-error)
    ("<f7>" . next-error)
+   ("<f9>" . rk-switch-shell)
    ("C-=" . text-scale-increase)
    ("C--" . text-scale-decrease)
    ("H-l" . rk-start-lisp)
