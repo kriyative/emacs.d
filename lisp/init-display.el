@@ -69,12 +69,12 @@
 
 (defun rk--optimum-font-size ()
   (if (<= 1920 (rk-display-pixel-width))
-      13
+      14
     11))
 
 ;; (rk--optimum-font-size)
 
-(defvar *rk--font* "Hack")
+(defvar *rk--font* "DejaVu Sans Mono Book")
 (defvar *rk--font-size* 0)
 
 (defun rk--x-set-font (&optional font-family font-size)
@@ -91,12 +91,12 @@
   (ignore-errors
     (rk--x-set-font)))
 
-;; (rk--x-set-font "DejaVu Sans Mono Book")
-;; (rk--x-set-font "Iosevka Term Slab")
-;; (rk--x-set-font "Hack")
-;; (rk--x-set-font "Fira Code")
+;; (rk--x-set-font "DejaVu Sans Mono" 14)
+;; (rk--x-set-font "Iosevka Term Slab" 14)
+;; (rk--x-set-font "Noto Mono" 13)
+;; (rk--x-set-font "Roboto Mono" 13)
 
-;; (rk--x-set-font "DejaVu Sans Mono Book" 18)
+;; (rk--x-set-font "DejaVu Sans Mono Book" 14)
 
 (defun rk--x-zoom-in ()
   (interactive)

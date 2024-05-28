@@ -146,6 +146,22 @@
   (interactive)
   (rk--n-col-view 2))
 
+(defun rk-121-view ()
+  (interactive)
+  (rk-3col-view)
+  (let* ((cw (window-at (/ (frame-width) 2)
+                        (/ (frame-height) 2)))
+         (lw (window-left cw))
+         (rw (window-right cw))
+         (wlist (window-list))
+         (width-4 (/ (frame-width) 2)))
+    (window-resize lw
+                   (- (window-width lw) width-4)
+                   t)
+    (window-resize rw
+                   (- (window-width rw) width-4)
+                   t)))
+
 (defun rk-fill-vertical-panes ()
   (interactive)
   (delete-other-windows)
@@ -325,6 +341,12 @@
          ("C-c g r" . ag-regexp)
          ("H-g r" . ag-regexp)))
 
+(use-package rg
+  :ensure t
+  :bind (("C-c r g" . rg)
+         ("C-c r d" . rg-dwim)
+         ("C-c r p" . rg-project)))
+
 (use-package  buffer-move
   :ensure t
   :after (cl)
@@ -503,7 +525,7 @@
 
 (use-package emacs
   :config
-  ;;;;;;;;;;;;;;;; charset encoding ;;;;;;;;;;;;;;;;
+  ;; charset encoding
   (prefer-coding-system       'utf-8)
   (set-file-name-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
@@ -518,10 +540,10 @@
   (put 'downcase-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
 
-  ;;;;;;;;;;;;;;;; hooks ;;;;;;;;;;;;;;;;
+  ;; hooks
   (add-to-list 'kill-emacs-query-functions 'rk--confirm-exit)
 
-  ;;;;;;;;;;;;;;;; run at startup ;;;;;;;;;;;;;;;;
+  ;; run at startup
 
   (display-time-mode -1)
   (appt-activate 1)
@@ -537,6 +559,9 @@
         version-control t
         completion-auto-select 'second-tab
         warning-minimum-level :error)
+
+  (global-unset-key (kbd "C-z"))
+  (global-unset-key (kbd "C-x C-z"))
 
   :bind
   (("M-g" . goto-line)
