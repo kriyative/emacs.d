@@ -7,6 +7,8 @@
 
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
+(setq byte-compile-warnings '((not cl-functions)))
+(require 'cl)
 (require 'init-bootstrap)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
