@@ -218,6 +218,10 @@
      (define-prefix-command ,prefix ,map ,prefix-key)
      (define-key global-map ,prefix-key ,prefix)))
 
+(defun rk-find-files-noselect (fs)
+  (dolist (f fs)
+    (find-file-noselect f)))
+
 ;;;;;;;;;;;;;;;; prefix keys ;;;;;;;;;;;;;;;;
 
 ;;; user-prefix keymap
