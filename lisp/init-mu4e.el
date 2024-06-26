@@ -81,15 +81,14 @@ maildir)."
   (auto-fill-mode -1)
   (visual-line-mode 1))
 
-(defun rk-mu4e-sent-messages-behavior ()
-  (let ((sent-folder (if (and mu4e-sent-folder (stringp mu4e-sent-folder))
-                         mu4e-sent-folder
-                       (alist-get 'mu4e-sent-folder
-                                  (alist-get mu4e-multi-last-read-account
-                                             mu4e-multi-account-alist
-                                             nil
-                                             nil
-                                             'equal)))))
+(defun rk--mu4e-sent-messages-behavior ()
+  (let ((sent-folder (or mu4e-sent-folder
+                         (alist-get 'mu4e-sent-folder
+                                    (alist-get mu4e-multi-last-read-account
+                                               mu4e-multi-account-alist
+                                               nil
+                                               nil
+                                               'equal)))))
     (if (string-match "\\[Gmail\\]" sent-folder)
         'delete
       'sent)))
@@ -120,7 +119,7 @@ maildir)."
                               ;; (:flags      .   6)
                               (:from       .  24)
                               (:subject    .  nil))
-        mu4e-sent-messages-behavior 'rk-mu4e-sent-messages-behavior
+        mu4e-sent-messages-behavior 'rk--mu4e-sent-messages-behavior
         mu4e-view-show-addresses t
         ;; mu4e-view-mode-hook '(bbdb-mua-auto-update)
         org-mu4e-convert-to-html nil
