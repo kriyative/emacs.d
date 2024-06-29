@@ -29,7 +29,7 @@
  remote-shell-program "ssh"
  url-proxy-services nil
  compilation-scroll-output t
- shell-file-name "bash"
+ ;; shell-file-name "bash"
  ;; completion-styles '(basic partial-completion)
  completion-styles '(basic partial-completion substring)
  completion-ignore-case t
