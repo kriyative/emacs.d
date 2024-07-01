@@ -74,7 +74,7 @@
 
 ;; (rk--optimum-font-size)
 
-(defvar *rk--font* "Source Code Pro")
+(defvar *rk--font* "DejaVu Sans Mono")
 (defvar *rk--font-size* 0)
 
 (defun rk--x-set-font (&optional font-family font-size)
@@ -91,9 +91,9 @@
   (ignore-errors
     (rk--x-set-font)))
 
-;; (rk--x-set-font "DejaVu Sans Mono" 14)
+;; (rk--x-set-font "DejaVu Sans Mono")
 ;; (rk--x-set-font "Iosevka Term Slab" 14)
-;; (rk--x-set-font "Noto Mono" 13)
+;; (rk--x-set-font "Noto Mono")
 ;; (rk--x-set-font "Roboto Mono" 13)
 ;; (rk--x-set-font "Source Code Pro")
 
