@@ -4,7 +4,7 @@
   (pop-to-buffer "*slime-connections*"))
 
 (defun rk-slime-mode-hook ()
-  (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
+  (setq common-lisp-hyperspec-root "file:///usr/local/share/doc/hyperspec/")
   ;; (set-face-attribute 'slime-highlight-edits-face nil :background "grey")
   (unless (boundp 'last-command-char)
     (defvar last-command-char nil)))
