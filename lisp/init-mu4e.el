@@ -82,14 +82,8 @@ maildir)."
   (visual-line-mode 1))
 
 (defun rk--mu4e-sent-messages-behavior ()
-  (let ((sent-folder (or mu4e-sent-folder
-                         (alist-get 'mu4e-sent-folder
-                                    (alist-get mu4e-multi-last-read-account
-                                               mu4e-multi-account-alist
-                                               nil
-                                               nil
-                                               'equal)))))
-    (if (string-match "\\[Gmail\\]" sent-folder)
+  (let ((maildir (getf mu4e-compose-parent-message :maildir)))
+    (if (string-match "/gmail/" maildir)
         'delete
       'sent)))
 
