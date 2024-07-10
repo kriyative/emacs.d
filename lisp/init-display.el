@@ -69,7 +69,7 @@
 
 (defun rk--optimum-font-size ()
   (if (<= 1920 (rk-display-pixel-width))
-      14
+      13
     11))
 
 ;; (rk--optimum-font-size)
@@ -92,10 +92,12 @@
     (rk--x-set-font)))
 
 ;; (rk--x-set-font "DejaVu Sans Mono")
-;; (rk--x-set-font "Iosevka Term Slab" 14)
+;; (rk--x-set-font "Iosevka")
 ;; (rk--x-set-font "Noto Mono")
-;; (rk--x-set-font "Roboto Mono" 13)
-;; (rk--x-set-font "Source Code Pro")
+;; (rk--x-set-font "Inconsolata" 14)
+;; (rk--x-set-font "Roboto Mono")
+;; (rk--x-set-font "Roboto Mono Bold")
+;; (rk--x-set-font "Roboto Mono Medium")
 
 ;; (rk--x-set-font "DejaVu Sans Mono Book" 14)
 
