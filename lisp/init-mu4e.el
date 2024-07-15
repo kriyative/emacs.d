@@ -83,7 +83,8 @@ maildir)."
 
 (defun rk--mu4e-sent-messages-behavior ()
   (let ((maildir (getf mu4e-compose-parent-message :maildir)))
-    (if (string-match "/gmail/" maildir)
+    (if (or (and maildir (string-match "/gmail/" maildir))
+            (equal "gmail" mu4e-multi-last-read-account))
         'delete
       'sent)))
 
