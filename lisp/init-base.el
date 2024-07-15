@@ -315,15 +315,14 @@
           '("--login" "--init-file" "~/.bash_profile" "-i"))))
 
 (use-package dictionary
-  :straight (dictionary :type git
-			:host github
-			:repo "myrkr/dictionary-el")
+  :ensure t
   :config
   ;; backward compatibility function to support some ancient version of
   ;; dictionary.el
   (unless (fboundp 'process-kill-without-query)
     (defun process-kill-without-query (process)
       (set-process-query-on-exit-flag process nil)))
+  (setq dictionary-server "dict.org")
   :bind
   (("C-c s" . dictionary-search)
    ("C-c m" . dictionary-match-words)))
