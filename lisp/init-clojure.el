@@ -68,9 +68,11 @@
   (add-hook 'cider-mode-hook 'cider-mode-hook)
   (setq cider-lein-parameters "trampoline repl :headless"
         cider-clojure-cli-parameters (concat
-                                      "-Adev"
+                                      ;; "-A:dev:test"
                                       ;; " -J-agentpath:/usr/local/lib/async-profiler-2.9-linux-x64/build/libasyncProfiler.so"
-                                      " -J-Djdk.attach.allowAttachSelf")
+                                      ;; " -J-Djdk.attach.allowAttachSelf"
+                                      )
+        cider-clojure-cli-aliases ":dev:test"
         cider-use-tooltips nil)
   (add-to-list 'clojure-build-tool-files "deps.edn"))
 
